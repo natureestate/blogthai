@@ -1,0 +1,146 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Cursor Rule: Website Development for Google Bot & LLM Search Optimization
+
+This rule defines the core principles and practices for developing all content and code within this project to maximize visibility on Google Search and ensure optimal understanding by Large Language Models (LLMs) for generative AI search.
+
+---
+
+## 1. Content First & Foremost
+
+All content must be **high-quality, accurate, in-depth, and directly relevant** to our target audience's needs in the software/web development freelance niche.
+
+* **Rule 1.1: Expertise & Authority (E-E-A-T-Focused):**
+    * Every piece of content must clearly demonstrate **Experience, Expertise, Authoritativeness, and Trustworthiness**.
+    * **Action:**
+        * Authors must be clearly identified with relevant credentials.
+        * All technical claims, code snippets, and data must be fact-checked and accurate.
+        * Include genuine case studies, testimonials, and if applicable, link to open-source contributions or industry presentations.
+        * Use "About Us" and author bios to highlight our qualifications.
+
+* **Rule 1.2: User-Centric & Comprehensive:**
+    * Content should be written primarily for **human readers**, answering their questions thoroughly and clearly.
+    * **Action:**
+        * Aim for comprehensive coverage of a topic, not just surface-level information.
+        * Use natural language, avoiding keyword stuffing.
+        * Break down complex topics into digestible sections with clear explanations.
+
+* **Rule 1.3: Freshness & Accuracy:**
+    * Content must be **up-to-date** with current industry standards, technologies, and best practices.
+    * **Action:**
+        * Regularly review and update existing articles and portfolio entries (e.g., when a new framework version is released).
+        * Display last updated dates prominently on all informational articles.
+
+---
+
+## 2. Structured Data & Semantic Markup
+
+We will provide explicit signals about our content's meaning and relationships to both search engines and LLMs.
+
+* **Rule 2.1: Semantic HTML5 Usage:**
+    * Always use the most semantically appropriate HTML5 tags for content structure.
+    * **Action:**
+        * Utilize `<header>`, `<nav>`, `<main>`, `<article>`, `<section>`, `<aside>`, `<footer>` for overall layout.
+        * Employ `<figure>` with `<figcaption>` for images/diagrams.
+        * Use `<code>`, `<pre>`, `<ul>`, `<ol>`, `<dl>` appropriately for code and lists.
+
+* **Rule 2.2: Logical Heading Hierarchy:**
+    * Content must follow a **strict and logical heading structure** (H1-H6).
+    * **Action:**
+        * Each page must have **one H1 tag** that accurately summarizes the page's main topic.
+        * Use H2s for major sections, H3s for sub-sections, and so on.
+        * Headings should include relevant keywords naturally and provide a clear outline of the content.
+
+* **Rule 2.3: Implement Schema Markup (JSON-LD):**
+    * Apply relevant Schema.org markup to provide context to search engines and LLMs.
+    * **Action:**
+        * Implement `WebPage`, `Article`, `Person`, `Organization` as standard.
+        * Apply `FAQPage` for dedicated FAQ sections.
+        * Use `HowTo` for step-by-step guides.
+        * Explore `Service` or `CreativeWork` for portfolio items and service pages to clearly define what we offer.
+
+* **Rule 2.4: Table of Contents for Long-Form Content:**
+    * For articles exceeding 800 words, include an interactive Table of Contents.
+    * **Action:**
+        * Place the ToC near the top of the article, linking to H2/H3 IDs.
+
+---
+
+## 3. Technical SEO Standards
+
+Ensure our website is technically sound for optimal crawling, indexing, and user experience.
+
+* **Rule 3.1: Mobile-First Responsiveness:**
+    * All designs and code must be **fully responsive** and provide an excellent user experience across all device types (mobile, tablet, desktop).
+    * **Action:**
+        * Implement responsive design with CSS media queries.
+        * Prioritize mobile layouts during design and development.
+
+* **Rule 3.2: Performance & Core Web Vitals:**
+    * Website loading speed and interactivity must be **optimized for performance**.
+    * **Action:**
+        * Optimize all images (compression, modern formats like WebP).
+        * Minify CSS, JavaScript, and HTML.
+        * Ensure minimal Cumulative Layout Shift (CLS), fast Largest Contentful Paint (LCP), and low First Input Delay (FID).
+        * Regularly audit performance using Lighthouse/PageSpeed Insights.
+
+* **Rule 3.3: Secure (HTTPS) & Clean URLs:**
+    * All pages must be served over **HTTPS** with **descriptive, user-friendly URLs**.
+    * **Action:**
+        * Enforce HTTPS sitewide.
+        * Use short, keyword-rich, and hyphen-separated URLs (e.g., `/your-service-name`).
+
+* **Rule 3.4: Sitemaps & Robots.txt:**
+    * Maintain accurate and up-to-date sitemaps and robots.txt files.
+    * **Action:**
+        * Automatically generate and submit XML sitemaps to Google Search Console.
+        * Use `robots.txt` only for pages that should explicitly be blocked from crawling (e.g., admin areas), ensuring important content is always discoverable.
+
+---
+
+## 4. Linking Strategy
+
+Build a robust internal and external linking profile that enhances relevance and authority.
+
+* **Rule 4.1: Strategic Internal Linking:**
+    * Link relevant pages within our own website to **distribute authority and improve navigation**.
+    * **Action:**
+        * Use descriptive, keyword-rich anchor text.
+        * Create logical pathways for users and bots to explore our content.
+
+* **Rule 4.2: Authoritative External Linking:**
+    * When citing data, tools, or official documentation, **link to reputable external sources**.
+    * **Action:**
+        * Ensure all outbound links point to high-authority, relevant websites.
+        * Use `rel="nofollow"` or `rel="sponsored"` where appropriate for paid/affiliate links.
+
+---
+
+## 5. LLM-Specific Content Optimization
+
+Beyond traditional SEO, optimize content for how LLMs understand and synthesize information.
+
+* **Rule 5.1: Direct Answerability:**
+    * Structure content to **directly answer common user questions** in a clear, concise manner.
+    * **Action:**
+        * Integrate dedicated FAQ sections using `FAQPage` Schema.
+        * Ensure introductory paragraphs or specific sections provide clear answers to common "what is" or "how to" queries.
+
+* **Rule 5.2: Summarizability & Key Takeaways:**
+    * Content should be easily **summarizable** by AI models.
+    * **Action:**
+        * Include a "Key Takeaways" or "Conclusion" section summarizing main points.
+        * Use bullet points and numbered lists for important information.
+
+* **Rule 5.3: Context & Nuance:**
+    * Provide sufficient context and address potential nuances or exceptions within technical topics.
+    * **Action:**
+        * Explain "why" certain approaches are taken, not just "how."
+        * Discuss pros and cons of different technologies or methods.
+
+---
+
+By strictly following these Cursor Rules, we will build a project that not only ranks effectively in traditional search results but also serves as a reliable, understandable, and valuable source of information for the next generation of AI-powered search experiences.
