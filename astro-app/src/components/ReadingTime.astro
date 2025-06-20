@@ -1,0 +1,65 @@
+import { calculateReadingTime } from '../utils/readingTime'
+
+// รับ props
+interface Props {
+  content: any[]
+  className?: string
+  showIcon?: boolean
+  showWords?: boolean
+}
+
+const { 
+  content, 
+  className = '', 
+  showIcon = true, 
+  showWords = false 
+} = Astro.props
+
+// คำนวณเวลาในการอ่าน
+const readingTime = calculateReadingTime(content)
+
+<div class={`reading-time flex items-center text-sm text-gray-600 ${className}`}>
+  {showIcon && (
+    <svg 
+      class="w-4 h-4 mr-2 text-gray-500" 
+      fill="none" 
+      stroke="currentColor" 
+      viewBox="0 0 24 24"
+    >
+      <path 
+        stroke-linecap="round" 
+        stroke-linejoin="round" 
+        stroke-width="2" 
+        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+      />
+    </svg>
+  )}
+  
+  <span class="reading-time-text">
+    {readingTime.text}
+    {showWords && (
+      <span class="text-gray-400 ml-1">
+        ({readingTime.words.toLocaleString()} คำ)
+      </span>
+    )}
+  </span>
+</div>
+
+<style>
+  .reading-time {
+    white-space: nowrap;
+  }
+  
+  .reading-time-text {
+    font-variant-numeric: tabular-nums;
+  }
+  
+  /* เปลี่ยนสีเมื่อ hover parent element */
+  .reading-time:hover {
+    color: #374151;
+  }
+  
+  .reading-time:hover svg {
+    color: #6b7280;
+  }
+</style> 

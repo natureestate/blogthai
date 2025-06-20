@@ -1,0 +1,348 @@
+import { generateTocFromPortableText, buildNestedToc, type TocItem } from '../utils/tableOfContents'
+
+// รับ props สำหรับ content
+interface Props {
+  content: any[]
+  maxLevel?: number
+  minLevel?: number
+  showNumbers?: boolean
+  className?: string
+  sticky?: boolean
+}
+
+const { 
+  content, 
+  maxLevel = 3, 
+  minLevel = 1, 
+  showNumbers = false, 
+  className = '',
+  sticky = true 
+} = Astro.props
+
+// สร้าง TOC
+const flatToc = generateTocFromPortableText(content)
+const filteredToc = flatToc.filter(item => item.level >= minLevel && item.level <= maxLevel)
+const nestedToc = buildNestedToc(filteredToc)
+
+// ถ้าไม่มี headings ไม่แสดง TOC
+if (nestedToc.length === 0) {
+  return null
+}
+
+<nav 
+  id="table-of-contents"
+  class={`toc-navigation ${sticky ? 'sticky top-4' : ''} ${className}`}
+  data-toc-items={JSON.stringify(filteredToc)}
+>
+  <!-- ✅ TOC Header -->
+  <div class="toc-header mb-4 pb-3 border-b border-gray-200">
+    <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+      <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+      </svg>
+      สารบัญ
+    </h3>
+    <p class="text-sm text-gray-500 mt-1">{filteredToc.length} หัวข้อ</p>
+  </div>
+  
+  <!-- ✅ TOC List -->
+  <div class="toc-content max-h-80 overflow-y-auto">
+    <ul class="space-y-1">
+      {nestedToc.map((item, index) => (
+        <li class="toc-item" data-level={item.level}>
+          <a 
+            href={`#${item.id}`}
+            class={`toc-link block py-1 px-2 text-sm rounded transition-colors duration-200 hover:bg-blue-50 hover:text-blue-700 ${
+              item.level === 1 ? 'font-medium text-gray-900' :
+              item.level === 2 ? 'text-gray-700 ml-3' :
+              'text-gray-600 ml-6'
+            }`}
+            data-toc-target={item.id}
+          >
+            {showNumbers && (
+              <span class="toc-number text-blue-600 mr-2">
+                {item.level === 1 ? `${index + 1}.` : '•'}
+              </span>
+            )}
+            <span class="toc-title">{item.title}</span>
+          </a>
+          
+          {/* Nested Children */}
+          {item.children && item.children.length > 0 && (
+            <ul class="mt-1 space-y-1">
+              {item.children.map((child, childIndex) => (
+                <li class="toc-item" data-level={child.level}>
+                  <a 
+                    href={`#${child.id}`}
+                    class={`toc-link block py-1 px-2 text-sm rounded transition-colors duration-200 hover:bg-blue-50 hover:text-blue-700 ${
+                      child.level === 2 ? 'text-gray-700 ml-3' : 'text-gray-600 ml-6'
+                    }`}
+                    data-toc-target={child.id}
+                  >
+                    {showNumbers && (
+                      <span class="toc-number text-blue-600 mr-2">
+                        {child.level === 2 ? `${index + 1}.${childIndex + 1}` : '•'}
+                      </span>
+                    )}
+                    <span class="toc-title">{child.title}</span>
+                  </a>
+                  
+                  {/* Level 3 Children */}
+                  {child.children && child.children.length > 0 && (
+                    <ul class="mt-1 space-y-1">
+                      {child.children.map((grandChild, grandChildIndex) => (
+                        <li class="toc-item" data-level={grandChild.level}>
+                          <a 
+                            href={`#${grandChild.id}`}
+                            class="toc-link block py-1 px-2 text-sm rounded transition-colors duration-200 hover:bg-blue-50 hover:text-blue-700 text-gray-600 ml-6"
+                            data-toc-target={grandChild.id}
+                          >
+                            {showNumbers && (
+                              <span class="toc-number text-blue-600 mr-2">
+                                {`${index + 1}.${childIndex + 1}.${grandChildIndex + 1}`}
+                              </span>
+                            )}
+                            <span class="toc-title">{grandChild.title}</span>
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+  
+  <!-- ✅ Progress Indicator -->
+  <div class="toc-progress mt-4 pt-3 border-t border-gray-200">
+    <div class="flex items-center text-xs text-gray-500">
+      <span>ความคืบหน้า</span>
+      <div class="flex-1 mx-2 bg-gray-200 rounded-full h-1">
+        <div id="reading-progress" class="bg-blue-600 h-1 rounded-full transition-all duration-300" style="width: 0%"></div>
+      </div>
+      <span id="progress-percentage">0%</span>
+    </div>
+  </div>
+</nav>
+
+<!-- ✅ JavaScript สำหรับ TOC Functionality -->
+<script>
+class TableOfContents {
+  private tocItems: any[] = []
+  private headingElements: HTMLElement[] = []
+  private tocLinks: NodeListOf<HTMLAnchorElement>
+  private progressBar: HTMLElement
+  private progressText: HTMLElement
+  private currentActiveId: string = ''
+  
+  constructor() {
+    this.loadTocData()
+    this.initializeElements()
+    this.bindEvents()
+    this.setupIntersectionObserver()
+  }
+  
+  private loadTocData() {
+    const tocNav = document.getElementById('table-of-contents')
+    if (tocNav) {
+      const tocData = tocNav.getAttribute('data-toc-items')
+      if (tocData) {
+        this.tocItems = JSON.parse(tocData)
+      }
+    }
+  }
+  
+  private initializeElements() {
+    this.tocLinks = document.querySelectorAll('.toc-link')
+    this.progressBar = document.getElementById('reading-progress') as HTMLElement
+    this.progressText = document.getElementById('progress-percentage') as HTMLElement
+    
+    // หา heading elements ในเอกสาร
+    this.headingElements = this.tocItems.map(item => {
+      return document.getElementById(item.id)
+    }).filter(Boolean) as HTMLElement[]
+  }
+  
+  private bindEvents() {
+    // Smooth scroll เมื่อคลิก TOC links
+    this.tocLinks.forEach(link => {
+      link.addEventListener('click', this.handleTocClick.bind(this))
+    })
+    
+    // Update progress บน scroll
+    window.addEventListener('scroll', this.updateProgress.bind(this))
+    
+    // Initial progress update
+    this.updateProgress()
+  }
+  
+  private handleTocClick(e: Event) {
+    e.preventDefault()
+    const link = e.currentTarget as HTMLAnchorElement
+    const targetId = link.getAttribute('data-toc-target')
+    
+    if (targetId) {
+      const targetElement = document.getElementById(targetId)
+      if (targetElement) {
+        // Smooth scroll to target
+        targetElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        })
+        
+        // Update URL hash
+        history.replaceState(null, '', `#${targetId}`)
+      }
+    }
+  }
+  
+  private setupIntersectionObserver() {
+    if (this.headingElements.length === 0) return
+    
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            this.setActiveHeading(entry.target.id)
+          }
+        })
+      },
+      {
+        rootMargin: '-20% 0px -60% 0px',
+        threshold: 0
+      }
+    )
+    
+    this.headingElements.forEach(heading => {
+      observer.observe(heading)
+    })
+  }
+  
+  private setActiveHeading(id: string) {
+    if (this.currentActiveId === id) return
+    
+    // ลบ active class จาก links ก่อนหน้า
+    this.tocLinks.forEach(link => {
+      link.classList.remove('toc-active')
+    })
+    
+    // เพิ่ม active class ให้ current link
+    const activeLink = document.querySelector(`[data-toc-target="${id}"]`)
+    if (activeLink) {
+      activeLink.classList.add('toc-active')
+      this.currentActiveId = id
+      
+      // Scroll TOC ให้เห็น active item
+      activeLink.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest'
+      })
+    }
+  }
+  
+  private updateProgress() {
+    if (!this.progressBar || !this.progressText) return
+    
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight
+    const scrollTop = window.pageYOffset
+    const progress = Math.min(Math.max((scrollTop / docHeight) * 100, 0), 100)
+    
+    this.progressBar.style.width = `${progress}%`
+    this.progressText.textContent = `${Math.round(progress)}%`
+  }
+}
+
+// เริ่มต้น TOC เมื่อ DOM โหลดเสร็จ
+document.addEventListener('DOMContentLoaded', () => {
+  new TableOfContents()
+})
+</script>
+
+<style>
+  .toc-navigation {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    max-width: 300px;
+  }
+  
+  /* Active TOC Link Styling */
+  .toc-link.toc-active {
+    background-color: #dbeafe;
+    color: #1d4ed8;
+    font-weight: 500;
+    border-left: 3px solid #3b82f6;
+    padding-left: calc(0.5rem - 3px);
+  }
+  
+  /* Smooth transitions */
+  .toc-link {
+    position: relative;
+    transition: all 0.2s ease;
+  }
+  
+  /* Level indicators */
+  .toc-item[data-level="1"] > .toc-link {
+    font-weight: 500;
+  }
+  
+  .toc-item[data-level="2"] > .toc-link {
+    font-size: 0.875rem;
+  }
+  
+  .toc-item[data-level="3"] > .toc-link {
+    font-size: 0.8125rem;
+    opacity: 0.8;
+  }
+  
+  /* Custom scrollbar สำหรับ TOC content */
+  .toc-content::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  .toc-content::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 2px;
+  }
+  
+  .toc-content::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 2px;
+  }
+  
+  .toc-content::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
+  
+  /* Mobile responsiveness */
+  @media (max-width: 768px) {
+    .toc-navigation {
+      position: static !important;
+      max-width: 100%;
+      margin-bottom: 2rem;
+    }
+    
+    .toc-content {
+      max-height: 200px;
+    }
+  }
+  
+  /* Print styles */
+  @media print {
+    .toc-navigation {
+      break-inside: avoid;
+      box-shadow: none;
+      border: 1px solid #000;
+    }
+    
+    .toc-progress {
+      display: none;
+    }
+  }
+</style> 

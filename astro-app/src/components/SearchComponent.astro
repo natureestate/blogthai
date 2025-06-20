@@ -1,0 +1,344 @@
+---
+import { simpleSearch, getSuggestions } from '../utils/search'
+
+// รับ props สำหรับ posts data
+interface Props {
+  posts: any[]
+  className?: string
+}
+
+const { posts, className = '' } = Astro.props
+
+// สร้าง suggestions สำหรับ autocomplete
+const suggestions = getSuggestions(posts)
+---
+
+<div class={`search-component ${className}`} data-search-posts={JSON.stringify(posts)}>
+  <!-- ✅ Search Input Field -->
+  <div class="relative w-full max-w-md mx-auto">
+    <div class="relative">
+      <!-- Search Icon -->
+      <svg 
+        class="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400"
+        fill="none" 
+        stroke="currentColor" 
+        viewBox="0 0 24 24"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21 21-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0z"/>
+      </svg>
+      
+      <!-- Search Input -->
+      <input
+        id="search-input"
+        type="search"
+        placeholder="ค้นหาบทความ..."
+        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      
+      <!-- Clear Button -->
+      <button
+        id="clear-search"
+        class="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 hover:text-gray-600 hidden"
+        aria-label="ล้างการค้นหา"
+      >
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+    
+    <!-- ✅ Search Suggestions Dropdown -->
+    <div 
+      id="search-suggestions" 
+      class="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-50 hidden"
+    >
+      <!-- Quick Suggestions -->
+      <div class="p-3 border-b border-gray-100">
+        <div class="text-xs font-medium text-gray-500 mb-2">หมวดหมู่ยอดนิยม</div>
+        <div class="flex flex-wrap gap-1">
+          {suggestions.categories.slice(0, 5).map(category => (
+            <button 
+              class="suggestion-tag px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full hover:bg-blue-200 transition-colors"
+              data-type="category"
+              data-value={category}
+            >
+              {category}
+            </button>
+          ))}
+        </div>
+      </div>
+      
+      <div class="p-3">
+        <div class="text-xs font-medium text-gray-500 mb-2">แท็กยอดนิยม</div>
+        <div class="flex flex-wrap gap-1">
+          {suggestions.popularTags.slice(0, 6).map(tag => (
+            <button 
+              class="suggestion-tag px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full hover:bg-green-200 transition-colors"
+              data-type="tag"
+              data-value={tag}
+            >
+              {tag}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- ✅ Search Results -->
+  <div id="search-results" class="mt-4 hidden">
+    <div class="text-sm text-gray-600 mb-3">
+      <span id="search-count">0</span> ผลลัพธ์สำหรับ "<span id="search-query"></span>"
+    </div>
+    
+    <div id="results-container" class="space-y-4">
+      <!-- Results จะแสดงที่นี่ -->
+    </div>
+    
+    <!-- No Results -->
+    <div id="no-results" class="text-center py-8 text-gray-500 hidden">
+      <svg class="mx-auto h-12 w-12 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.087 0-3.991.806-5.414 2.172M15 11V7a4 4 0 00-8 0l-1.294-.707M17 11V7a4 4 0 00-7.293-2.293"/>
+      </svg>
+      <p class="text-lg font-medium">ไม่พบผลลัพธ์</p>
+      <p class="text-sm">ลองใช้คำค้นหาอื่น หรือดูหมวดหมู่ที่แนะนำด้านบน</p>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ JavaScript สำหรับ Search Functionality -->
+<script>
+// นำเข้า search utilities (ต้องใช้ client-side)
+import { simpleSearch, createSearchEngine, searchPosts } from '../utils/search.ts'
+
+class SearchComponent {
+  private posts: any[] = []
+  private searchEngine: any = null
+  private searchInput: HTMLInputElement
+  private clearButton: HTMLElement
+  private suggestions: HTMLElement
+  private resultsContainer: HTMLElement
+  private searchResults: HTMLElement
+  private noResults: HTMLElement
+  private searchCount: HTMLElement
+  private searchQuery: HTMLElement
+  
+  constructor() {
+    this.initializeElements()
+    this.loadPostsData()
+    this.bindEvents()
+  }
+  
+  private initializeElements() {
+    this.searchInput = document.getElementById('search-input') as HTMLInputElement
+    this.clearButton = document.getElementById('clear-search') as HTMLElement
+    this.suggestions = document.getElementById('search-suggestions') as HTMLElement
+    this.resultsContainer = document.getElementById('results-container') as HTMLElement
+    this.searchResults = document.getElementById('search-results') as HTMLElement
+    this.noResults = document.getElementById('no-results') as HTMLElement
+    this.searchCount = document.getElementById('search-count') as HTMLElement
+    this.searchQuery = document.getElementById('search-query') as HTMLElement
+  }
+  
+  private loadPostsData() {
+    const searchComponent = document.querySelector('[data-search-posts]')
+    if (searchComponent) {
+      const postsData = searchComponent.getAttribute('data-search-posts')
+      if (postsData) {
+        this.posts = JSON.parse(postsData)
+        this.searchEngine = createSearchEngine(this.posts)
+      }
+    }
+  }
+  
+  private bindEvents() {
+    // Search Input Events
+    this.searchInput.addEventListener('input', this.handleSearch.bind(this))
+    this.searchInput.addEventListener('focus', this.showSuggestions.bind(this))
+    this.searchInput.addEventListener('keydown', this.handleKeydown.bind(this))
+    
+    // Clear Button
+    this.clearButton.addEventListener('click', this.clearSearch.bind(this))
+    
+    // Suggestion Tags
+    document.querySelectorAll('.suggestion-tag').forEach(tag => {
+      tag.addEventListener('click', this.handleSuggestionClick.bind(this))
+    })
+    
+    // Click outside to hide suggestions
+    document.addEventListener('click', (e) => {
+      if (!this.searchInput.contains(e.target as Node) && !this.suggestions.contains(e.target as Node)) {
+        this.hideSuggestions()
+      }
+    })
+  }
+  
+  private handleSearch() {
+    const query = this.searchInput.value.trim()
+    
+    // แสดง/ซ่อน clear button
+    if (query.length > 0) {
+      this.clearButton.classList.remove('hidden')
+    } else {
+      this.clearButton.classList.add('hidden')
+    }
+    
+    // ถ้าคำค้นหาสั้นเกินไป
+    if (query.length < 2) {
+      this.hideResults()
+      this.showSuggestions()
+      return
+    }
+    
+    // ค้นหา
+    this.performSearch(query)
+    this.hideSuggestions()
+  }
+  
+  private performSearch(query: string) {
+    const results = searchPosts(this.searchEngine, query, 10)
+    this.displayResults(results, query)
+  }
+  
+  private displayResults(results: any[], query: string) {
+    this.searchQuery.textContent = query
+    this.searchCount.textContent = results.length.toString()
+    
+    if (results.length === 0) {
+      this.showNoResults()
+      return
+    }
+    
+    // แสดงผลลัพธ์
+    this.resultsContainer.innerHTML = results.map(result => {
+      const post = result.item
+      return `
+        <article class="border-b border-gray-200 pb-4 last:border-b-0">
+          <h3 class="text-lg font-semibold mb-2">
+            <a href="/post/${post.slug.current}" class="text-blue-600 hover:text-blue-800 transition-colors">
+              ${post.title}
+            </a>
+          </h3>
+          
+          <p class="text-gray-600 text-sm mb-2 line-clamp-2">
+            ${post.excerpt || ''}
+          </p>
+          
+          <div class="flex items-center text-xs text-gray-500 space-x-2">
+            ${post.author?.name ? `<span>โดย ${post.author.name}</span>` : ''}
+            ${post.publishedAt ? `<span>•</span><span>${new Date(post.publishedAt).toLocaleDateString('th-TH')}</span>` : ''}
+            ${post.categories?.length ? `<span>•</span><span>${post.categories.map(c => c.title).join(', ')}</span>` : ''}
+          </div>
+          
+          ${post.tags?.length ? `
+            <div class="mt-2 flex flex-wrap gap-1">
+              ${post.tags.slice(0, 3).map(tag => `
+                <span class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">${tag}</span>
+              `).join('')}
+            </div>
+          ` : ''}
+        </article>
+      `
+    }).join('')
+    
+    this.showResults()
+  }
+  
+  private showResults() {
+    this.searchResults.classList.remove('hidden')
+    this.noResults.classList.add('hidden')
+  }
+  
+  private hideResults() {
+    this.searchResults.classList.add('hidden')
+  }
+  
+  private showNoResults() {
+    this.searchResults.classList.remove('hidden')
+    this.noResults.classList.remove('hidden')
+    this.resultsContainer.innerHTML = ''
+  }
+  
+  private showSuggestions() {
+    if (this.searchInput.value.trim().length < 2) {
+      this.suggestions.classList.remove('hidden')
+    }
+  }
+  
+  private hideSuggestions() {
+    this.suggestions.classList.add('hidden')
+  }
+  
+  private clearSearch() {
+    this.searchInput.value = ''
+    this.clearButton.classList.add('hidden')
+    this.hideResults()
+    this.showSuggestions()
+    this.searchInput.focus()
+  }
+  
+  private handleSuggestionClick(e: Event) {
+    const target = e.target as HTMLElement
+    const value = target.getAttribute('data-value') || ''
+    const type = target.getAttribute('data-type') || ''
+    
+    this.searchInput.value = value
+    this.performSearch(value)
+    this.hideSuggestions()
+  }
+  
+  private handleKeydown(e: KeyboardEvent) {
+    if (e.key === 'Escape') {
+      this.clearSearch()
+    }
+  }
+}
+
+// เริ่มต้น Search Component เมื่อ DOM โหลดเสร็จ
+document.addEventListener('DOMContentLoaded', () => {
+  new SearchComponent()
+})
+</script>
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .search-component {
+    position: relative;
+  }
+  
+  /* Focus styles */
+  #search-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+  
+  /* Suggestion hover effects */
+  .suggestion-tag:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Results animation */
+  #search-results {
+    animation: fadeIn 0.2s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style> 
