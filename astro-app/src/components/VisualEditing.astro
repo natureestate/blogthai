@@ -1,0 +1,366 @@
+---
+import { isPreviewMode, visualEditingConfig } from '../utils/preview'
+
+// รับ props
+interface Props {
+  enabled?: boolean
+  studioUrl?: string
+}
+
+const { 
+  enabled = true,
+  studioUrl = visualEditingConfig.studioUrl
+} = Astro.props
+
+// ตรวจสอบว่าอยู่ใน preview mode หรือไม่
+const isPreview = isPreviewMode(Astro.request)
+
+// ถ้าไม่ได้อยู่ใน preview mode หรือปิดการใช้งาน ไม่แสดง component
+if (!isPreview || !enabled) {
+  return null
+}
+---
+
+<!-- ✅ Visual Editing Overlay -->
+<div id="visual-editing-overlay" class="visual-editing-overlay">
+  <!-- Header Bar -->
+  <div class="visual-editing-header">
+    <div class="flex items-center justify-between">
+      <!-- Logo และ Status -->
+      <div class="flex items-center space-x-3">
+        <div class="flex items-center space-x-2">
+          <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+          </svg>
+          <span class="text-sm font-medium text-white">Visual Editing</span>
+        </div>
+        
+        <div class="flex items-center space-x-1">
+          <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+          <span class="text-xs text-green-300">เชื่อมต่อแล้ว</span>
+        </div>
+      </div>
+      
+      <!-- Action Buttons -->
+      <div class="flex items-center space-x-2">
+        <!-- Refresh Button -->
+        <button 
+          id="refresh-preview"
+          class="px-3 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition-colors"
+          title="รีเฟรชหน้า"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+          </svg>
+        </button>
+        
+        <!-- Open Studio Button -->
+        <a 
+          href={studioUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="px-3 py-1 bg-purple-600 text-white text-xs rounded hover:bg-purple-700 transition-colors"
+          title="เปิด Sanity Studio"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+          </svg>
+        </a>
+        
+        <!-- Exit Preview Button -->
+        <button 
+          id="exit-preview"
+          class="px-3 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700 transition-colors"
+          title="ออกจาก Preview Mode"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Info Panel (แสดงเมื่อ hover) -->
+  <div id="visual-editing-info" class="visual-editing-info hidden">
+    <div class="bg-gray-900 text-white p-4 rounded-lg shadow-lg">
+      <h3 class="font-semibold mb-2">🎨 Visual Editing Mode</h3>
+      <ul class="text-sm space-y-1 text-gray-300">
+        <li>• คลิกที่เนื้อหาเพื่อแก้ไขใน Studio</li>
+        <li>• การเปลี่ยนแปลงจะอัปเดตแบบ real-time</li>
+        <li>• กด Refresh เพื่อโหลดข้อมูลล่าสุด</li>
+        <li>• กด Exit เพื่อออกจาก Preview Mode</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ Visual Editing Scripts -->
+<script>
+/**
+ * Visual Editing Client-side functionality
+ */
+class VisualEditingManager {
+  private overlay: HTMLElement | null = null
+  private infoPanel: HTMLElement | null = null
+  private isInfoVisible = false
+  
+  constructor() {
+    this.initializeElements()
+    this.bindEvents()
+    this.initializeVisualEditing()
+  }
+  
+  private initializeElements() {
+    this.overlay = document.getElementById('visual-editing-overlay')
+    this.infoPanel = document.getElementById('visual-editing-info')
+  }
+  
+  private bindEvents() {
+    // Refresh button
+    const refreshBtn = document.getElementById('refresh-preview')
+    refreshBtn?.addEventListener('click', this.refreshPreview.bind(this))
+    
+    // Exit preview button
+    const exitBtn = document.getElementById('exit-preview')
+    exitBtn?.addEventListener('click', this.exitPreview.bind(this))
+    
+    // Show/hide info panel
+    this.overlay?.addEventListener('mouseenter', this.showInfo.bind(this))
+    this.overlay?.addEventListener('mouseleave', this.hideInfo.bind(this))
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', this.handleKeyboard.bind(this))
+    
+    // Listen for postMessage from Studio
+    window.addEventListener('message', this.handleStudioMessage.bind(this))
+  }
+  
+  private async initializeVisualEditing() {
+    try {
+      // ถ้ามี @sanity/visual-editing ให้เปิดใช้งาน
+      if (typeof window !== 'undefined' && 'postMessage' in window) {
+        // Enable visual editing overlays
+        this.enableVisualOverlays()
+        
+        // Connect to Studio
+        this.connectToStudio()
+      }
+    } catch (error) {
+      console.warn('Visual editing not available:', error)
+    }
+  }
+  
+  private enableVisualOverlays() {
+    // เพิ่ม data attributes ให้กับ elements ที่แก้ไขได้
+    const editableElements = document.querySelectorAll('[data-sanity]')
+    
+    editableElements.forEach(element => {
+      element.addEventListener('click', (e) => {
+        e.preventDefault()
+        const sanityData = element.getAttribute('data-sanity')
+        if (sanityData) {
+          this.openInStudio(sanityData)
+        }
+      })
+      
+      // เพิ่ม hover effect
+      element.classList.add('visual-editing-target')
+    })
+  }
+  
+  private connectToStudio() {
+    // ส่งข้อความไปยัง Studio ว่าพร้อมแล้ว
+    if (window.parent !== window) {
+      window.parent.postMessage({
+        type: 'preview-ready',
+        url: window.location.href
+      }, '*')
+    }
+  }
+  
+  private openInStudio(sanityPath: string) {
+    const studioUrl = '{studioUrl}'
+    const editUrl = `${studioUrl}/structure/${sanityPath}`
+    window.open(editUrl, '_blank', 'noopener,noreferrer')
+  }
+  
+  private refreshPreview() {
+    window.location.reload()
+  }
+  
+  private async exitPreview() {
+    try {
+      // Call API endpoint เพื่อปิด draft mode
+      await fetch('/api/preview/exit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      
+      // Redirect ไปหน้าปกติ
+      const url = new URL(window.location.href)
+      url.searchParams.delete('preview')
+      url.searchParams.delete('sanity-preview')
+      url.searchParams.delete('draft')
+      
+      window.location.href = url.toString()
+    } catch (error) {
+      console.error('Error exiting preview:', error)
+      // Fallback: แค่ redirect
+      window.location.href = window.location.pathname
+    }
+  }
+  
+  private showInfo() {
+    if (this.infoPanel) {
+      this.infoPanel.classList.remove('hidden')
+      this.isInfoVisible = true
+    }
+  }
+  
+  private hideInfo() {
+    if (this.infoPanel) {
+      this.infoPanel.classList.add('hidden')
+      this.isInfoVisible = false
+    }
+  }
+  
+  private handleKeyboard(e: KeyboardEvent) {
+    // Esc = exit preview
+    if (e.key === 'Escape') {
+      this.exitPreview()
+    }
+    
+    // Ctrl/Cmd + R = refresh
+    if ((e.ctrlKey || e.metaKey) && e.key === 'r') {
+      e.preventDefault()
+      this.refreshPreview()
+    }
+    
+    // Ctrl/Cmd + Shift + E = toggle info
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'E') {
+      e.preventDefault()
+      this.isInfoVisible ? this.hideInfo() : this.showInfo()
+    }
+  }
+  
+  private handleStudioMessage(event: MessageEvent) {
+    // จัดการข้อความจาก Studio
+    if (event.data?.type === 'sanity/visual-editing') {
+      switch (event.data.action) {
+        case 'refresh':
+          this.refreshPreview()
+          break
+        case 'navigate':
+          if (event.data.url) {
+            window.location.href = event.data.url
+          }
+          break
+      }
+    }
+  }
+}
+
+// เริ่มต้น Visual Editing เมื่อ DOM โหลดเสร็จ
+document.addEventListener('DOMContentLoaded', () => {
+  new VisualEditingManager()
+})
+</script>
+
+<style>
+  .visual-editing-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 999999;
+    pointer-events: none;
+  }
+  
+  .visual-editing-header {
+    background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+    border-bottom: 1px solid #4b5563;
+    padding: 8px 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    pointer-events: auto;
+  }
+  
+  .visual-editing-info {
+    position: absolute;
+    top: 100%;
+    left: 16px;
+    z-index: 1000000;
+    pointer-events: auto;
+    animation: fadeIn 0.2s ease-out;
+  }
+  
+  /* Visual editing targets */
+  :global(.visual-editing-target) {
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  :global(.visual-editing-target:hover) {
+    outline: 2px dashed #3b82f6;
+    outline-offset: 2px;
+    background-color: rgba(59, 130, 246, 0.1);
+  }
+  
+  :global(.visual-editing-target::before) {
+    content: '✏️ แก้ไข';
+    position: absolute;
+    top: -24px;
+    left: 0;
+    background: #3b82f6;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 1000001;
+  }
+  
+  :global(.visual-editing-target:hover::before) {
+    opacity: 1;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .visual-editing-header {
+      padding: 6px 12px;
+    }
+    
+    .visual-editing-header .flex {
+      font-size: 0.875rem;
+    }
+    
+    .visual-editing-info {
+      left: 12px;
+      right: 12px;
+    }
+  }
+  
+  /* Print mode - ซ่อน visual editing */
+  @media print {
+    .visual-editing-overlay {
+      display: none !important;
+    }
+  }
+</style> 

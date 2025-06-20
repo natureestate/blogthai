@@ -1,0 +1,403 @@
+---
+import { MultiLanguageManager, SUPPORTED_LANGUAGES } from '../utils/scheduler'
+
+// รับ props
+interface Props {
+  currentLanguage?: string
+  currentPath?: string
+  compact?: boolean
+  showFlags?: boolean
+  className?: string
+}
+
+const { 
+  currentLanguage = 'th',
+  currentPath = '/',
+  compact = false,
+  showFlags = true,
+  className = ''
+} = Astro.props
+
+// สร้าง language manager
+const langManager = new MultiLanguageManager()
+
+// ดึงข้อมูลภาษาปัจจุบัน
+const currentLang = langManager.getLanguage(currentLanguage) || langManager.getDefaultLanguage()
+
+// สร้าง URLs สำหรับแต่ละภาษา
+const languageUrls = SUPPORTED_LANGUAGES.map(lang => ({
+  ...lang,
+  url: langManager.createLocalizedUrl(currentPath, lang.code),
+  isCurrent: lang.code === currentLanguage
+}))
+---
+
+<!-- ✅ Language Switcher Component -->
+<div class={`language-switcher ${compact ? 'compact' : ''} ${className}`}>
+  {compact ? (
+    <!-- Compact Dropdown Version -->
+    <div class="relative group">
+      <!-- Current Language Button -->
+      <button 
+        class="current-lang-btn flex items-center space-x-2 px-3 py-2 text-sm font-medium rounded-lg border hover:bg-gray-50 transition-colors"
+        title={`ปัจจุบัน: ${currentLang.nativeName}`}
+      >
+        {showFlags && <span class="flag text-lg">{currentLang.flag}</span>}
+        <span class="lang-code font-mono">{currentLang.code.toUpperCase()}</span>
+        <svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+      </button>
+      
+      <!-- Dropdown Menu -->
+      <div class="dropdown-menu hidden group-hover:block absolute right-0 top-full mt-1 bg-white border rounded-lg shadow-lg py-1 z-50 min-w-[160px]">
+        {languageUrls.map(lang => (
+          <a
+            href={lang.url}
+            class={`dropdown-item flex items-center space-x-3 px-4 py-2 text-sm hover:bg-gray-50 transition-colors ${
+              lang.isCurrent ? 'bg-blue-50 text-blue-700' : 'text-gray-700'
+            }`}
+            title={`เปลี่ยนเป็น ${lang.nativeName}`}
+          >
+            {showFlags && <span class="flag">{lang.flag}</span>}
+            <span class="flex-1">{lang.nativeName}</span>
+            {lang.isCurrent && (
+              <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+              </svg>
+            )}
+          </a>
+        ))}
+      </div>
+    </div>
+  ) : (
+    <!-- Full Toggle Version -->
+    <div class="language-toggle">
+      <!-- Header -->
+      <div class="toggle-header mb-3">
+        <h3 class="text-sm font-semibold text-gray-700 flex items-center space-x-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
+          </svg>
+          <span>เลือกภาษา</span>
+        </h3>
+      </div>
+      
+      <!-- Language Options -->
+      <div class="language-grid space-y-2">
+        {languageUrls.map(lang => (
+          <a
+            href={lang.url}
+            class={`language-option flex items-center justify-between p-3 rounded-lg border transition-all duration-200 ${
+              lang.isCurrent 
+                ? 'bg-blue-50 border-blue-200 text-blue-700' 
+                : 'bg-white border-gray-200 hover:border-blue-300 hover:bg-blue-50 text-gray-700'
+            }`}
+            title={`เปลี่ยนเป็น ${lang.nativeName}`}
+          >
+            <div class="flex items-center space-x-3">
+              {showFlags && <span class="flag text-2xl">{lang.flag}</span>}
+              <div>
+                <div class="font-medium">{lang.nativeName}</div>
+                <div class="text-sm opacity-75">{lang.name}</div>
+              </div>
+            </div>
+            
+            <div class="flex items-center space-x-2">
+              <span class="lang-code px-2 py-1 text-xs font-mono bg-gray-100 rounded">
+                {lang.code.toUpperCase()}
+              </span>
+              {lang.isCurrent && (
+                <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                </svg>
+              )}
+            </div>
+          </a>
+        ))}
+      </div>
+      
+      <!-- Language Info -->
+      <div class="language-info mt-4 p-3 bg-gray-50 rounded-lg">
+        <div class="flex items-start space-x-2 text-sm text-gray-600">
+          <svg class="w-4 h-4 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <div>
+            <p class="font-medium mb-1">เกี่ยวกับการแปลภาษา</p>
+            <p class="text-xs leading-relaxed">
+              เนื้อหาบางส่วนอาจยังไม่ได้แปลเป็นภาษาที่เลือก 
+              และจะแสดงเป็นภาษาเริ่มต้น (ไทย) แทน
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )}
+</div>
+
+<!-- Enhanced Dropdown Behavior Script -->
+<script>
+  /**
+   * Enhanced Language Switcher functionality
+   */
+  class LanguageSwitcherManager {
+    private dropdown: HTMLElement | null = null
+    private button: HTMLElement | null = null
+    private isOpen = false
+    
+    constructor() {
+      this.initializeElements()
+      this.bindEvents()
+    }
+    
+    private initializeElements() {
+      this.dropdown = document.querySelector('.dropdown-menu')
+      this.button = document.querySelector('.current-lang-btn')
+    }
+    
+    private bindEvents() {
+      if (!this.dropdown || !this.button) return
+      
+      // Click to toggle
+      this.button.addEventListener('click', (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        this.toggle()
+      })
+      
+      // Close on outside click
+      document.addEventListener('click', (e) => {
+        if (!this.dropdown?.contains(e.target as Node) && 
+            !this.button?.contains(e.target as Node)) {
+          this.close()
+        }
+      })
+      
+      // Close on escape
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          this.close()
+        }
+      })
+      
+      // Keyboard navigation
+      this.dropdown.addEventListener('keydown', (e) => {
+        this.handleKeyboardNavigation(e)
+      })
+      
+      // Save language preference
+      const languageOptions = document.querySelectorAll('.dropdown-item, .language-option')
+      languageOptions.forEach(option => {
+        option.addEventListener('click', (e) => {
+          const href = (e.currentTarget as HTMLAnchorElement).href
+          const url = new URL(href)
+          const langCode = this.extractLanguageFromUrl(url.pathname)
+          
+          if (langCode) {
+            this.saveLanguagePreference(langCode)
+          }
+        })
+      })
+    }
+    
+    private toggle() {
+      if (this.isOpen) {
+        this.close()
+      } else {
+        this.open()
+      }
+    }
+    
+    private open() {
+      if (!this.dropdown) return
+      
+      this.dropdown.classList.remove('hidden')
+      this.dropdown.classList.add('block')
+      this.isOpen = true
+      
+      // Focus first item
+      const firstItem = this.dropdown.querySelector('.dropdown-item') as HTMLElement
+      if (firstItem) {
+        firstItem.focus()
+      }
+    }
+    
+    private close() {
+      if (!this.dropdown) return
+      
+      this.dropdown.classList.remove('block')
+      this.dropdown.classList.add('hidden')
+      this.isOpen = false
+    }
+    
+    private handleKeyboardNavigation(e: KeyboardEvent) {
+      const items = Array.from(this.dropdown?.querySelectorAll('.dropdown-item') || []) as HTMLElement[]
+      const currentIndex = items.findIndex(item => item === document.activeElement)
+      
+      switch (e.key) {
+        case 'ArrowDown':
+          e.preventDefault()
+          const nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0
+          items[nextIndex]?.focus()
+          break
+          
+        case 'ArrowUp':
+          e.preventDefault()
+          const prevIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1
+          items[prevIndex]?.focus()
+          break
+          
+        case 'Enter':
+        case ' ':
+          e.preventDefault()
+          (document.activeElement as HTMLElement)?.click()
+          break
+      }
+    }
+    
+    private extractLanguageFromUrl(path: string): string | null {
+      const segments = path.split('/').filter(Boolean)
+      const supportedLangs = ['th', 'en'] // จาก SUPPORTED_LANGUAGES
+      
+      return supportedLangs.includes(segments[0]) ? segments[0] : null
+    }
+    
+    private saveLanguagePreference(langCode: string) {
+      try {
+        localStorage.setItem('preferred-language', langCode)
+        
+        // อัปเดต HTML lang attribute
+        document.documentElement.lang = langCode
+        
+        // ส่ง analytics event ถ้ามี
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'language_change', {
+            language: langCode,
+            page_path: window.location.pathname
+          })
+        }
+      } catch (error) {
+        console.warn('Could not save language preference:', error)
+      }
+    }
+  }
+  
+  // เริ่มต้น Language Switcher เมื่อ DOM โหลดเสร็จ
+  document.addEventListener('DOMContentLoaded', () => {
+    new LanguageSwitcherManager()
+  })
+</script>
+
+<style>
+  .language-switcher {
+    @apply relative;
+  }
+  
+  /* Compact Version */
+  .language-switcher.compact {
+    @apply inline-block;
+  }
+  
+  .current-lang-btn {
+    @apply bg-white border-gray-300 text-gray-700;
+  }
+  
+  .current-lang-btn:hover {
+    @apply border-blue-400 text-blue-600;
+  }
+  
+  /* Dropdown Menu */
+  .dropdown-menu {
+    @apply animate-in slide-in-from-top-2 duration-200;
+  }
+  
+  .dropdown-item:focus {
+    @apply bg-blue-50 outline-none;
+  }
+  
+  /* Full Version */
+  .language-option {
+    cursor: pointer;
+  }
+  
+  .language-option:hover {
+    @apply transform scale-[1.02];
+  }
+  
+  .language-option.current {
+    @apply ring-2 ring-blue-400 ring-offset-2;
+  }
+  
+  /* Flag Styling */
+  .flag {
+    @apply select-none;
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  }
+  
+  /* Animations */
+  @keyframes slide-in-from-top-2 {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .animate-in {
+    animation-fill-mode: both;
+  }
+  
+  .slide-in-from-top-2 {
+    animation-name: slide-in-from-top-2;
+  }
+  
+  .duration-200 {
+    animation-duration: 200ms;
+  }
+  
+  /* Responsive */
+  @media (max-width: 640px) {
+    .language-toggle {
+      @apply px-2;
+    }
+    
+    .language-option {
+      @apply p-2;
+    }
+    
+    .flag {
+      @apply text-xl;
+    }
+  }
+  
+  /* Print Mode */
+  @media print {
+    .language-switcher {
+      @apply hidden;
+    }
+  }
+  
+  /* High Contrast Mode */
+  @media (prefers-contrast: high) {
+    .language-option {
+      @apply border-2;
+    }
+    
+    .current-lang-btn {
+      @apply border-2;
+    }
+  }
+  
+  /* Reduced Motion */
+  @media (prefers-reduced-motion: reduce) {
+    .language-option,
+    .dropdown-menu,
+    .current-lang-btn {
+      @apply transition-none;
+    }
+  }
+</style> 

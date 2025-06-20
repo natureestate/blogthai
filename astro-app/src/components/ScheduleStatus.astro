@@ -1,0 +1,386 @@
+import { ScheduledPublishing } from '../utils/preview'
+
+// รับ props
+interface Props {
+  publishedAt?: string
+  status?: 'draft' | 'scheduled' | 'published'
+  showCountdown?: boolean
+  compact?: boolean
+  className?: string
+}
+
+const { 
+  publishedAt,
+  status = 'published',
+  showCountdown = true,
+  compact = false,
+  className = ''
+} = Astro.props
+
+// คำนวณสถานะ
+let scheduleStatus = status
+let timeInfo = null
+
+if (publishedAt && status === 'scheduled') {
+  const timeData = ScheduledPublishing.getTimeUntilPublish(publishedAt)
+  timeInfo = timeData
+  
+  if (timeData.isPast) {
+    scheduleStatus = 'overdue'
+  }
+}
+
+// สร้าง status text และสีสำหรับแต่ละสถานะ
+const statusConfig = {
+  draft: {
+    text: 'แบบร่าง',
+    color: 'gray',
+    icon: '📝',
+    description: 'ยังไม่ได้เผยแพร่'
+  },
+  scheduled: {
+    text: 'กำหนดการ',
+    color: 'blue',
+    icon: '⏰',
+    description: 'รอเวลาเผยแพร่'
+  },
+  published: {
+    text: 'เผยแพร่แล้ว',
+    color: 'green',
+    icon: '✅',
+    description: 'เผยแพร่สำเร็จ'
+  },
+  overdue: {
+    text: 'เลยกำหนด',
+    color: 'red',
+    icon: '⚠️',
+    description: 'เลยเวลาที่กำหนดไว้'
+  }
+} as const
+
+const config = statusConfig[scheduleStatus as keyof typeof statusConfig] || statusConfig.published
+
+// Format วันที่
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString)
+  return date.toLocaleString('th-TH', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+}
+
+// Format countdown
+const formatCountdown = (timeInfo: any) => {
+  if (!timeInfo || timeInfo.isPast) return null
+  
+  const { days, hours, minutes } = timeInfo
+  
+  if (days > 0) {
+    return `${days} วัน ${hours} ชั่วโมง`
+  } else if (hours > 0) {
+    return `${hours} ชั่วโมง ${minutes} นาที`
+  } else {
+    return `${minutes} นาที`
+  }
+}
+
+<!-- ✅ Schedule Status Component -->
+<div class={`schedule-status status-${config.color} ${compact ? 'compact' : ''} ${className}`}>
+  {compact ? (
+    <!-- Compact Version -->
+    <div class="flex items-center space-x-2 text-sm">
+      <span class="status-icon" title={config.description}>
+        {config.icon}
+      </span>
+      <span class="status-text font-medium">
+        {config.text}
+      </span>
+      {publishedAt && scheduleStatus === 'scheduled' && timeInfo && !timeInfo.isPast && (
+        <span class="countdown text-xs opacity-75">
+          ({formatCountdown(timeInfo)})
+        </span>
+      )}
+    </div>
+  ) : (
+    <!-- Full Version -->
+    <div class="status-card">
+      <!-- Header -->
+      <div class="flex items-start justify-between mb-3">
+        <div class="flex items-center space-x-2">
+          <span class="status-icon text-lg">
+            {config.icon}
+          </span>
+          <div>
+            <h4 class="status-text font-semibold text-base">
+              {config.text}
+            </h4>
+            <p class="text-sm opacity-75 mt-1">
+              {config.description}
+            </p>
+          </div>
+        </div>
+        
+        {scheduleStatus === 'overdue' && (
+          <span class="overdue-badge px-2 py-1 text-xs font-medium bg-red-100 text-red-800 rounded-full">
+            ล่าช้า
+          </span>
+        )}
+      </div>
+      
+      <!-- Schedule Details -->
+      {publishedAt && (
+        <div class="schedule-details">
+          <div class="flex items-center space-x-2 text-sm mb-2">
+            <svg class="w-4 h-4 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+            <span class="opacity-75">
+              {scheduleStatus === 'scheduled' ? 'จะเผยแพร่เมื่อ:' : 'เผยแพร่เมื่อ:'}
+            </span>
+          </div>
+          
+          <div class="publish-time font-medium mb-3">
+            {formatDate(publishedAt)}
+          </div>
+          
+          <!-- Countdown Timer -->
+          {showCountdown && scheduleStatus === 'scheduled' && timeInfo && !timeInfo.isPast && (
+            <div class="countdown-section">
+              <div class="countdown-grid">
+                {timeInfo.days > 0 && (
+                  <div class="countdown-item">
+                    <div class="countdown-number">{timeInfo.days}</div>
+                    <div class="countdown-label">วัน</div>
+                  </div>
+                )}
+                
+                {(timeInfo.days > 0 || timeInfo.hours > 0) && (
+                  <div class="countdown-item">
+                    <div class="countdown-number">{timeInfo.hours}</div>
+                    <div class="countdown-label">ชั่วโมง</div>
+                  </div>
+                )}
+                
+                <div class="countdown-item">
+                  <div class="countdown-number">{timeInfo.minutes}</div>
+                  <div class="countdown-label">นาที</div>
+                </div>
+              </div>
+              
+              <div class="text-xs opacity-60 mt-2 text-center">
+                เหลือเวลาอีก {formatCountdown(timeInfo)}
+              </div>
+            </div>
+          )}
+          
+          <!-- Overdue Notice -->
+          {scheduleStatus === 'overdue' && timeInfo && (
+            <div class="overdue-notice">
+              <div class="flex items-center space-x-2 text-sm text-red-600">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span>เลยกำหนดไปแล้ว {Math.abs(timeInfo.days)} วัน</span>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  )}
+</div>
+
+{showCountdown && scheduleStatus === 'scheduled' && timeInfo && !timeInfo.isPast && (
+  <!-- Real-time Countdown Script -->
+  <script>
+    /**
+     * Real-time countdown updater
+     */
+    class CountdownUpdater {
+      private targetDate: Date
+      private elements: {
+        days?: HTMLElement
+        hours?: HTMLElement  
+        minutes?: HTMLElement
+        description?: HTMLElement
+      } = {}
+      private updateInterval?: number
+      
+      constructor(publishedAt: string) {
+        this.targetDate = new Date(publishedAt)
+        this.findElements()
+        this.startUpdating()
+      }
+      
+      private findElements() {
+        // หา countdown elements
+        const countdownNumbers = document.querySelectorAll('.countdown-number')
+        const countdownLabels = document.querySelectorAll('.countdown-label')
+        
+        countdownLabels.forEach((label, index) => {
+          const text = label.textContent?.trim()
+          const numberElement = countdownNumbers[index] as HTMLElement
+          
+          if (text === 'วัน') {
+            this.elements.days = numberElement
+          } else if (text === 'ชั่วโมง') {
+            this.elements.hours = numberElement
+          } else if (text === 'นาที') {
+            this.elements.minutes = numberElement
+          }
+        })
+        
+        this.elements.description = document.querySelector('.countdown-section .text-xs') as HTMLElement
+      }
+      
+      private updateCountdown() {
+        const now = new Date()
+        const diffMs = this.targetDate.getTime() - now.getTime()
+        
+        if (diffMs <= 0) {
+          // เวลาหมดแล้ว - refresh หน้าเพื่อแสดงสถานะใหม่
+          window.location.reload()
+          return
+        }
+        
+        const totalSeconds = Math.floor(diffMs / 1000)
+        const days = Math.floor(totalSeconds / (24 * 60 * 60))
+        const hours = Math.floor((totalSeconds % (24 * 60 * 60)) / (60 * 60))
+        const minutes = Math.floor((totalSeconds % (60 * 60)) / 60)
+        
+        // อัปเดต display
+        if (this.elements.days) {
+          this.elements.days.textContent = days.toString()
+        }
+        if (this.elements.hours) {
+          this.elements.hours.textContent = hours.toString()
+        }
+        if (this.elements.minutes) {
+          this.elements.minutes.textContent = minutes.toString()
+        }
+        
+        // อัปเดต description
+        if (this.elements.description) {
+          let timeText = ''
+          if (days > 0) {
+            timeText = `${days} วัน ${hours} ชั่วโมง`
+          } else if (hours > 0) {
+            timeText = `${hours} ชั่วโมง ${minutes} นาที`
+          } else {
+            timeText = `${minutes} นาที`
+          }
+          
+          this.elements.description.textContent = `เหลือเวลาอีก ${timeText}`
+        }
+      }
+      
+      private startUpdating() {
+        // อัปเดตทันที
+        this.updateCountdown()
+        
+        // อัปเดตทุก 30 วินาที
+        this.updateInterval = window.setInterval(() => {
+          this.updateCountdown()
+        }, 30000)
+      }
+      
+      destroy() {
+        if (this.updateInterval) {
+          clearInterval(this.updateInterval)
+        }
+      }
+    }
+    
+    // เริ่มต้น countdown updater
+    document.addEventListener('DOMContentLoaded', () => {
+      const publishedAt = '{publishedAt}'
+      if (publishedAt) {
+        new CountdownUpdater(publishedAt)
+      }
+    })
+  </script>
+)}
+
+<style>
+  .schedule-status {
+    @apply rounded-lg transition-all duration-200;
+  }
+  
+  /* Status Colors */
+  .status-gray {
+    @apply text-gray-700 bg-gray-50 border border-gray-200;
+  }
+  
+  .status-blue {
+    @apply text-blue-700 bg-blue-50 border border-blue-200;
+  }
+  
+  .status-green {
+    @apply text-green-700 bg-green-50 border border-green-200;
+  }
+  
+  .status-red {
+    @apply text-red-700 bg-red-50 border border-red-200;
+  }
+  
+  /* Full Status Card */
+  .status-card {
+    @apply p-4;
+  }
+  
+  /* Compact Version */
+  .schedule-status.compact {
+    @apply p-2 inline-flex;
+  }
+  
+  /* Countdown Grid */
+  .countdown-grid {
+    @apply flex items-center justify-center space-x-4 py-3;
+  }
+  
+  .countdown-item {
+    @apply text-center;
+  }
+  
+  .countdown-number {
+    @apply text-2xl font-bold leading-none;
+  }
+  
+  .countdown-label {
+    @apply text-xs uppercase tracking-wide opacity-75 mt-1;
+  }
+  
+  /* Responsive */
+  @media (max-width: 640px) {
+    .countdown-grid {
+      @apply space-x-2;
+    }
+    
+    .countdown-number {
+      @apply text-xl;
+    }
+    
+    .status-card {
+      @apply p-3;
+    }
+  }
+  
+  /* Animation */
+  .countdown-number {
+    transition: all 0.3s ease;
+  }
+  
+  .countdown-item:hover .countdown-number {
+    @apply scale-110;
+  }
+  
+  /* Print Mode */
+  @media print {
+    .schedule-status {
+      @apply border border-gray-300 bg-white text-black;
+    }
+  }
+</style> 
