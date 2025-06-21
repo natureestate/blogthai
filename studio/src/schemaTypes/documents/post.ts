@@ -190,7 +190,8 @@ export default defineType({
       title: 'Reading Time (minutes)',
       type: 'number',
       description: 'เวลาในการอ่าน (นาที) - จะคำนวณอัตโนมัติ',
-      readOnly: true
+      readOnly: true,
+      initialValue: 5
     }),
     defineField({
       name: 'series',

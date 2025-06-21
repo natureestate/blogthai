@@ -218,10 +218,19 @@ export function advancedSearch(
  * แนะนำคำค้นหาที่เป็นไปได้
  */
 export function getSuggestions(posts: SearchablePost[]): {
-  popularTags: string[]
+  tags: string[]
   categories: string[]
   authors: string[]
 } {
+  // ตรวจสอบว่า posts มีข้อมูลหรือไม่
+  if (!posts || posts.length === 0) {
+    return {
+      tags: [],
+      categories: [],
+      authors: []
+    }
+  }
+
   const tagCounts: Record<string, number> = {}
   const categories: Set<string> = new Set()
   const authors: Set<string> = new Set()
@@ -250,8 +259,8 @@ export function getSuggestions(posts: SearchablePost[]): {
     .map(([tag]) => tag)
   
   return {
-    popularTags,
-    categories: Array.from(categories),
-    authors: Array.from(authors)
+    tags: popularTags,
+    categories: Array.from(categories).slice(0, 6),
+    authors: Array.from(authors).slice(0, 5)
   }
 } 

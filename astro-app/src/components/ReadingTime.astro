@@ -1,3 +1,4 @@
+---
 import { calculateReadingTime } from '../utils/readingTime'
 
 // รับ props
@@ -17,11 +18,12 @@ const {
 
 // คำนวณเวลาในการอ่าน
 const readingTime = calculateReadingTime(content)
+---
 
 <div class={`reading-time flex items-center text-sm text-gray-600 ${className}`}>
   {showIcon && (
     <svg 
-      class="w-4 h-4 mr-2 text-gray-500" 
+      class="w-4 h-4 mr-1" 
       fill="none" 
       stroke="currentColor" 
       viewBox="0 0 24 24"
@@ -38,7 +40,7 @@ const readingTime = calculateReadingTime(content)
   <span class="reading-time-text">
     {readingTime.text}
     {showWords && (
-      <span class="text-gray-400 ml-1">
+      <span class="text-gray-500 ml-1">
         ({readingTime.words.toLocaleString()} คำ)
       </span>
     )}
@@ -47,19 +49,14 @@ const readingTime = calculateReadingTime(content)
 
 <style>
   .reading-time {
-    white-space: nowrap;
+    @apply transition-colors duration-200;
+  }
+  
+  .reading-time:hover {
+    @apply text-gray-800;
   }
   
   .reading-time-text {
-    font-variant-numeric: tabular-nums;
-  }
-  
-  /* เปลี่ยนสีเมื่อ hover parent element */
-  .reading-time:hover {
-    color: #374151;
-  }
-  
-  .reading-time:hover svg {
-    color: #6b7280;
+    @apply font-medium;
   }
 </style> 

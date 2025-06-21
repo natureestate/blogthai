@@ -1,5 +1,17 @@
 # 🚀 AI Blog Development Guide
 
+# ดู Astro App
+open http://localhost:4321
+
+# ดู Sanity Studio  
+open http://localhost:3333
+
+# ตรวจสอบข้อมูล
+node test-connection.js
+
+# สร้างข้อมูลตัวอย่าง (ถ้าต้องการ)
+node create-sample-data.js
+
 ## ℹ️ ข้อมูลพื้นฐาน / Basic Information
 
 **โปรเจค:** AI Blog ด้วย Astro + Sanity CMS  

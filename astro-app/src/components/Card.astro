@@ -2,147 +2,124 @@
 import { formatDate } from "../utils";
 import { urlFor } from "../utils/image";
 import type { Post } from "../utils/sanity";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import { Badge } from "./ui/badge";
 
 interface Props {
   post: Post;
 }
 
 const { post } = Astro.props;
+
+// ฟังก์ชันสำหรับสี category
+const getCategoryColor = (color: string) => {
+  const colors = {
+    blue: "bg-blue-100 text-blue-800 hover:bg-blue-200",
+    green: "bg-green-100 text-green-800 hover:bg-green-200", 
+    purple: "bg-purple-100 text-purple-800 hover:bg-purple-200",
+    red: "bg-red-100 text-red-800 hover:bg-red-200",
+    yellow: "bg-yellow-100 text-yellow-800 hover:bg-yellow-200",
+    cyan: "bg-cyan-100 text-cyan-800 hover:bg-cyan-200"
+  };
+  return colors[color] || colors.blue;
+};
 ---
 
-<div class="card">
-  {
-    post.mainImage ? (
+<!-- ✅ Card Component แปลงเป็น Tailwind CSS -->
+<Card className="group relative overflow-hidden border hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+  <!-- รูปภาพ -->
+  {post.mainImage ? (
+    <div class="aspect-video overflow-hidden">
       <img
-        class="card__cover"
+        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         src={urlFor(post.mainImage).width(500).height(300).url()}
         alt={post.mainImage.alt || ""}
+        loading="lazy"
       />
-    ) : (
-      <div class="card__cover--none" />
-    )
-  }
-  <div class="card__container">
-    <h3 class="card__title">
-      <a
-        class="card__link"
-        href={`/post/${post.slug.current}`}
-      >
+    </div>
+  ) : (
+    <div class="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+      <span class="text-4xl">📝</span>
+    </div>
+  )}
+
+  <!-- Badge เด่น -->
+  {post.featured && (
+    <div class="absolute top-3 right-3 z-10">
+      <Badge className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white shadow-md">
+        ⭐ เด่น
+      </Badge>
+    </div>
+  )}
+
+  <CardHeader className="pb-3">
+    <!-- Categories -->
+    {post.categories && post.categories.length > 0 && (
+      <div class="flex gap-2 mb-3 flex-wrap">
+        {post.categories.slice(0, 2).map(category => (
+          <Badge 
+            variant="secondary"
+            className={`text-xs ${getCategoryColor(category.color || 'blue')}`}
+          >
+            {category.icon && <span class="mr-1">{category.icon}</span>}
+            {category.title}
+          </Badge>
+        ))}
+      </div>
+    )}
+
+    <!-- Title -->
+    <CardTitle className="text-xl font-bold leading-tight line-clamp-2 group-hover:text-primary transition-colors">
+      <a href={`/post/${post.slug.current}`} class="before:absolute before:inset-0">
         {post.title}
       </a>
-    </h3>
-    <p class="card__excerpt">{post.excerpt}</p>
-    <p class="card__date">
-      {formatDate(post._createdAt)}
-    </p>
-  </div>
-</div>
+    </CardTitle>
+  </CardHeader>
 
-<style>
-  .card {
-    display: flex;
-    flex-direction: column;
-    padding: var(--space-2);
-    padding: 9px;
-    position: relative;
-    border-bottom: 1px solid #ced2d9;
+  <CardContent className="pt-0">
+    <!-- Excerpt -->
+    <CardDescription className="text-sm text-muted-foreground line-clamp-3 mb-4">
+      {post.excerpt}
+    </CardDescription>
+    
+    <!-- Meta Information -->
+    <div class="flex items-center gap-3 text-xs text-muted-foreground mb-3 flex-wrap">
+      <span class="font-medium">
+        {formatDate(post.publishedAt || post._createdAt)}
+      </span>
+      
+      {post.author && (
+        <>
+          <span>•</span>
+          <span>โดย {post.author.name}</span>
+        </>
+      )}
+      
+      {post.readingTime && (
+        <>
+          <span>•</span>
+          <span>{post.readingTime} นาที</span>
+        </>
+      )}
+    </div>
+    
+    <!-- Tags -->
+    {post.tags && post.tags.length > 0 && (
+      <div class="flex gap-1.5 flex-wrap">
+        {post.tags.slice(0, 3).map(tag => (
+          <Badge variant="outline" className="text-xs px-2 py-0.5">
+            #{tag}
+          </Badge>
+        ))}
+        {post.tags.length > 3 && (
+          <Badge variant="outline" className="text-xs px-2 py-0.5 font-medium">
+            +{post.tags.length - 3}
+          </Badge>
+        )}
+      </div>
+    )}
+  </CardContent>
+</Card>
 
-    & .card__container {
-      margin: 0 var(--space-1) 0;
-    }
+<!-- ✅ ใช้ Tailwind CSS แทน Custom CSS แล้ว -->
 
-    & .card__cover {
-      width: 100%;
-      height: 231px;
-      object-fit: cover;
-    }
-
-    & .card__cover--none {
-      width: 100%;
-      height: 231px;
-      background: var(--black);
-    }
-
-    & .card__title {
-      font-family: var(--font-family-sans);
-      font-weight: 800;
-      font-size: var(--font-size-7);
-      line-height: var(--line-height-6);
-      letter-spacing: -0.025em;
-      margin: var(--space-3) 0;
-    }
-
-    & .card__excerpt {
-      font-family: var(--font-family-serif);
-      font-weight: 400;
-      font-size: var(--font-size-4);
-      line-height: var(--line-height-3);
-      margin-top: 0;
-    }
-
-    & .card__date {
-      font-weight: 600;
-      font-family: var(--font-family-sans);
-      font-size: var(--font-size-1);
-      margin-top: calc(var(----space-4) + 7);
-    }
-
-    & .card__link {
-      color: var(--black);
-      text-decoration: none;
-
-      &:hover {
-        opacity: 0.8;
-        transition: 0.2s;
-      }
-
-      &::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-      }
-    }
-
-    &:first-child {
-      border-top-left-radius: 3px;
-      border-top-right-radius: 3px;
-    }
-
-    &:last-child {
-      border-bottom-left-radius: 3px;
-      border-bottom-right-radius: 3px;
-    }
-  }
-
-  @media (min-width: 575px) {
-    .card {
-      border: 1px solid #ced2d9;
-      border-bottom: none;
-
-      & .card__title {
-        margin-top: var(--space-4);
-      }
-
-      &:last-child {
-        border-bottom: 1px solid #ced2d9;
-      }
-    }
-  }
-
-  @media (min-width: 800px) {
-    .card {
-      flex-direction: row;
-
-      & .card__container {
-        margin: 0 var(--space-4) 0;
-      }
-
-      & .card__cover,
-      & .card__cover--none {
-        min-width: 366.5px;
-        max-width: 366.5px;
-        max-height: 231px;
-      }
-    }
-  }
-</style>

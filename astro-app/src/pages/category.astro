@@ -1,0 +1,121 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getCategories, getCategoryPostCount } from "../utils/sanity";
+
+// ดึงข้อมูลหมวดหมู่ทั้งหมด
+const categories = await getCategories();
+
+// นับจำนวนบทความในแต่ละหมวดหมู่
+const categoriesWithCount = await Promise.all(
+  categories.map(async (category) => {
+    const postCount = await getCategoryPostCount(category.slug.current);
+    return {
+      ...category,
+      postCount
+    };
+  })
+);
+---
+
+<Layout title="หมวดหมู่ - Blog ไทย">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Header Section -->
+    <div class="text-center mb-12">
+      <h1 class="text-4xl md:text-5xl font-bold text-foreground mb-4">
+        📚 หมวดหมู่บทความ
+      </h1>
+      <p class="text-lg text-muted-foreground max-w-2xl mx-auto">
+        เลือกหมวดหมู่ที่สนใจเพื่ออ่านบทความที่เกี่ยวข้อง
+      </p>
+    </div>
+
+    <!-- Categories Grid -->
+    {categoriesWithCount.length > 0 ? (
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {categoriesWithCount.map((category) => (
+          <a 
+            href={`/category/${category.slug.current}`}
+            class="group bg-card border border-border rounded-xl p-6 hover:border-primary/50 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
+          >
+            <!-- Icon -->
+            <div class="text-4xl mb-4 group-hover:scale-110 transition-transform duration-200">
+              {category.icon || '📝'}
+            </div>
+            
+            <!-- Title -->
+            <h3 class="text-xl font-bold text-foreground group-hover:text-primary transition-colors mb-2">
+              {category.title}
+            </h3>
+            
+            <!-- Description -->
+            {category.description && (
+              <p class="text-muted-foreground text-sm mb-4 line-clamp-3">
+                {category.description}
+              </p>
+            )}
+            
+            <!-- Post Count -->
+            <div class="flex items-center justify-between mt-auto">
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-secondary text-secondary-foreground">
+                {category.postCount} บทความ
+              </span>
+              <span class="text-primary text-sm group-hover:translate-x-1 transition-transform">
+                →
+              </span>
+            </div>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <div class="text-center py-16">
+        <div class="text-6xl mb-4">📚</div>
+        <h3 class="text-xl font-semibold text-foreground mb-2">
+          ยังไม่มีหมวดหมู่
+        </h3>
+        <p class="text-muted-foreground">
+          หมวดหมู่จะปรากฏที่นี่เมื่อมีการสร้างบทความ
+        </p>
+      </div>
+    )}
+
+    <!-- Statistics Section -->
+    {categoriesWithCount.length > 0 && (
+      <div class="mt-16 bg-muted/50 rounded-xl p-8">
+        <div class="text-center mb-6">
+          <h2 class="text-2xl font-bold text-foreground mb-2">
+            📊 สถิติหมวดหมู่
+          </h2>
+        </div>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
+          <div class="bg-card border border-border rounded-lg p-4">
+            <div class="text-2xl font-bold text-primary">
+              {categoriesWithCount.length}
+            </div>
+            <div class="text-muted-foreground text-sm">
+              หมวดหมู่ทั้งหมด
+            </div>
+          </div>
+          
+          <div class="bg-card border border-border rounded-lg p-4">
+            <div class="text-2xl font-bold text-primary">
+              {categoriesWithCount.reduce((sum, cat) => sum + cat.postCount, 0)}
+            </div>
+            <div class="text-muted-foreground text-sm">
+              บทความทั้งหมด
+            </div>
+          </div>
+          
+          <div class="bg-card border border-border rounded-lg p-4">
+            <div class="text-2xl font-bold text-primary">
+              {Math.round(categoriesWithCount.reduce((sum, cat) => sum + cat.postCount, 0) / categoriesWithCount.length) || 0}
+            </div>
+            <div class="text-muted-foreground text-sm">
+              บทความเฉลี่ย/หมวดหมู่
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+  </div>
+</Layout> 

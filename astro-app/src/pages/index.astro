@@ -1,14 +1,128 @@
 ---
 import Card from "../components/Card.astro";
 import Welcome from "../components/Welcome.astro";
+import SearchComponent from "../components/SearchComponent.astro";
 import Layout from "../layouts/Layout.astro";
-import { getPosts } from "../utils/sanity";
+import { getPosts, getCategories, getFeaturedPosts } from "../utils/sanity";
 
+// ดึงข้อมูลทั้งหมด
 const posts = await getPosts();
+const categories = await getCategories();
+const featuredPosts = await getFeaturedPosts(3);
 ---
 
-<Layout title="Welcome to Astro.">
-  <section>
-    {posts.length ? posts.map((post) => <Card post={post} />) : <Welcome />}
-  </section>
+<Layout title="Blog ไทย - แหล่งรวมบทความเทคโนโลยี">
+  <div class="max-w-7xl mx-auto">
+    <!-- ✅ Hero Section -->
+    <section class="text-center py-12 bg-gradient-to-br from-background to-muted rounded-xl mb-12">
+      <div class="max-w-4xl mx-auto px-8">
+        <h1 class="text-4xl md:text-5xl font-bold text-foreground mb-4 leading-tight">
+          ยินดีต้อนรับสู่ <span class="bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">Blog ไทย</span>
+        </h1>
+        <p class="text-lg text-muted-foreground mb-8 leading-relaxed">
+          แหล่งรวมบทความเทคโนโลยี การพัฒนาเว็บ และเทรนด์ใหม่ๆ ในโลกดิจิทัล
+        </p>
+        
+        <!-- Search Component -->
+        <div class="max-w-2xl mx-auto">
+          <SearchComponent posts={posts} />
+        </div>
+      </div>
+    </section>
+
+    <!-- ✅ Featured Posts Section -->
+    {featuredPosts.length > 0 && (
+      <section class="mb-16">
+        <div class="text-center mb-10">
+          <h2 class="flex items-center justify-center gap-2 text-3xl font-bold text-foreground mb-2">
+            <span class="text-2xl">⭐</span>
+            บทความเด่น
+          </h2>
+          <p class="text-muted-foreground">บทความที่แนะนำและได้รับความนิยม</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {featuredPosts.map((post) => (
+            <div class="transform hover:scale-105 transition-transform duration-200">
+              <Card post={post} />
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- ✅ Categories Section -->
+    {categories.length > 0 && (
+      <section class="mb-16">
+        <div class="text-center mb-10">
+          <h2 class="flex items-center justify-center gap-2 text-3xl font-bold text-foreground mb-2">
+            <span class="text-2xl">📚</span>
+            หมวดหมู่
+          </h2>
+          <p class="text-muted-foreground">เลือกหมวดหมู่ที่สนใจ</p>
+        </div>
+        
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          {categories.slice(0, 6).map((category) => (
+            <a 
+              href={`/category/${category.slug.current}`}
+              class="group bg-card border border-border rounded-lg p-4 text-center hover:border-primary/50 hover:shadow-md transition-all duration-200"
+            >
+              <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">
+                {category.icon || '📝'}
+              </div>
+              <h3 class="font-semibold text-foreground group-hover:text-primary transition-colors">
+                {category.title}
+              </h3>
+              {category.description && (
+                <p class="text-xs text-muted-foreground mt-1 line-clamp-2">
+                  {category.description}
+                </p>
+              )}
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- ✅ Recent Posts Section -->
+    <section class="mb-16">
+      <div class="text-center mb-10">
+        <h2 class="flex items-center justify-center gap-2 text-3xl font-bold text-foreground mb-2">
+          <span class="text-2xl">📰</span>
+          บทความล่าสุด
+        </h2>
+        <p class="text-muted-foreground">
+          {posts.length} บทความทั้งหมด
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {posts.length ? (
+          posts.map((post) => (
+            <div class="transform hover:scale-105 transition-transform duration-200">
+              <Card post={post} />
+            </div>
+          ))
+        ) : (
+          <div class="col-span-full">
+            <Welcome />
+          </div>
+        )}
+      </div>
+      
+      <!-- Load More Button (สำหรับอนาคต) -->
+      {posts.length > 6 && (
+        <div class="text-center mt-12">
+          <button 
+            class="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 transition-colors cursor-not-allowed opacity-60"
+            disabled
+          >
+            <span>โหลดบทความเพิ่มเติม</span>
+            <span class="text-xs text-muted-foreground">(กำลังพัฒนา)</span>
+          </button>
+        </div>
+      )}
+    </section>
+  </div>
 </Layout>

@@ -1,344 +1,261 @@
-import { ScheduledPublishing } from '../utils/preview'
+---
+// import { ScheduledPublishing } from '../utils/preview' // ไม่ใช้แล้ว
 
-// รับ props
-interface Props {
-  publishedAt?: string
-  status?: 'draft' | 'scheduled' | 'published'
-  showCountdown?: boolean
-  compact?: boolean
-  className?: string
+// สถานะการเผยแพร่ของโพสต์
+export interface Props {
+  publishedAt?: string | Date; // วันที่เผยแพร่
+  status?: 'draft' | 'published' | 'scheduled' | 'archived' | 'overdue'; // สถานะ
+  compact?: boolean; // แสดงแบบย่อ
+  showCountdown?: boolean; // แสดงการนับถอยหลัง
+  className?: string; // CSS class เพิ่มเติม
 }
 
 const { 
-  publishedAt,
-  status = 'published',
+  publishedAt, 
+  status = 'draft', 
+  compact = false, 
   showCountdown = true,
-  compact = false,
-  className = ''
-} = Astro.props
+  className = '' 
+} = Astro.props;
 
-// คำนวณสถานะ
-let scheduleStatus = status
-let timeInfo = null
+// แปลง publishedAt เป็น Date object
+const publishDate = publishedAt ? new Date(publishedAt) : null;
+const now = new Date();
 
-if (publishedAt && status === 'scheduled') {
-  const timeData = ScheduledPublishing.getTimeUntilPublish(publishedAt)
-  timeInfo = timeData
-  
-  if (timeData.isPast) {
-    scheduleStatus = 'overdue'
+// คำนวณสถานะการเผยแพร่
+let scheduleStatus = status;
+if (publishDate && status === 'scheduled') {
+  if (publishDate <= now) {
+    scheduleStatus = 'overdue'; // เลยกำหนดแล้ว
   }
 }
 
-// สร้าง status text และสีสำหรับแต่ละสถานะ
+// คำนวณเวลาที่เหลือ
+const timeInfo = publishDate ? {
+  isPast: publishDate <= now,
+  days: Math.floor((publishDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)),
+  hours: Math.floor(((publishDate.getTime() - now.getTime()) % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+  minutes: Math.floor(((publishDate.getTime() - now.getTime()) % (1000 * 60 * 60)) / (1000 * 60))
+} : null;
+
+// กำหนดค่า config สำหรับแต่ละสถานะ
 const statusConfig = {
   draft: {
-    text: 'แบบร่าง',
-    color: 'gray',
     icon: '📝',
-    description: 'ยังไม่ได้เผยแพร่'
-  },
-  scheduled: {
-    text: 'กำหนดการ',
-    color: 'blue',
-    icon: '⏰',
-    description: 'รอเวลาเผยแพร่'
+    text: 'ฉบับร่าง',
+    description: 'ยังไม่ได้เผยแพร่',
+    color: 'gray'
   },
   published: {
-    text: 'เผยแพร่แล้ว',
-    color: 'green',
     icon: '✅',
-    description: 'เผยแพร่สำเร็จ'
+    text: 'เผยแพร่แล้ว',
+    description: 'เผยแพร่สู่สาธารณะแล้ว',
+    color: 'green'
+  },
+  scheduled: {
+    icon: '⏰',
+    text: 'กำหนดการเผยแพร่',
+    description: 'จะเผยแพร่ตามเวลาที่กำหนด',
+    color: 'blue'
   },
   overdue: {
-    text: 'เลยกำหนด',
-    color: 'red',
     icon: '⚠️',
-    description: 'เลยเวลาที่กำหนดไว้'
+    text: 'เลยกำหนด',
+    description: 'เลยเวลาที่กำหนดไว้แล้ว',
+    color: 'red'
+  },
+  archived: {
+    icon: '📦',
+    text: 'เก็บถาวร',
+    description: 'ถูกเก็บเข้าคลังแล้ว',
+    color: 'gray'
   }
-} as const
+};
 
-const config = statusConfig[scheduleStatus as keyof typeof statusConfig] || statusConfig.published
+const config = statusConfig[scheduleStatus] || statusConfig.draft;
 
-// Format วันที่
-const formatDate = (dateString: string) => {
-  const date = new Date(dateString)
-  return date.toLocaleString('th-TH', {
+// ฟอร์แมตวันที่
+const formatDate = (date: Date) => {
+  return new Intl.DateTimeFormat('th-TH', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
     hour: '2-digit',
-    minute: '2-digit'
-  })
-}
+    minute: '2-digit',
+    timeZone: 'Asia/Bangkok'
+  }).format(date);
+};
 
-// Format countdown
+// ฟอร์แมตเวลานับถอยหลัง
 const formatCountdown = (timeInfo: any) => {
-  if (!timeInfo || timeInfo.isPast) return null
-  
-  const { days, hours, minutes } = timeInfo
+  const { days, hours, minutes } = timeInfo;
   
   if (days > 0) {
-    return `${days} วัน ${hours} ชั่วโมง`
+    return `${days} วัน ${hours} ชั่วโมง`;
   } else if (hours > 0) {
-    return `${hours} ชั่วโมง ${minutes} นาที`
+    return `${hours} ชั่วโมง ${minutes} นาที`;
   } else {
-    return `${minutes} นาที`
+    return `${minutes} นาที`;
   }
-}
+};
+---
 
-<!-- ✅ Schedule Status Component -->
 <div class={`schedule-status status-${config.color} ${compact ? 'compact' : ''} ${className}`}>
   {compact ? (
-    <!-- Compact Version -->
-    <div class="flex items-center space-x-2 text-sm">
+    <>
       <span class="status-icon" title={config.description}>
         {config.icon}
       </span>
-      <span class="status-text font-medium">
+      <span class="status-text">
         {config.text}
       </span>
       {publishedAt && scheduleStatus === 'scheduled' && timeInfo && !timeInfo.isPast && (
-        <span class="countdown text-xs opacity-75">
+        <span class="countdown-text">
           ({formatCountdown(timeInfo)})
         </span>
       )}
-    </div>
+    </>
   ) : (
-    <!-- Full Version -->
-    <div class="status-card">
-      <!-- Header -->
-      <div class="flex items-start justify-between mb-3">
-        <div class="flex items-center space-x-2">
-          <span class="status-icon text-lg">
-            {config.icon}
-          </span>
-          <div>
-            <h4 class="status-text font-semibold text-base">
-              {config.text}
-            </h4>
-            <p class="text-sm opacity-75 mt-1">
+    <div class="status-header">
+      <span class="status-icon" title={config.description}>
+        {config.icon}
+      </span>
+      <div class="status-info">
+        <div class="status-label">
+          {config.text}
+          {config.description && (
+            <span class="status-description">
               {config.description}
-            </p>
-          </div>
+            </span>
+          )}
         </div>
         
-        {scheduleStatus === 'overdue' && (
-          <span class="overdue-badge px-2 py-1 text-xs font-medium bg-red-100 text-red-800 rounded-full">
-            ล่าช้า
-          </span>
-        )}
-      </div>
-      
-      <!-- Schedule Details -->
-      {publishedAt && (
-        <div class="schedule-details">
-          <div class="flex items-center space-x-2 text-sm mb-2">
-            <svg class="w-4 h-4 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+        {scheduleStatus === 'overdue' && timeInfo && (
+          <div class="overdue-warning">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.268 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
             </svg>
-            <span class="opacity-75">
+            <span>เลยกำหนดไปแล้ว {Math.abs(timeInfo.days || 0)} วัน</span>
+          </div>
+        )}
+        
+        {publishDate && (
+          <div class="publish-date">
+            <span class="date-label">
               {scheduleStatus === 'scheduled' ? 'จะเผยแพร่เมื่อ:' : 'เผยแพร่เมื่อ:'}
             </span>
+            <span class="date-value">
+              {formatDate(publishDate)}
+            </span>
           </div>
-          
-          <div class="publish-time font-medium mb-3">
-            {formatDate(publishedAt)}
-          </div>
-          
-          <!-- Countdown Timer -->
-          {showCountdown && scheduleStatus === 'scheduled' && timeInfo && !timeInfo.isPast && (
-            <div class="countdown-section">
-              <div class="countdown-grid">
-                {timeInfo.days > 0 && (
-                  <div class="countdown-item">
-                    <div class="countdown-number">{timeInfo.days}</div>
-                    <div class="countdown-label">วัน</div>
-                  </div>
-                )}
-                
-                {(timeInfo.days > 0 || timeInfo.hours > 0) && (
-                  <div class="countdown-item">
-                    <div class="countdown-number">{timeInfo.hours}</div>
-                    <div class="countdown-label">ชั่วโมง</div>
-                  </div>
-                )}
-                
+        )}
+        
+        {showCountdown && scheduleStatus === 'scheduled' && timeInfo && !timeInfo.isPast && (
+          <div class="countdown-container">
+            <div class="countdown-grid">
+              {timeInfo.days > 0 && (
                 <div class="countdown-item">
-                  <div class="countdown-number">{timeInfo.minutes}</div>
-                  <div class="countdown-label">นาที</div>
+                  <div class="countdown-number">{timeInfo.days}</div>
+                  <div class="countdown-label">วัน</div>
                 </div>
-              </div>
-              
-              <div class="text-xs opacity-60 mt-2 text-center">
-                เหลือเวลาอีก {formatCountdown(timeInfo)}
-              </div>
-            </div>
-          )}
-          
-          <!-- Overdue Notice -->
-          {scheduleStatus === 'overdue' && timeInfo && (
-            <div class="overdue-notice">
-              <div class="flex items-center space-x-2 text-sm text-red-600">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-                <span>เลยกำหนดไปแล้ว {Math.abs(timeInfo.days)} วัน</span>
+              )}
+              {(timeInfo.days > 0 || timeInfo.hours > 0) && (
+                <div class="countdown-item">
+                  <div class="countdown-number">{timeInfo.hours}</div>
+                  <div class="countdown-label">ชั่วโมง</div>
+                </div>
+              )}
+              <div class="countdown-item">
+                <div class="countdown-number">{timeInfo.minutes}</div>
+                <div class="countdown-label">นาที</div>
               </div>
             </div>
-          )}
-        </div>
-      )}
+            <div class="countdown-text">
+              เหลือเวลาอีก {formatCountdown(timeInfo)}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   )}
 </div>
 
 {showCountdown && scheduleStatus === 'scheduled' && timeInfo && !timeInfo.isPast && (
-  <!-- Real-time Countdown Script -->
-  <script>
-    /**
-     * Real-time countdown updater
-     */
-    class CountdownUpdater {
-      private targetDate: Date
-      private elements: {
-        days?: HTMLElement
-        hours?: HTMLElement  
-        minutes?: HTMLElement
-        description?: HTMLElement
-      } = {}
-      private updateInterval?: number
-      
-      constructor(publishedAt: string) {
-        this.targetDate = new Date(publishedAt)
-        this.findElements()
-        this.startUpdating()
-      }
-      
-      private findElements() {
-        // หา countdown elements
-        const countdownNumbers = document.querySelectorAll('.countdown-number')
-        const countdownLabels = document.querySelectorAll('.countdown-label')
-        
-        countdownLabels.forEach((label, index) => {
-          const text = label.textContent?.trim()
-          const numberElement = countdownNumbers[index] as HTMLElement
-          
-          if (text === 'วัน') {
-            this.elements.days = numberElement
-          } else if (text === 'ชั่วโมง') {
-            this.elements.hours = numberElement
-          } else if (text === 'นาที') {
-            this.elements.minutes = numberElement
-          }
-        })
-        
-        this.elements.description = document.querySelector('.countdown-section .text-xs') as HTMLElement
-      }
-      
-      private updateCountdown() {
-        const now = new Date()
-        const diffMs = this.targetDate.getTime() - now.getTime()
-        
-        if (diffMs <= 0) {
-          // เวลาหมดแล้ว - refresh หน้าเพื่อแสดงสถานะใหม่
-          window.location.reload()
-          return
-        }
-        
-        const totalSeconds = Math.floor(diffMs / 1000)
-        const days = Math.floor(totalSeconds / (24 * 60 * 60))
-        const hours = Math.floor((totalSeconds % (24 * 60 * 60)) / (60 * 60))
-        const minutes = Math.floor((totalSeconds % (60 * 60)) / 60)
-        
-        // อัปเดต display
-        if (this.elements.days) {
-          this.elements.days.textContent = days.toString()
-        }
-        if (this.elements.hours) {
-          this.elements.hours.textContent = hours.toString()
-        }
-        if (this.elements.minutes) {
-          this.elements.minutes.textContent = minutes.toString()
-        }
-        
-        // อัปเดต description
-        if (this.elements.description) {
-          let timeText = ''
-          if (days > 0) {
-            timeText = `${days} วัน ${hours} ชั่วโมง`
-          } else if (hours > 0) {
-            timeText = `${hours} ชั่วโมง ${minutes} นาที`
-          } else {
-            timeText = `${minutes} นาที`
-          }
-          
-          this.elements.description.textContent = `เหลือเวลาอีก ${timeText}`
-        }
-      }
-      
-      private startUpdating() {
-        // อัปเดตทันที
-        this.updateCountdown()
-        
-        // อัปเดตทุก 30 วินาที
-        this.updateInterval = window.setInterval(() => {
-          this.updateCountdown()
-        }, 30000)
-      }
-      
-      destroy() {
-        if (this.updateInterval) {
-          clearInterval(this.updateInterval)
-        }
-      }
-    }
-    
-    // เริ่มต้น countdown updater
-    document.addEventListener('DOMContentLoaded', () => {
-      const publishedAt = '{publishedAt}'
-      if (publishedAt) {
-        new CountdownUpdater(publishedAt)
-      }
-    })
-  </script>
+  <div class="countdown-mobile">
+    <div class="countdown-text">
+      ⏰ เหลือเวลาอีก {formatCountdown(timeInfo)}
+    </div>
+  </div>
 )}
 
 <style>
   .schedule-status {
-    @apply rounded-lg transition-all duration-200;
+    @apply inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium;
+  }
+  
+  .schedule-status.compact {
+    @apply px-2 py-1 text-xs;
   }
   
   /* Status Colors */
   .status-gray {
-    @apply text-gray-700 bg-gray-50 border border-gray-200;
+    @apply bg-gray-100 text-gray-800 border border-gray-200;
   }
   
   .status-blue {
-    @apply text-blue-700 bg-blue-50 border border-blue-200;
+    @apply bg-blue-100 text-blue-800 border border-blue-200;
   }
   
   .status-green {
-    @apply text-green-700 bg-green-50 border border-green-200;
+    @apply bg-green-100 text-green-800 border border-green-200;
   }
   
   .status-red {
-    @apply text-red-700 bg-red-50 border border-red-200;
+    @apply bg-red-100 text-red-800 border border-red-200;
   }
   
-  /* Full Status Card */
-  .status-card {
-    @apply p-4;
+  .status-header {
+    @apply flex items-start gap-3;
   }
   
-  /* Compact Version */
-  .schedule-status.compact {
-    @apply p-2 inline-flex;
+  .status-icon {
+    @apply text-lg;
   }
   
-  /* Countdown Grid */
+  .status-info {
+    @apply flex-1 space-y-2;
+  }
+  
+  .status-label {
+    @apply font-semibold;
+  }
+  
+  .status-description {
+    @apply block text-xs opacity-75 font-normal;
+  }
+  
+  .overdue-warning {
+    @apply flex items-center text-red-600 text-sm;
+  }
+  
+  .publish-date {
+    @apply text-sm;
+  }
+  
+  .date-label {
+    @apply font-medium mr-2;
+  }
+  
+  .date-value {
+    @apply opacity-75;
+  }
+  
+  .countdown-container {
+    @apply space-y-2;
+  }
+  
   .countdown-grid {
-    @apply flex items-center justify-center space-x-4 py-3;
+    @apply flex gap-4;
   }
   
   .countdown-item {
@@ -346,41 +263,29 @@ const formatCountdown = (timeInfo: any) => {
   }
   
   .countdown-number {
-    @apply text-2xl font-bold leading-none;
+    @apply text-2xl font-bold;
   }
   
   .countdown-label {
-    @apply text-xs uppercase tracking-wide opacity-75 mt-1;
+    @apply text-xs opacity-75;
+  }
+  
+  .countdown-text {
+    @apply text-sm opacity-75;
+  }
+  
+  .countdown-mobile {
+    @apply md:hidden mt-2 p-2 bg-blue-50 rounded text-center text-sm text-blue-700;
   }
   
   /* Responsive */
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
     .countdown-grid {
-      @apply space-x-2;
+      @apply gap-2;
     }
     
     .countdown-number {
-      @apply text-xl;
-    }
-    
-    .status-card {
-      @apply p-3;
-    }
-  }
-  
-  /* Animation */
-  .countdown-number {
-    transition: all 0.3s ease;
-  }
-  
-  .countdown-item:hover .countdown-number {
-    @apply scale-110;
-  }
-  
-  /* Print Mode */
-  @media print {
-    .schedule-status {
-      @apply border border-gray-300 bg-white text-black;
+      @apply text-lg;
     }
   }
 </style> 

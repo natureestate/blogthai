@@ -15,6 +15,7 @@ const dataset = PUBLIC_SANITY_STUDIO_DATASET || PUBLIC_SANITY_DATASET || "blog";
 
 import sanity from "@sanity/astro";
 import react from "@astrojs/react";
+import tailwind from "@astrojs/tailwind";
 
 // Change this depending on your hosting provider (Vercel, Netlify etc)
 // https://docs.astro.build/en/guides/server-side-rendering/#adding-an-adapter
@@ -35,5 +36,6 @@ export default defineConfig({
       apiVersion: "2024-12-08", // Set to date of setup to use the latest API version
     }),
     react(), // Required for Sanity Studio
+    tailwind(), // ✅ เพิ่ม Tailwind CSS integration
   ],
 });

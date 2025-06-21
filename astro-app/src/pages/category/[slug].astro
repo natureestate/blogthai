@@ -1,0 +1,450 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Card from "../../components/Card.astro";
+import SearchComponent from "../../components/SearchComponent.astro";
+import { getCategories, getPostsByCategory, getPosts } from "../../utils/sanity";
+
+export async function getStaticPaths() {
+  // ดึงหมวดหมู่ทั้งหมดเพื่อสร้าง static paths
+  const categories = await getCategories();
+  
+  return categories.map((category) => ({
+    params: { slug: category.slug.current },
+    props: { category },
+  }));
+}
+
+// const { slug } = Astro.params; // ไม่ใช้ในตอนนี้
+const { category } = Astro.props;
+
+// ดึงบทความในหมวดหมู่นี้
+const categoryPosts = await getPostsByCategory(category.slug.current);
+const allPosts = await getPosts(); // สำหรับ search component
+const otherCategories = (await getCategories()).filter(
+  (cat) => cat.slug.current !== category.slug.current
+).slice(0, 5);
+
+// SEO metadata
+const pageTitle = `หมวดหมู่: ${category.title} | Blog ไทย`;
+const pageDescription = category.description || `บทความทั้งหมดในหมวดหมู่ ${category.title}`;
+---
+
+<Layout title={pageTitle}>
+  <div class="category-page">
+    <!-- ✅ Category Header -->
+    <section class="category-header">
+      <div class="breadcrumb">
+        <a href="/" class="breadcrumb-link">หน้าแรก</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current">หมวดหมู่</span>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-current">{category.title}</span>
+      </div>
+      
+      <div class="category-info">
+        <div class="category-icon">
+          {category.icon || '📚'}
+        </div>
+        <div class="category-details">
+          <h1 class="category-title">{category.title}</h1>
+          {category.description && (
+            <p class="category-description">{category.description}</p>
+          )}
+          <div class="category-stats">
+            <span class="post-count">
+              📄 {categoryPosts.length} บทความ
+            </span>
+            {category.color && (
+              <span class={`category-badge category-badge--${category.color}`}>
+                {category.title}
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ✅ Search Section -->
+    <section class="search-section">
+      <div class="search-container">
+        <h2 class="search-title">ค้นหาบทความ</h2>
+        <SearchComponent posts={allPosts} />
+      </div>
+    </section>
+
+    <!-- ✅ Other Categories -->
+    {otherCategories.length > 0 && (
+      <section class="other-categories">
+        <h2 class="section-title">หมวดหมู่อื่นๆ</h2>
+        <div class="categories-grid">
+          {otherCategories.map((cat) => (
+            <a 
+              href={`/category/${cat.slug.current}`}
+              class={`category-card category-card--${cat.color || 'blue'}`}
+            >
+              <div class="category-card__icon">
+                {cat.icon || '📝'}
+              </div>
+              <h3 class="category-card__title">{cat.title}</h3>
+              {cat.description && (
+                <p class="category-card__description">{cat.description}</p>
+              )}
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- ✅ Posts Section -->
+    <section class="posts-section">
+      <div class="section-header">
+        <h2 class="section-title">
+          บทความในหมวดหมู่ {category.title}
+        </h2>
+        <p class="section-subtitle">
+          {categoryPosts.length} บทความทั้งหมด
+        </p>
+      </div>
+      
+      {categoryPosts.length > 0 ? (
+        <div class="posts-grid">
+          {categoryPosts.map((post) => (
+            <div class="post-card">
+              <Card post={post} />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div class="empty-state">
+          <div class="empty-icon">📝</div>
+          <h3 class="empty-title">ยังไม่มีบทความ</h3>
+          <p class="empty-description">
+            หมวดหมู่นี้ยังไม่มีบทความ กลับไปดูบทความอื่นๆ ได้ที่หน้าแรก
+          </p>
+          <a href="/" class="empty-action">
+            กลับสู่หน้าแรก
+          </a>
+        </div>
+      )}
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .category-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  /* ✅ Category Header */
+  .category-header {
+    margin-bottom: 3rem;
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.875rem;
+    color: #64748b;
+  }
+
+  .breadcrumb-link {
+    color: #3b82f6;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .breadcrumb-link:hover {
+    color: #1d4ed8;
+  }
+
+  .breadcrumb-separator {
+    color: #cbd5e1;
+  }
+
+  .breadcrumb-current {
+    color: #1e293b;
+    font-weight: 500;
+  }
+
+  .category-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-radius: 1rem;
+    border: 1px solid #e2e8f0;
+  }
+
+  .category-icon {
+    font-size: 3rem;
+    line-height: 1;
+  }
+
+  .category-details {
+    flex: 1;
+  }
+
+  .category-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 0.5rem;
+  }
+
+  .category-description {
+    font-size: 1.125rem;
+    color: #64748b;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
+  .category-stats {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .post-count {
+    font-size: 0.875rem;
+    color: #64748b;
+    font-weight: 500;
+  }
+
+  .category-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .category-badge--blue {
+    background-color: #dbeafe;
+    color: #1e40af;
+  }
+
+  .category-badge--green {
+    background-color: #dcfce7;
+    color: #166534;
+  }
+
+  .category-badge--purple {
+    background-color: #f3e8ff;
+    color: #7c3aed;
+  }
+
+  .category-badge--red {
+    background-color: #fee2e2;
+    color: #dc2626;
+  }
+
+  .category-badge--yellow {
+    background-color: #fef3c7;
+    color: #d97706;
+  }
+
+  .category-badge--cyan {
+    background-color: #cffafe;
+    color: #0891b2;
+  }
+
+  /* ✅ Search Section */
+  .search-section {
+    margin-bottom: 3rem;
+  }
+
+  .search-container {
+    text-align: center;
+    padding: 2rem;
+    background: white;
+    border-radius: 1rem;
+    border: 1px solid #e2e8f0;
+  }
+
+  .search-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1a202c;
+    margin-bottom: 1rem;
+  }
+
+  /* ✅ Other Categories */
+  .other-categories {
+    margin-bottom: 3rem;
+  }
+
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .category-card {
+    display: block;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    text-decoration: none;
+    transition: all 0.2s;
+    border: 1px solid;
+  }
+
+  .category-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .category-card--blue {
+    background-color: #dbeafe;
+    border-color: #bfdbfe;
+    color: #1e40af;
+  }
+
+  .category-card--green {
+    background-color: #dcfce7;
+    border-color: #bbf7d0;
+    color: #166534;
+  }
+
+  .category-card--purple {
+    background-color: #f3e8ff;
+    border-color: #e9d5ff;
+    color: #7c3aed;
+  }
+
+  .category-card--red {
+    background-color: #fee2e2;
+    border-color: #fecaca;
+    color: #dc2626;
+  }
+
+  .category-card--yellow {
+    background-color: #fef3c7;
+    border-color: #fed7aa;
+    color: #d97706;
+  }
+
+  .category-card--cyan {
+    background-color: #cffafe;
+    border-color: #a5f3fc;
+    color: #0891b2;
+  }
+
+  .category-card__icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .category-card__title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  .category-card__description {
+    font-size: 0.75rem;
+    opacity: 0.8;
+    line-height: 1.4;
+  }
+
+  /* ✅ Section Headers */
+  .section-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .section-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-subtitle {
+    color: #64748b;
+    font-size: 1rem;
+  }
+
+  /* ✅ Posts Grid */
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .post-card {
+    transition: transform 0.2s;
+  }
+
+  .post-card:hover {
+    transform: translateY(-2px);
+  }
+
+  /* ✅ Empty State */
+  .empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: #f8fafc;
+    border-radius: 1rem;
+    border: 1px solid #e2e8f0;
+  }
+
+  .empty-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+  }
+
+  .empty-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1a202c;
+    margin-bottom: 0.5rem;
+  }
+
+  .empty-description {
+    color: #64748b;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  .empty-action {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    background: #3b82f6;
+    color: white;
+    text-decoration: none;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: background-color 0.2s;
+  }
+
+  .empty-action:hover {
+    background: #1d4ed8;
+  }
+
+  /* ✅ Responsive */
+  @media (max-width: 768px) {
+    .category-info {
+      flex-direction: column;
+      text-align: center;
+      gap: 1rem;
+    }
+
+    .category-title {
+      font-size: 1.5rem;
+    }
+
+    .categories-grid {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+
+    .posts-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style> 

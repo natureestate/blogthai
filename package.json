@@ -26,5 +26,9 @@
   "devDependencies": {
     "concurrently": "^9.1.0"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "ansi-styles": "^6.2.1",
+    "chalk": "^5.4.1"
+  }
 }
