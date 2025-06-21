@@ -2,7 +2,7 @@
 import { formatDate } from "../utils";
 import { urlFor } from "../utils/image";
 import type { Post } from "../utils/sanity";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import { Card as UICard, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
 
 interface Props {
@@ -13,7 +13,7 @@ const { post } = Astro.props;
 
 // ฟังก์ชันสำหรับสี category
 const getCategoryColor = (color: string) => {
-  const colors = {
+  const colors: Record<string, string> = {
     blue: "bg-blue-100 text-blue-800 hover:bg-blue-200",
     green: "bg-green-100 text-green-800 hover:bg-green-200", 
     purple: "bg-purple-100 text-purple-800 hover:bg-purple-200",
@@ -26,7 +26,7 @@ const getCategoryColor = (color: string) => {
 ---
 
 <!-- ✅ Card Component แปลงเป็น Tailwind CSS -->
-<Card className="group relative overflow-hidden border hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+<UICard className="group relative overflow-hidden border hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
   <!-- รูปภาพ -->
   {post.mainImage ? (
     <div class="aspect-video overflow-hidden">
@@ -119,7 +119,7 @@ const getCategoryColor = (color: string) => {
       </div>
     )}
   </CardContent>
-</Card>
+</UICard>
 
 <!-- ✅ ใช้ Tailwind CSS แทน Custom CSS แล้ว -->
 
