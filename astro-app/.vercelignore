@@ -1,0 +1,7 @@
+# ไม่ deploy เมื่อมีการเปลี่ยนแปลงในไฟล์เหล่านี้
+*.md
+.env*
+.vscode/
+*.log
+node_modules/
+.git/ 
