@@ -1,0 +1,1012 @@
+{
+  "_createdAt": "2025-06-22T15:07:47Z",
+  "_id": "modern-web-design-trends-2024",
+  "_rev": "RFm3s734DzQ7KN9Bim4Fq6",
+  "_type": "post",
+  "_updatedAt": "2025-06-22T15:07:47Z",
+  "author": {
+    "_ref": "drafts.a335dc2a-5b15-43ed-adee-eeb0392a1668",
+    "_type": "reference"
+  },
+  "body": [
+    {
+      "_key": "intro",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "การออกแบบเว็บไซต์ในปี 2024 ได้เปลี่ยนแปลงไปอย่างมาก ด้วยเทคโนโลยีใหม่ๆ ที่เข้ามา และความต้องการของผู้ใช้ที่สูงขึ้น นักออกแบบและนักพัฒนาจึงต้องปรับตัวให้ทันกับเทรนด์ใหม่ เพื่อสร้างเว็บไซต์ที่ไม่เพียงแต่สวยงาม แต่ยังใช้งานง่ายและมีประสิทธิภาพสูง"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "trends-heading",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "🎨 เทรนด์การออกแบบเว็บไซต์ที่ฮิตที่สุดในปี 2024"
+        }
+      ],
+      "markDefs": [],
+      "style": "h2"
+    },
+    {
+      "_key": "minimalism",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "1. Minimalism และ Clean Design"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "minimalism-desc",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "การออกแบบแบบมินิมอลยังคงได้รับความนิยมสูง โดยเน้นการใช้ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "white space ที่เหมาะสม"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": ", "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "typography ที่ชัดเจน"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " และการจัดวางองค์ประกอบที่เรียบง่ายแต่มีประสิทธิภาพ เทรนด์นี้ช่วยให้ผู้ใช้สามารถโฟกัสไปที่เนื้อหาสำคัญได้ง่ายขึ้น"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "dark-mode",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "2. Dark Mode และ Theme Switching"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "dark-mode-desc",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "Dark Mode ไม่ใช่แค่เทรนด์แล้ว แต่กลายเป็น "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "standard feature"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " ที่ผู้ใช้คาดหวัง ช่วยลดความเมื่อยล้าของสายตา ประหยัดแบตเตอรี่ และสร้างความรู้สึกที่ทันสมัย"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "dark-mode-css",
+      "_type": "code",
+      "code": "/* CSS สำหรับ Dark Mode */\n:root {\n  --bg-color: #ffffff;\n  --text-color: #333333;\n  --accent-color: #007bff;\n}\n\n[data-theme=\"dark\"] {\n  --bg-color: #1a1a1a;\n  --text-color: #ffffff;\n  --accent-color: #66b3ff;\n}\n\nbody {\n  background-color: var(--bg-color);\n  color: var(--text-color);\n  transition: background-color 0.3s ease, color 0.3s ease;\n}",
+      "language": "css"
+    },
+    {
+      "_key": "micro-interactions",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "3. Micro-interactions และ Subtle Animations"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "micro-interactions-desc",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "การใช้ animations เล็กๆ น้อยๆ ที่ช่วยให้ UX ดูมีชีวิตชีวาขึ้น เช่น "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "hover effects, loading animations, scroll-triggered animations"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " ที่ไม่รบกวนแต่เพิ่มความน่าสนใจ"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "responsive-design",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "📱 Responsive Design ที่ต้องเข้าใจในปี 2024"
+        }
+      ],
+      "markDefs": [],
+      "style": "h2"
+    },
+    {
+      "_key": "mobile-first-strategy",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "Mobile-First Strategy"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "mobile-first-desc",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "เนื่องจากผู้ใช้ส่วนใหญ่เข้าถึงเว็บไซต์ผ่านมือถือ การออกแบบจึงต้องเริ่มจาก "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "mobile screen ก่อน"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " แล้วค่อยขยายไปยังหน้าจอใหญ่ขึ้น (Progressive Enhancement)"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "responsive-css",
+      "_type": "code",
+      "code": "/* Mobile-First Responsive Design */\n.container {\n  padding: 1rem;\n  max-width: 100%;\n}\n\n/* Tablet */\n@media (min-width: 768px) {\n  .container {\n    padding: 2rem;\n    max-width: 750px;\n    margin: 0 auto;\n  }\n}\n\n/* Desktop */\n@media (min-width: 1024px) {\n  .container {\n    padding: 3rem;\n    max-width: 1200px;\n  }\n}",
+      "language": "css"
+    },
+    {
+      "_key": "performance-optimization",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "⚡ Performance Optimization สำหรับ UX ที่ดีเยี่ยม"
+        }
+      ],
+      "markDefs": [],
+      "style": "h2"
+    },
+    {
+      "_key": "core-web-vitals",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "Core Web Vitals ที่ต้องจับตา"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "core-web-vitals-list",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "📊 "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Largest Contentful Paint (LCP)"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - ควรอยู่ที่ 2.5 วินาทีหรือน้อยกว่า\n⚡ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "First Input Delay (FID)"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - ควรอยู่ที่ 100 milliseconds หรือน้อยกว่า\n📐 "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Cumulative Layout Shift (CLS)"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - ควรอยู่ที่ 0.1 หรือน้อยกว่า"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "optimization-techniques",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "เทคนิคการเพิ่มประสิทธิภาพ"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "optimization-list",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "🖼️ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Image Optimization"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - ใช้ WebP/AVIF, lazy loading, responsive images\n🗜️ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Code Minification"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - บีบอัด CSS, JavaScript, HTML\n🌐 "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "CDN Usage"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - ใช้ Content Delivery Network\n📦 "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Caching Strategy"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - Browser และ Server-side caching"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "accessibility",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "♿ Accessibility: การออกแบบเพื่อทุกคน"
+        }
+      ],
+      "markDefs": [],
+      "style": "h2"
+    },
+    {
+      "_key": "accessibility-importance",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "ในปี 2024 "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Web Accessibility"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " ไม่ใช่ตัวเลือก แต่เป็น "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "ความจำเป็น"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " การออกแบบต้องคำนึงถึงผู้ใช้ที่มีความต้องการพิเศษ เพื่อให้ทุกคนสามารถเข้าถึงเนื้อหาได้อย่างเท่าเทียม"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "accessibility-checklist",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "Accessibility Checklist"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "a11y-list",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "✅ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Semantic HTML"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - ใช้ tags ที่มีความหมาย\n✅ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Alt Text"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - คำอธิบายรูปภาพสำหรับ screen readers\n✅ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Keyboard Navigation"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - สามารถใช้งานด้วย keyboard ได้\n✅ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Color Contrast"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - ความคมชัดของสีอย่างน้อย 4.5:1\n✅ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Focus Indicators"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - แสดงสถานะ focus ชัดเจน"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "tools-frameworks",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "🛠️ เครื่องมือและ Frameworks ยอดนิยมปี 2024"
+        }
+      ],
+      "markDefs": [],
+      "style": "h2"
+    },
+    {
+      "_key": "css-frameworks",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "CSS Frameworks ที่ควรรู้จัก"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "frameworks-list",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "🎨 "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Tailwind CSS"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - Utility-first CSS framework ที่ยืดหยุ่นสูง\n🧩 "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "ShadCN/UI"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - Component library ที่ใช้งานง่าย\n⚛️ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Chakra UI"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - React component library ที่เน้น accessibility\n🎭 "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Framer Motion"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - Animation library สำหรับ React"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "design-tools",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "Design Tools ที่นักออกแบบต้องมี"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "design-tools-list",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "🎨 "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Figma"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - UI/UX design และ prototyping\n🖼️ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Adobe XD"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - User experience design\n🌈 "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Adobe Color"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - Color palette generator\n📱 "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Principle"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - Animation และ interaction design"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "future-trends",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "🔮 อนาคตของการออกแบบเว็บไซต์"
+        }
+      ],
+      "markDefs": [],
+      "style": "h2"
+    },
+    {
+      "_key": "ai-integration",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "AI Integration ในการออกแบบ"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "ai-desc",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "AI กำลังเข้ามาเปลี่ยนแปลงวงการออกแบบเว็บไซต์ ตั้งแต่ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "automated design generation"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": ", "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "personalized user experiences"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " ไปจนถึง "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "intelligent content optimization"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "voice-interfaces",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "Voice User Interfaces (VUI)"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "vui-desc",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "การออกแบบสำหรับ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "voice search"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " และ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "voice commands"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " กำลังเติบโตขึ้น เว็บไซต์ต้องเตรียมพร้อมสำหรับการใช้งานผ่านเสียง"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "conclusion",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "🎯 สรุป: การเตรียมพร้อมสำหรับอนาคต"
+        }
+      ],
+      "markDefs": [],
+      "style": "h2"
+    },
+    {
+      "_key": "conclusion-text",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "การออกแบบเว็บไซต์ในปี 2024 ต้องมองไปข้างหน้า โดยคำนึงถึง "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "user experience"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": ", "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "performance"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": ", "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "accessibility"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " และความพร้อมสำหรับเทคโนโลยีใหม่ๆ ที่จะเข้ามา"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "key-takeaways",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "Key Takeaways สำหรับนักออกแบบ"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "takeaways-list",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "🎯 เน้น "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "user-centered design"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " เป็นหลัก\n⚡ ให้ความสำคัญกับ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "performance optimization"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "\n♿ ออกแบบให้ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "accessible ต่อทุกคน"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "\n📱 คิด "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "mobile-first"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " เสมอ\n🔮 เตรียมตัวสำหรับ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "เทคโนโลยีอนาคต"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " เช่น AI และ Voice UI"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "call-to-action-final",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "การติดตามเทรนด์ใหม่ๆ และการพัฒนาทักษะอย่างต่อเนื่องจะช่วยให้คุณสร้างเว็บไซต์ที่ไม่เพียงแต่สวยงาม แต่ยังมีประสิทธิภาพและตอบโจทย์ผู้ใช้ได้อย่างแท้จริง "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "🚀 เริ่มต้นประยุกต์ใช้เทรนด์เหล่านี้ในโปรเจ็กต์ต่อไปของคุณได้เลย!"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    }
+  ],
+  "categories": [],
+  "excerpt": "สำรวจเทรนด์การออกแบบเว็บไซต์ล่าสุดในปี 2024 พร้อมเทคนิค UI/UX ที่ทันสมัย Responsive Design และ Performance Optimization สำหรับสร้างประสบการณ์ผู้ใช้ที่ยอดเยี่ยม",
+  "featured": true,
+  "language": "th",
+  "publishedAt": "2024-06-22T16:00:00Z",
+  "readingTime": 8,
+  "seo": {
+    "description": "สำรวจเทรนด์การออกแบบเว็บไซต์ล่าสุดในปี 2024 พร้อมเทคนิค UI/UX ที่ทันสมัย Responsive Design และ Performance Optimization สำหรับสร้างประสบการณ์ผู้ใช้ที่ยอดเยี่ยม รวมทั้ง Dark Mode, Accessibility และ AI Integration",
+    "keywords": [
+      "Web Design",
+      "UI/UX",
+      "2024 Trends",
+      "Responsive Design",
+      "Dark Mode",
+      "Performance",
+      "Accessibility",
+      "Mobile-First",
+      "การออกแบบเว็บไซต์",
+      "UX Design",
+      "Minimalism",
+      "Core Web Vitals"
+    ],
+    "title": "เทรนด์การออกแบบเว็บไซต์สมัยใหม่ 2024: UI/UX ที่จะครองโลกออนไลน์"
+  },
+  "slug": {
+    "_type": "slug",
+    "current": "modern-web-design-trends-2024"
+  },
+  "tags": [
+    "Web Design",
+    "UI/UX",
+    "2024",
+    "Trends",
+    "Responsive",
+    "Performance",
+    "Accessibility",
+    "Dark Mode",
+    "Mobile-First",
+    "Design"
+  ],
+  "title": "เทรนด์การออกแบบเว็บไซต์สมัยใหม่ 2024: UI/UX ที่จะครองโลกออนไลน์",
+  "mainImage": {
+    "_type": "image",
+    "asset": {
+      "_type": "reference",
+      "_ref": "image-placeholder-web-design"
+    },
+    "alt": "Modern web design interface with clean UI elements and responsive layout",
+    "caption": "การออกแบบเว็บไซต์สมัยใหม่ที่เน้น UX และ performance"
+  }
+}

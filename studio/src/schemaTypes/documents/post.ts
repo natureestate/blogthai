@@ -115,6 +115,22 @@ export default defineType({
       description: 'ผู้เขียนบทความ'
     }),
 
+    // ✅ ภาษา (Multi-language support)
+    defineField({
+      name: 'language',
+      title: 'Language',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'ไทย', value: 'th'},
+          {title: 'English', value: 'en'},
+        ],
+        layout: 'radio'
+      },
+      initialValue: 'th',
+      description: 'ภาษาของบทความ'
+    }),
+
     // ✅ SEO Fields
     defineField({
       name: 'seo',
@@ -217,10 +233,11 @@ export default defineType({
       author: 'author.name',
       media: 'mainImage',
       publishedAt: 'publishedAt',
-      featured: 'featured'
+      featured: 'featured',
+      slug: 'slug.current'
     },
     prepare(selection) {
-      const {author, publishedAt, featured} = selection
+      const {author, publishedAt, featured, slug} = selection
       const subtitle = [
         author && `โดย ${author}`,
         publishedAt && `เผยแพร่ ${new Date(publishedAt).toLocaleDateString('th-TH')}`,
@@ -229,7 +246,10 @@ export default defineType({
       
       return {
         ...selection, 
-        subtitle
+        subtitle,
+        media: selection.media || {
+          icon: () => '📝',
+        }
       }
     },
   },

@@ -1,0 +1,345 @@
+{
+  "_type": "post",
+  "_id": "comprehensive-tailwind-guide",
+  "title": "Tailwind CSS Master Class: เทคนิคขั้นสูงที่จะเปลี่ยนการเขียน CSS ของคุณ",
+  "slug": {
+    "_type": "slug",
+    "current": "comprehensive-tailwind-guide"
+  },
+  "author": {
+    "_type": "reference",
+    "_ref": "a335dc2a-5b15-43ed-adee-eeb0392a1668"
+  },
+  "categories": [],
+  "publishedAt": "2024-06-24T09:30:00Z",
+  "featured": true,
+  "language": "th",
+  "excerpt": "เรียนรู้เทคนิคขั้นสูงของ Tailwind CSS ที่จะช่วยเพิ่มประสิทธิภาพการทำงาน การปรับแต่ง design system และการสร้าง responsive layouts ที่สวยงามและใช้งานได้จริง",
+  "body": [
+    {
+      "_type": "block",
+      "_key": "intro",
+      "style": "normal",
+      "children": [
+        {
+          "_type": "span",
+          "text": "Tailwind CSS ได้เปลี่ยนแปลงวงการพัฒนาเว็บไซต์อย่างสิ้นเชิง ด้วย utility-first approach ที่ช่วยให้นักพัฒนาสามารถสร้าง UI ที่สวยงามและ responsive ได้อย่างรวดเร็ว แต่หลายคนยังไม่รู้ถึงศักยภาพที่แท้จริงของ Tailwind ในบทความนี้เราจะไปสำรวจเทคนิคขั้นสูงที่จะยกระดับการใช้งาน Tailwind CSS ของคุณไปอีกขั้น",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "block",
+      "_key": "why-tailwind",
+      "style": "h2",
+      "children": [
+        {
+          "_type": "span",
+          "text": "🎨 ทำไมต้อง Tailwind CSS?",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "block",
+      "_key": "tailwind-benefits",
+      "style": "normal",
+      "children": [
+        {
+          "_type": "span",
+          "text": "Tailwind CSS มีข้อดีเหนือ traditional CSS frameworks หลายประการ:",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "block",
+      "_key": "benefits-list",
+      "style": "normal",
+      "children": [
+        {
+          "_type": "span",
+          "text": "🚀 ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "ความเร็วในการพัฒนา",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - เขียน CSS ได้เร็วขึ้น 3-5 เท่า\n💡 ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "Consistency ในการออกแบบ",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - design system ที่สอดคล้องกัน\n📱 ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "Responsive Design ที่ง่าย",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - responsive utilities ที่ใช้งานง่าย\n🎯 ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "Bundle Size ที่เล็ก",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - PurgeCSS ลบ CSS ที่ไม่ใช้ออก\n🔧 ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "ปรับแต่งได้ง่าย",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - configuration ที่ยืดหยุ่น",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "block",
+      "_key": "advanced-responsive",
+      "style": "h2",
+      "children": [
+        {
+          "_type": "span",
+          "text": "📱 Advanced Responsive Design Techniques",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "code",
+      "_key": "responsive-examples",
+      "language": "html",
+      "code": "<!-- Responsive Grid Layout -->\n<div class=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6\">\n  <div class=\"bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow\">\n    <!-- Card Content -->\n  </div>\n</div>\n\n<!-- Advanced Typography Responsiveness -->\n<h1 class=\"text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight sm:leading-snug\">\n  Responsive Heading\n</h1>\n\n<!-- Flexible Container -->\n<div class=\"max-w-sm mx-auto md:max-w-2xl lg:max-w-4xl xl:max-w-6xl px-4 md:px-6 lg:px-8\">\n  <!-- Content -->\n</div>\n\n<!-- Responsive Navigation -->\n<nav class=\"hidden md:flex space-x-8\">\n  <a href=\"#\" class=\"text-gray-700 hover:text-blue-600 transition-colors\">หน้าแรก</a>\n  <a href=\"#\" class=\"text-gray-700 hover:text-blue-600 transition-colors\">เกี่ยวกับ</a>\n</nav>\n\n<!-- Mobile Menu Toggle -->\n<button class=\"md:hidden p-2 rounded-md hover:bg-gray-100\">\n  <svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n    <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M4 6h16M4 12h16M4 18h16\"></path>\n  </svg>\n</button>"
+    },
+    {
+      "_type": "block",
+      "_key": "dark-mode",
+      "style": "h2",
+      "children": [
+        {
+          "_type": "span",
+          "text": "🌙 Dark Mode Implementation",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "code",
+      "_key": "dark-mode-config",
+      "language": "javascript",
+      "code": "// tailwind.config.js\nmodule.exports = {\n  darkMode: 'class', // หรือ 'media' สำหรับ system preference\n  theme: {\n    extend: {\n      colors: {\n        // Custom colors สำหรับ dark mode\n        dark: {\n          50: '#f9fafb',\n          100: '#f3f4f6',\n          // ... เพิ่ม shades อื่นๆ\n          900: '#111827',\n        }\n      }\n    }\n  }\n}"
+    },
+    {
+      "_type": "code",
+      "_key": "dark-mode-html",
+      "language": "html",
+      "code": "<!-- Dark Mode Classes -->\n<div class=\"bg-white dark:bg-gray-900 text-gray-900 dark:text-white min-h-screen transition-colors duration-200\">\n  <!-- Header -->\n  <header class=\"bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700\">\n    <div class=\"container mx-auto px-4 py-4\">\n      <h1 class=\"text-2xl font-bold text-gray-900 dark:text-white\">My Website</h1>\n      \n      <!-- Dark Mode Toggle -->\n      <button id=\"theme-toggle\" class=\"p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors\">\n        <svg class=\"w-5 h-5 hidden dark:block\" fill=\"currentColor\" viewBox=\"0 0 20 20\">\n          <path fill-rule=\"evenodd\" d=\"M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z\" clip-rule=\"evenodd\"></path>\n        </svg>\n        <svg class=\"w-5 h-5 dark:hidden\" fill=\"currentColor\" viewBox=\"0 0 20 20\">\n          <path d=\"M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z\"></path>\n        </svg>\n      </button>\n    </div>\n  </header>\n  \n  <!-- Main Content -->\n  <main class=\"container mx-auto px-4 py-8\">\n    <div class=\"bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-2xl p-6\">\n      <h2 class=\"text-xl font-semibold text-gray-900 dark:text-white mb-4\">Card Title</h2>\n      <p class=\"text-gray-600 dark:text-gray-300\">Card content goes here...</p>\n    </div>\n  </main>\n</div>"
+    },
+    {
+      "_type": "block",
+      "_key": "custom-utilities",
+      "style": "h2",
+      "children": [
+        {
+          "_type": "span",
+          "text": "🔧 Custom Utilities และ Components",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "code",
+      "_key": "custom-config",
+      "language": "javascript",
+      "code": "// tailwind.config.js - Custom Utilities\nmodule.exports = {\n  theme: {\n    extend: {\n      // Custom Spacing\n      spacing: {\n        '72': '18rem',\n        '84': '21rem',\n        '96': '24rem',\n      },\n      \n      // Custom Font Families\n      fontFamily: {\n        'thai': ['Sarabun', 'sans-serif'],\n        'display': ['Playfair Display', 'serif'],\n      },\n      \n      // Custom Colors\n      colors: {\n        'brand': {\n          50: '#eff6ff',\n          500: '#3b82f6',\n          900: '#1e3a8a',\n        },\n        'accent': '#f59e0b',\n      },\n      \n      // Custom Shadows\n      boxShadow: {\n        'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)',\n        'glow': '0 0 20px rgba(59, 130, 246, 0.5)',\n      },\n      \n      // Custom Animations\n      animation: {\n        'fade-in': 'fadeIn 0.5s ease-in-out',\n        'slide-up': 'slideUp 0.3s ease-out',\n        'bounce-gentle': 'bounceGentle 1s infinite',\n      },\n      \n      keyframes: {\n        fadeIn: {\n          '0%': { opacity: '0' },\n          '100%': { opacity: '1' },\n        },\n        slideUp: {\n          '0%': { transform: 'translateY(10px)', opacity: '0' },\n          '100%': { transform: 'translateY(0)', opacity: '1' },\n        },\n        bounceGentle: {\n          '0%, 100%': { transform: 'translateY(-5%)' },\n          '50%': { transform: 'translateY(0)' },\n        }\n      }\n    }\n  },\n  \n  plugins: [\n    // Custom Plugin สำหรับ Utilities เพิ่มเติม\n    function({ addUtilities }) {\n      const newUtilities = {\n        '.text-shadow': {\n          textShadow: '2px 2px 4px rgba(0,0,0,0.10)',\n        },\n        '.text-shadow-lg': {\n          textShadow: '0 15px 30px rgba(0,0,0,0.11), 0 5px 15px rgba(0,0,0,0.08)',\n        },\n        '.backface-hidden': {\n          'backface-visibility': 'hidden',\n        },\n        '.perspective-1000': {\n          perspective: '1000px',\n        }\n      }\n      addUtilities(newUtilities)\n    }\n  ]\n}"
+    },
+    {
+      "_type": "block",
+      "_key": "advanced-layouts",
+      "style": "h2",
+      "children": [
+        {
+          "_type": "span",
+          "text": "📐 Advanced Layout Techniques",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "code",
+      "_key": "advanced-layout-examples",
+      "language": "html",
+      "code": "<!-- CSS Grid Advanced Layout -->\n<div class=\"min-h-screen grid grid-rows-[auto_1fr_auto] lg:grid-cols-[250px_1fr] lg:grid-rows-[auto_1fr]\">\n  <!-- Header -->\n  <header class=\"bg-white shadow-sm lg:col-span-2 p-4\">\n    <h1 class=\"text-2xl font-bold\">Dashboard</h1>\n  </header>\n  \n  <!-- Sidebar -->\n  <aside class=\"bg-gray-100 p-4 lg:row-span-1\">\n    <nav class=\"space-y-2\">\n      <a href=\"#\" class=\"block p-2 rounded hover:bg-gray-200 transition-colors\">หน้าแรก</a>\n      <a href=\"#\" class=\"block p-2 rounded hover:bg-gray-200 transition-colors\">โปรไฟล์</a>\n    </nav>\n  </aside>\n  \n  <!-- Main Content -->\n  <main class=\"p-6 overflow-auto\">\n    <!-- Responsive Cards Grid -->\n    <div class=\"grid gap-6 grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4\">\n      <div class=\"bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-200\">\n        <h3 class=\"text-lg font-semibold mb-2\">การ์ดที่ 1</h3>\n        <p class=\"text-gray-600\">เนื้อหาการ์ด...</p>\n      </div>\n    </div>\n  </main>\n</div>\n\n<!-- Sticky Elements Layout -->\n<div class=\"relative\">\n  <!-- Sticky Navigation -->\n  <nav class=\"sticky top-0 z-50 bg-white border-b border-gray-200 px-4 py-3\">\n    <div class=\"flex items-center justify-between max-w-7xl mx-auto\">\n      <div class=\"text-xl font-bold\">Brand</div>\n      <div class=\"hidden md:flex space-x-6\">\n        <a href=\"#\" class=\"text-gray-700 hover:text-blue-600\">หน้าแรก</a>\n        <a href=\"#\" class=\"text-gray-700 hover:text-blue-600\">บริการ</a>\n      </div>\n    </div>\n  </nav>\n  \n  <!-- Content with Floating Action Button -->\n  <div class=\"relative min-h-screen px-4 py-8\">\n    <div class=\"max-w-4xl mx-auto\">\n      <!-- Content here -->\n    </div>\n    \n    <!-- Floating Action Button -->\n    <button class=\"fixed bottom-6 right-6 w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 hover:shadow-xl transition-all duration-200 flex items-center justify-center z-40\">\n      <svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n        <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M12 4v16m8-8H4\"></path>\n      </svg>\n    </button>\n  </div>\n</div>"
+    },
+    {
+      "_type": "block",
+      "_key": "performance-optimization",
+      "style": "h2",
+      "children": [
+        {
+          "_type": "span",
+          "text": "⚡ Performance Optimization",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "block",
+      "_key": "performance-tips",
+      "style": "normal",
+      "children": [
+        {
+          "_type": "span",
+          "text": "การเพิ่มประสิทธิภาพ Tailwind CSS เพื่อให้ได้ไฟล์ CSS ที่เล็กและเร็วที่สุด:",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "code",
+      "_key": "purge-config",
+      "language": "javascript",
+      "code": "// tailwind.config.js - Production Optimization\nmodule.exports = {\n  content: [\n    './src/**/*.{html,js,ts,jsx,tsx}',\n    './components/**/*.{html,js,ts,jsx,tsx}',\n    './pages/**/*.{html,js,ts,jsx,tsx}',\n    // ระบุไฟล์ทั้งหมดที่ใช้ Tailwind classes\n  ],\n  \n  // Safelist สำหรับ classes ที่สร้างแบบ dynamic\n  safelist: [\n    'text-red-500',\n    'text-green-500',\n    'bg-blue-100',\n    {\n      pattern: /bg-(red|green|blue)-(100|500|900)/,\n      variants: ['lg', 'hover', 'focus', 'lg:hover'],\n    },\n  ],\n  \n  theme: {\n    // ลด unused utilities โดยการ override ค่า default\n    colors: {\n      transparent: 'transparent',\n      current: 'currentColor',\n      white: '#ffffff',\n      black: '#000000',\n      gray: {\n        50: '#f9fafb',\n        100: '#f3f4f6',\n        // เก็บเฉพาะ shades ที่ใช้\n      },\n      // เก็บเฉพาะสีที่ใช้จริง\n    },\n    \n    fontSize: {\n      xs: '0.75rem',\n      sm: '0.875rem',\n      base: '1rem',\n      lg: '1.125rem',\n      xl: '1.25rem',\n      // ลด font sizes ที่ไม่ใช้\n    }\n  }\n}"
+    },
+    {
+      "_type": "block",
+      "_key": "best-practices",
+      "style": "h2",
+      "children": [
+        {
+          "_type": "span",
+          "text": "✨ Best Practices และเทคนิคขั้นสูง",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "block",
+      "_key": "practices-list",
+      "style": "normal",
+      "children": [
+        {
+          "_type": "span",
+          "text": "🎯 ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "ใช้ @apply directive อย่างชาญฉลาด",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - สำหรับ components ที่ใช้ซ้ำ\n🔄 ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "สร้าง Design System",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - กำหนด spacing, colors, typography ที่สอดคล้อง\n📦 ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "Component-based Architecture",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - แยก UI components และ utility classes\n🎨 ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "Mobile-first Design",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - เริ่มจาก mobile แล้วขยายไป desktop\n⚡ ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "Performance Monitoring",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - ตรวจสอบ bundle size และ loading time",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "block",
+      "_key": "conclusion",
+      "style": "h2",
+      "children": [
+        {
+          "_type": "span",
+          "text": "🎯 สรุป: ยกระดับการใช้ Tailwind CSS",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "block",
+      "_key": "conclusion-content",
+      "style": "normal",
+      "children": [
+        {
+          "_type": "span",
+          "text": "Tailwind CSS ไม่ใช่แค่ utility framework ธรรมดา แต่เป็นเครื่องมือที่ทรงพลังที่สามารถเปลี่ยนวิธีการพัฒนา UI ของคุณให้ดีขึ้นอย่างมาก การเข้าใจและประยุกต์ใช้เทคนิคขั้นสูงเหล่านี้จะช่วยให้คุณสร้างเว็บไซต์ที่สวยงาม responsive และมีประสิทธิภาพสูง พร้อมทั้งลดเวลาในการพัฒนาอย่างมีนัยสำคัญ",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    }
+  ],
+  "seo": {
+    "title": "Tailwind CSS Master Class 2024: เทคนิคขั้นสูงและ Best Practices สำหรับนักพัฒนา",
+    "description": "เรียนรู้เทคนิคขั้นสูงของ Tailwind CSS รวมถึง Dark Mode, Custom Utilities, Advanced Layouts, Performance Optimization และ Best Practices ที่จะเปลี่ยนการเขียน CSS ของคุณให้ดีขึ้น",
+    "keywords": ["Tailwind CSS", "CSS Framework", "Utility-first", "Responsive Design", "Dark Mode", "Web Development", "Frontend", "CSS", "Performance", "Best Practices"]
+  },
+  "readingTime": 12,
+  "tags": ["Tailwind CSS", "CSS", "Frontend", "Web Development", "Responsive Design", "Dark Mode", "Performance", "Best Practices", "Tutorial", "2024"]
+} 

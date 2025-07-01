@@ -1,0 +1,1 @@
+import {createClient} from "@sanity/client"; const client = createClient({projectId: "yor24whn", dataset: "blog", useCdn: false, apiVersion: "2024-01-01"}); client.fetch("*[_type == \"post\" && defined(language)]").then(posts => { console.log("Posts with language field:", posts.length); posts.forEach(post => console.log(`- ${post.title}: ${post.language}`)); });

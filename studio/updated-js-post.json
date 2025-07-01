@@ -1,0 +1,669 @@
+{
+  "_createdAt": "2025-06-22T15:10:21Z",
+  "_id": "javascript-es6-modern-features-2024",
+  "_rev": "mSkCbxUwGcv6uYz7geqgsk",
+  "_type": "post",
+  "_updatedAt": "2025-06-22T15:10:21Z",
+  "author": {
+    "_ref": "drafts.a335dc2a-5b15-43ed-adee-eeb0392a1668",
+    "_type": "reference"
+  },
+  "body": [
+    {
+      "_key": "intro",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "JavaScript ได้พัฒนาไปอย่างรวดเร็วในช่วงหลายปีที่ผ่านมา ตั้งแต่ ES6 (ES2015) เป็นต้นมา มีฟีเจอร์ใหม่ๆ ที่ช่วยให้การเขียนโค้ดมีประสิทธิภาพและอ่านง่ายขึ้นมาก ในบทความนี้เราจะมาสำรวจ Features ที่สำคัญที่สุดที่นักพัฒนาควรรู้และนำไปใช้ในการทำงานจริง"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "fundamental-features",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "🚀 ES6+ Features พื้นฐานที่ต้องเข้าใจ"
+        }
+      ],
+      "markDefs": [],
+      "style": "h2"
+    },
+    {
+      "_key": "arrow-functions",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "1. Arrow Functions - ฟังก์ชันที่เขียนสั้นและมีประสิทธิภาพ"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "arrow-functions-desc",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "Arrow Functions ไม่เพียงแต่ทำให้โค้ดสั้นลง แต่ยังแก้ปัญหาการ bind ของ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "code"
+          ],
+          "text": "this"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " อีกด้วย"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "arrow-functions-code",
+      "_type": "code",
+      "code": "// แบบเดิม (ES5)\nfunction add(a, b) {\n  return a + b;\n}\n\n// แบบใหม่ (ES6 Arrow Function)\nconst add = (a, b) => a + b;\n\n// สำหรับฟังก์ชันที่มีหลายบรรทัด\nconst processData = (data) => {\n  const processed = data.map(item => item * 2);\n  return processed.filter(item => item > 10);\n};\n\n// การใช้งานกับ Array Methods\nconst numbers = [1, 2, 3, 4, 5];\nconst doubled = numbers.map(n => n * 2); // [2, 4, 6, 8, 10]\nconst filtered = numbers.filter(n => n > 3); // [4, 5]\n\n// ข้อดีของ Arrow Function กับ this\nclass Counter {\n  constructor() {\n    this.count = 0;\n  }\n  \n  // Arrow function จะ inherit this จาก parent scope\n  increment = () => {\n    this.count++;\n    console.log(this.count);\n  }\n}",
+      "language": "javascript"
+    },
+    {
+      "_key": "destructuring",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "2. Destructuring Assignment - แกะข้อมูลแบบสมาร์ท"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "destructuring-desc",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "Destructuring ช่วยให้เราสามารถ \"แกะ\" ข้อมูลจาก Object หรือ Array ได้อย่างสะดวกและรวดเร็ว"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "destructuring-code",
+      "_type": "code",
+      "code": "// Object Destructuring\nconst user = {\n  name: 'สมชาย',\n  age: 25,\n  email: 'somchai@example.com',\n  address: {\n    city: 'กรุงเทพฯ',\n    country: 'ไทย'\n  }\n};\n\n// แบบเดิม\nconst name = user.name;\nconst age = user.age;\n\n// แบบใหม่ (Destructuring)\nconst { name, age, email } = user;\n\n// Destructuring แบบ nested\nconst { address: { city, country } } = user;\n\n// กำหนดค่า default\nconst { name, age, occupation = 'ไม่ระบุ' } = user;\n\n// Rename variables\nconst { name: userName, age: userAge } = user;\n\n// Array Destructuring\nconst colors = ['แดง', 'เขียว', 'น้ำเงิน', 'เหลือง'];\nconst [first, second, ...rest] = colors;\n// first = 'แดง', second = 'เขียว', rest = ['น้ำเงิน', 'เหลือง']\n\n// ใช้กับ function parameters\nfunction createUser({ name, age, email = 'ไม่มีอีเมล' }) {\n  return {\n    id: Date.now(),\n    name,\n    age,\n    email,\n    createdAt: new Date()\n  };\n}\n\nconst newUser = createUser({ name: 'หนึ่ง', age: 30 });",
+      "language": "javascript"
+    },
+    {
+      "_key": "template-literals",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "3. Template Literals - String ที่ทรงพลัง"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "template-literals-code",
+      "_type": "code",
+      "code": "// แบบเดิม\nconst message = 'สวัสดี ' + name + ', อายุ ' + age + ' ปี';\n\n// แบบใหม่ (Template Literals)\nconst message = `สวัสดี ${name}, อายุ ${age} ปี`;\n\n// Multi-line strings\nconst html = `\n  <div class=\"user-card\">\n    <h2>${name}</h2>\n    <p>อายุ: ${age} ปี</p>\n    <p>อีเมล: ${email}</p>\n  </div>\n`;\n\n// การใช้ expressions\nconst price = 100;\nconst tax = 0.07;\nconst total = `ราคารวม: ${price + (price * tax)} บาท`;\n\n// Tagged Template Literals (Advanced)\nfunction highlight(strings, ...values) {\n  return strings.reduce((result, string, i) => {\n    const value = values[i] ? `<mark>${values[i]}</mark>` : '';\n    return result + string + value;\n  }, '');\n}\n\nconst highlighted = highlight`ผู้ใช้ ${name} มีอายุ ${age} ปี`;\n// ผลลัพธ์: \"ผู้ใช้ <mark>สมชาย</mark> มีอายุ <mark>25</mark> ปี\"",
+      "language": "javascript"
+    },
+    {
+      "_key": "modern-features",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "⚡ Modern Features ที่เปลี่ยนวิธีการเขียนโค้ด"
+        }
+      ],
+      "markDefs": [],
+      "style": "h2"
+    },
+    {
+      "_key": "async-await",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "4. Async/Await - จัดการ Asynchronous ได้ง่าย"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "async-await-desc",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "Async/Await ทำให้การเขียนโค้ด asynchronous อ่านง่ายเหมือนโค้ด synchronous และลดปัญหา "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "callback hell"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "async-await-code",
+      "_type": "code",
+      "code": "// แบบเดิม (Promises)\nfetch('/api/users')\n  .then(response => response.json())\n  .then(users => {\n    console.log(users);\n    return fetch(`/api/users/${users[0].id}`);\n  })\n  .then(response => response.json())\n  .then(user => console.log(user))\n  .catch(error => console.error(error));\n\n// แบบใหม่ (Async/Await)\nasync function getUsers() {\n  try {\n    const response = await fetch('/api/users');\n    const users = await response.json();\n    console.log(users);\n    \n    const userResponse = await fetch(`/api/users/${users[0].id}`);\n    const user = await userResponse.json();\n    console.log(user);\n    \n    return user;\n  } catch (error) {\n    console.error('เกิดข้อผิดพลาด:', error);\n    throw error;\n  }\n}\n\n// ใช้งาน async function\ngetUsers().then(user => {\n  console.log('ได้ข้อมูลผู้ใช้:', user);\n});\n\n// Parallel execution with Promise.all\nasync function getMultipleData() {\n  try {\n    const [users, posts, comments] = await Promise.all([\n      fetch('/api/users').then(r => r.json()),\n      fetch('/api/posts').then(r => r.json()),\n      fetch('/api/comments').then(r => r.json())\n    ]);\n    \n    return { users, posts, comments };\n  } catch (error) {\n    console.error('เกิดข้อผิดพลาดในการดึงข้อมูล:', error);\n  }\n}",
+      "language": "javascript"
+    },
+    {
+      "_key": "spread-rest",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "5. Spread และ Rest Operators - จัดการข้อมูลได้อย่างยืดหยุ่น"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "spread-rest-code",
+      "_type": "code",
+      "code": "// Spread Operator (...)\n// กับ Arrays\nconst arr1 = [1, 2, 3];\nconst arr2 = [4, 5, 6];\nconst combined = [...arr1, ...arr2]; // [1, 2, 3, 4, 5, 6]\n\n// Copy array\nconst originalArray = [1, 2, 3];\nconst copiedArray = [...originalArray];\n\n// กับ Objects\nconst user = { name: 'สมชาย', age: 25 };\nconst address = { city: 'กรุงเทพฯ', country: 'ไทย' };\nconst userWithAddress = { ...user, ...address };\n// { name: 'สมชาย', age: 25, city: 'กรุงเทพฯ', country: 'ไทย' }\n\n// Update object properties\nconst updatedUser = { ...user, age: 26, occupation: 'โปรแกรมเมอร์' };\n\n// Rest Operator (...)\n// กับ function parameters\nfunction sum(...numbers) {\n  return numbers.reduce((total, num) => total + num, 0);\n}\n\nsum(1, 2, 3, 4, 5); // 15\n\n// กับ destructuring\nconst [first, second, ...others] = [1, 2, 3, 4, 5];\n// first = 1, second = 2, others = [3, 4, 5]\n\nconst { name, ...otherProps } = user;\n// name = 'สมชาย', otherProps = { age: 25 }\n\n// Practical example: React component props\nfunction Button({ children, className, ...otherProps }) {\n  return (\n    <button \n      className={`btn ${className || ''}`}\n      {...otherProps}\n    >\n      {children}\n    </button>\n  );\n}",
+      "language": "javascript"
+    },
+    {
+      "_key": "advanced-features",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "🔥 Advanced Features สำหรับนักพัฒนาระดับสูง"
+        }
+      ],
+      "markDefs": [],
+      "style": "h2"
+    },
+    {
+      "_key": "optional-chaining",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "6. Optional Chaining (?.) - เข้าถึงข้อมูลอย่างปลอดภัย"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "optional-chaining-code",
+      "_type": "code",
+      "code": "// แบบเดิม (ต้องเช็คทุกระดับ)\nif (user && user.address && user.address.street) {\n  console.log(user.address.street.name);\n}\n\n// แบบใหม่ (Optional Chaining)\nconsole.log(user?.address?.street?.name);\n\n// กับ Arrays\nconst firstComment = post?.comments?.[0]?.text;\n\n// กับ Function calls\nuser?.getName?.(); // เรียกฟังก์ชันเฉพาะเมื่อมีอยู่จริง\n\n// Practical example\nfunction getUserCity(user) {\n  return user?.profile?.address?.city ?? 'ไม่ระบุเมือง';\n}\n\n// กับ Dynamic property access\nconst property = 'email';\nconst userEmail = user?.[property]; // user?.email\n\n// Complex example\nconst apiResponse = {\n  data: {\n    users: [\n      {\n        profile: {\n          contact: {\n            email: 'user@example.com'\n          }\n        }\n      }\n    ]\n  }\n};\n\nconst firstUserEmail = apiResponse?.data?.users?.[0]?.profile?.contact?.email;",
+      "language": "javascript"
+    },
+    {
+      "_key": "nullish-coalescing",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "7. Nullish Coalescing (??) - กำหนดค่า Default อย่างแม่นยำ"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "nullish-coalescing-code",
+      "_type": "code",
+      "code": "// ปัญหาของ || operator\nconst userAge = 0;\nconst displayAge = userAge || 'ไม่ระบุ'; // 'ไม่ระบุ' (ผิด! 0 เป็นอายุที่ถูกต้อง)\n\n// แก้ไขด้วย ?? operator\nconst displayAge2 = userAge ?? 'ไม่ระบุ'; // 0 (ถูกต้อง!)\n\n// ?? จะใช้ค่า default เฉพาะเมื่อเป็น null หรือ undefined เท่านั้น\nconst examples = [\n  null ?? 'default',        // 'default'\n  undefined ?? 'default',   // 'default'\n  0 ?? 'default',          // 0\n  '' ?? 'default',         // ''\n  false ?? 'default',      // false\n  NaN ?? 'default'         // NaN\n];\n\n// การใช้งานจริง\nfunction createUser(options = {}) {\n  return {\n    name: options.name ?? 'ไม่ระบุชื่อ',\n    age: options.age ?? 0,\n    isActive: options.isActive ?? true,\n    notifications: options.notifications ?? []\n  };\n}\n\n// ร่วมกับ Optional Chaining\nconst userPreference = user?.settings?.theme ?? 'light';\nconst maxItems = config?.pagination?.limit ?? 10;\n\n// Logical Assignment Operators (ES2021)\nlet user = { name: 'สมชาย' };\nuser.age ??= 25; // กำหนดค่า age เป็น 25 เฉพาะเมื่อ age เป็น null/undefined\nuser.name ??= 'ไม่ระบุ'; // ไม่เปลี่ยนแปลง เพราะ name มีค่าอยู่แล้ว",
+      "language": "javascript"
+    },
+    {
+      "_key": "private-fields",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "8. Private Fields และ Methods - Encapsulation ที่แท้จริง"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "private-fields-code",
+      "_type": "code",
+      "code": "class BankAccount {\n  // Private fields (เข้าถึงได้เฉพาะภายใน class เท่านั้น)\n  #balance = 0;\n  #accountNumber;\n  #pin;\n  \n  constructor(accountNumber, initialBalance = 0, pin) {\n    this.#accountNumber = accountNumber;\n    this.#balance = initialBalance;\n    this.#pin = pin;\n  }\n  \n  // Private method\n  #validatePin(inputPin) {\n    return inputPin === this.#pin;\n  }\n  \n  // Public methods\n  deposit(amount, pin) {\n    if (!this.#validatePin(pin)) {\n      throw new Error('PIN ไม่ถูกต้อง');\n    }\n    \n    if (amount <= 0) {\n      throw new Error('จำนวนเงินต้องมากกว่า 0');\n    }\n    \n    this.#balance += amount;\n    return this.getBalance(pin);\n  }\n  \n  withdraw(amount, pin) {\n    if (!this.#validatePin(pin)) {\n      throw new Error('PIN ไม่ถูกต้อง');\n    }\n    \n    if (amount > this.#balance) {\n      throw new Error('ยอดเงินไม่เพียงพอ');\n    }\n    \n    this.#balance -= amount;\n    return this.getBalance(pin);\n  }\n  \n  getBalance(pin) {\n    if (!this.#validatePin(pin)) {\n      throw new Error('PIN ไม่ถูกต้อง');\n    }\n    \n    return this.#balance;\n  }\n  \n  get accountInfo() {\n    return {\n      accountNumber: this.#accountNumber,\n      // ไม่เปิดเผย balance และ pin\n    };\n  }\n}\n\n// การใช้งาน\nconst account = new BankAccount('123-456-789', 1000, '1234');\n\nconsole.log(account.getBalance('1234')); // 1000\naccount.deposit(500, '1234');\nconsole.log(account.getBalance('1234')); // 1500\n\n// ไม่สามารถเข้าถึง private fields ได้\n// console.log(account.#balance); // SyntaxError\n// account.#validatePin('1234'); // SyntaxError",
+      "language": "javascript"
+    },
+    {
+      "_key": "practical-patterns",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "🛠️ Practical Patterns ที่ควรนำไปใช้"
+        }
+      ],
+      "markDefs": [],
+      "style": "h2"
+    },
+    {
+      "_key": "module-pattern",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "9. ES6 Modules - จัดการโค้ดแบบมีระเบียบ"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "module-pattern-code",
+      "_type": "code",
+      "code": "// utils.js - Export functions\nexport const formatCurrency = (amount) => {\n  return new Intl.NumberFormat('th-TH', {\n    style: 'currency',\n    currency: 'THB'\n  }).format(amount);\n};\n\nexport const validateEmail = (email) => {\n  const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n  return emailRegex.test(email);\n};\n\n// Default export\nexport default class ApiClient {\n  constructor(baseURL) {\n    this.baseURL = baseURL;\n  }\n  \n  async get(endpoint) {\n    const response = await fetch(`${this.baseURL}${endpoint}`);\n    return response.json();\n  }\n}\n\n// main.js - Import and use\nimport ApiClient, { formatCurrency, validateEmail } from './utils.js';\n\n// หรือ import ทั้งหมด\nimport * as utils from './utils.js';\n\n// การใช้งาน\nconst api = new ApiClient('https://api.example.com');\nconst price = formatCurrency(1250.50); // ฿1,250.50\nconst isValidEmail = validateEmail('user@example.com'); // true\n\n// Dynamic imports (ES2020)\nasync function loadModule() {\n  const module = await import('./heavy-module.js');\n  module.heavyFunction();\n}\n\n// Import with renaming\nimport { validateEmail as isEmailValid } from './utils.js';",
+      "language": "javascript"
+    },
+    {
+      "_key": "generator-functions",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "10. Generator Functions - ควบคุมการทำงานได้อย่างละเอียด"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "generator-functions-code",
+      "_type": "code",
+      "code": "// Basic Generator\nfunction* numberGenerator() {\n  let num = 1;\n  while (true) {\n    yield num++;\n  }\n}\n\nconst numbers = numberGenerator();\nconsole.log(numbers.next().value); // 1\nconsole.log(numbers.next().value); // 2\nconsole.log(numbers.next().value); // 3\n\n// Fibonacci Generator\nfunction* fibonacci() {\n  let [prev, curr] = [0, 1];\n  while (true) {\n    yield curr;\n    [prev, curr] = [curr, prev + curr];\n  }\n}\n\nconst fib = fibonacci();\nconst first10Fib = [];\nfor (let i = 0; i < 10; i++) {\n  first10Fib.push(fib.next().value);\n}\nconsole.log(first10Fib); // [1, 1, 2, 3, 5, 8, 13, 21, 34, 55]\n\n// Async Generator (ES2018)\nasync function* fetchData() {\n  const endpoints = ['/users', '/posts', '/comments'];\n  \n  for (const endpoint of endpoints) {\n    try {\n      const response = await fetch(endpoint);\n      const data = await response.json();\n      yield { endpoint, data };\n    } catch (error) {\n      yield { endpoint, error };\n    }\n  }\n}\n\n// การใช้งาน Async Generator\nasync function processApiData() {\n  for await (const result of fetchData()) {\n    if (result.error) {\n      console.error(`Error fetching ${result.endpoint}:`, result.error);\n    } else {\n      console.log(`Data from ${result.endpoint}:`, result.data);\n    }\n  }\n}\n\n// Generator สำหรับ Pagination\nfunction* paginate(items, pageSize = 10) {\n  for (let i = 0; i < items.length; i += pageSize) {\n    yield items.slice(i, i + pageSize);\n  }\n}\n\nconst largeArray = Array.from({ length: 100 }, (_, i) => i + 1);\nconst paginator = paginate(largeArray, 10);\n\nfor (const page of paginator) {\n  console.log('หน้าถัดไป:', page);\n}",
+      "language": "javascript"
+    },
+    {
+      "_key": "performance-tips",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "⚡ Performance Tips และ Best Practices"
+        }
+      ],
+      "markDefs": [],
+      "style": "h2"
+    },
+    {
+      "_key": "performance-recommendations",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "การใช้ ES6+ Features อย่างมีประสิทธิภาพ:"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "performance-list",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "✅ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "ใช้ const และ let แทน var"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - เพื่อ block scope และป้องกัน hoisting issues\n✅ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "ใช้ Arrow Functions สำหรับ callbacks สั้นๆ"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - แต่ระวังเรื่อง this binding\n✅ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "ใช้ Destructuring แต่อย่าซับซ้อนเกินไป"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - เพื่อความอ่านง่าย\n✅ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "ใช้ Template Literals สำหรับ string interpolation"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "\n✅ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "ใช้ Optional Chaining เพื่อป้องกัน runtime errors"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "\n✅ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "ใช้ Async/Await แทน Promise chains"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - เพื่อความอ่านง่าย\n✅ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "ใช้ Modules เพื่อแยกโค้ดและ tree shaking"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "browser-support",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "Browser Support และ Transpilation"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "babel-config",
+      "_type": "code",
+      "code": "// .babelrc.json - การตั้งค่า Babel\n{\n  \"presets\": [\n    [\n      \"@babel/preset-env\",\n      {\n        \"targets\": {\n          \"browsers\": [\"> 1%\", \"last 2 versions\"]\n        },\n        \"useBuiltIns\": \"usage\",\n        \"corejs\": 3\n      }\n    ]\n  ],\n  \"plugins\": [\n    \"@babel/plugin-proposal-optional-chaining\",\n    \"@babel/plugin-proposal-nullish-coalescing-operator\",\n    \"@babel/plugin-proposal-private-methods\",\n    \"@babel/plugin-proposal-class-properties\"\n  ]\n}\n\n// package.json scripts\n{\n  \"scripts\": {\n    \"build\": \"babel src -d dist\",\n    \"dev\": \"babel src -d dist --watch\"\n  }\n}",
+      "language": "javascript"
+    },
+    {
+      "_key": "conclusion",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "🎯 สรุป: เลือกใช้ Feature ที่เหมาะสม"
+        }
+      ],
+      "markDefs": [],
+      "style": "h2"
+    },
+    {
+      "_key": "conclusion-text",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "JavaScript ES6+ Features เหล่านี้ช่วยให้เราเขียนโค้ดที่ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "สะอาด อ่านง่าย และมีประสิทธิภาพ"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " มากขึ้น แต่สำคัญที่สุดคือการเลือกใช้ให้เหมาะสมกับสถานการณ์และทีมงาน"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "key-recommendations",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "คำแนะนำสำคัญ"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "recommendations-list",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "🎯 "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "เริ่มจาก features พื้นฐาน"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " แล้วค่อยไปขั้นสูง\n📚 "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "อ่าน documentation และติดตาม updates"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "\n🔧 "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "ใช้ transpiler สำหรับ legacy browsers"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "\n👥 "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "สอนทีมงานและทำ code review"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "\n⚡ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "เน้น readability และ maintainability"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "\n🧪 "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "ทดสอบในสภาพแวดล้อมจริง"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " ก่อนนำไป production"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "final-note",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "การเรียนรู้และปรับตัวตาม JavaScript standards ใหม่ๆ จะช่วยให้คุณเป็นนักพัฒนาที่ดีขึ้น และสามารถสร้างแอปพลิเคชันที่ทันสมัยและมีประสิทธิภาพ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "🚀 เริ่มนำ features เหล่านี้ไปใช้ในโปรเจ็กต์ต่อไปของคุณได้เลย!"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    }
+  ],
+  "categories": [],
+  "excerpt": "มาเรียนรู้ JavaScript ES6+ Features ที่สำคัญและทันสมัยที่สุด ตั้งแต่ Arrow Functions, Destructuring, Async/Await ไปจนถึง Optional Chaining และ Private Fields พร้อมตัวอย่างโค้ดที่ใช้งานได้จริง",
+  "featured": true,
+  "language": "th",
+  "publishedAt": "2024-06-22T18:00:00Z",
+  "readingTime": 15,
+  "seo": {
+    "description": "มาเรียนรู้ JavaScript ES6+ Features ที่สำคัญและทันสมัยที่สุด ตั้งแต่ Arrow Functions, Destructuring, Async/Await ไปจนถึง Optional Chaining และ Private Fields พร้อมตัวอย่างโค้ดที่ใช้งานได้จริง และ Best Practices สำหรับการพัฒนาแอปพลิเคชันสมัยใหม่",
+    "keywords": [
+      "JavaScript",
+      "ES6",
+      "ES2015",
+      "Arrow Functions",
+      "Async Await",
+      "Destructuring",
+      "Optional Chaining",
+      "Modern JavaScript",
+      "Programming",
+      "Web Development",
+      "โปรแกรมมิ่ง",
+      "นักพัฒนา"
+    ],
+    "title": "JavaScript ES6+ Features ที่นักพัฒนาต้องรู้ในปี 2024: จากเบสิกสู่ขั้นสูง"
+  },
+  "slug": {
+    "_type": "slug",
+    "current": "javascript-es6-modern-features-2024"
+  },
+  "tags": [
+    "JavaScript",
+    "ES6",
+    "ES2015",
+    "Programming",
+    "Web Development",
+    "Modern JS",
+    "Features",
+    "Tutorial",
+    "Advanced",
+    "2024"
+  ],
+  "title": "JavaScript ES6+ Features ที่นักพัฒนาต้องรู้ในปี 2024: จากเบสิกสู่ขั้นสูง",
+  "mainImage": {
+    "_type": "image",
+    "asset": {
+      "_type": "reference",
+      "_ref": "image-placeholder-javascript-code"
+    },
+    "alt": "JavaScript code on computer screen showing modern ES6+ features",
+    "caption": "Modern JavaScript code และ ES6+ features"
+  }
+}

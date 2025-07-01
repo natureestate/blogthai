@@ -82,10 +82,10 @@ export default defineType({
       },
     }),
 
-    // ✅ Code Block สำหรับ Technical Blog
+    // ✅ Code Block สำหรับ Technical Blog (รองรับ type 'code' และ 'codeBlock')
     defineArrayMember({
       type: 'object',
-      name: 'codeBlock',
+      name: 'code',
       title: 'Code Block',
       fields: [
         {
@@ -136,6 +136,67 @@ export default defineType({
         prepare({title, subtitle, code}) {
           return {
             title: title || 'Code Block',
+            subtitle: subtitle || 'text',
+            media: () => '💻'
+          }
+        }
+      }
+    }),
+
+    // ✅ Code Block แบบเก่า (เพื่อ backward compatibility)
+    defineArrayMember({
+      type: 'object',
+      name: 'codeBlock',
+      title: 'Code Block (Legacy)',
+      fields: [
+        {
+          name: 'language',
+          title: 'Language',
+          type: 'string',
+          options: {
+            list: [
+              {title: 'JavaScript', value: 'javascript'},
+              {title: 'TypeScript', value: 'typescript'},
+              {title: 'HTML', value: 'html'},
+              {title: 'CSS', value: 'css'},
+              {title: 'React/JSX', value: 'jsx'},
+              {title: 'Vue', value: 'vue'},
+              {title: 'Python', value: 'python'},
+              {title: 'PHP', value: 'php'},
+              {title: 'JSON', value: 'json'},
+              {title: 'Bash/Shell', value: 'bash'},
+              {title: 'SQL', value: 'sql'},
+              {title: 'Plain Text', value: 'text'},
+            ]
+          }
+        },
+        {
+          name: 'code',
+          title: 'Code',
+          type: 'text',
+          rows: 10
+        },
+        {
+          name: 'filename',
+          title: 'Filename (optional)',
+          type: 'string'
+        },
+        {
+          name: 'highlightedLines',
+          title: 'Highlighted Lines (optional)',
+          type: 'string',
+          description: 'เช่น: 1,3-5,8'
+        }
+      ],
+      preview: {
+        select: {
+          title: 'filename',
+          subtitle: 'language',
+          code: 'code'
+        },
+        prepare({title, subtitle, code}) {
+          return {
+            title: title || 'Code Block (Legacy)',
             subtitle: subtitle || 'text',
             media: () => '💻'
           }

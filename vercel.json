@@ -1,0 +1,12 @@
+{
+  "framework": "astro",
+  "git": {
+    "deploymentEnabled": true
+  },
+  "env": {
+    "PUBLIC_SANITY_PROJECT_ID": "yor24whn",
+    "PUBLIC_SANITY_DATASET": "blog",
+    "PUBLIC_SANITY_STUDIO_PROJECT_ID": "yor24whn",
+    "PUBLIC_SANITY_STUDIO_DATASET": "blog"
+  }
+} 

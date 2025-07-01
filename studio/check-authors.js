@@ -1,0 +1,1 @@
+import {createClient} from "@sanity/client"; const client = createClient({projectId: "yor24whn", dataset: "blog", useCdn: false, apiVersion: "2024-01-01"}); client.fetch("*[_type == \"author\"]").then(console.log);

@@ -1,0 +1,254 @@
+---
+import Card from "../components/Card.astro";
+import Welcome from "../components/Welcome.astro";
+import SearchComponent from "../components/SearchComponent.astro";
+import Layout from "../layouts/Layout.astro";
+import { getPosts, getCategories, getFeaturedPosts } from "../utils/sanity";
+import { createOrganizationSchema, createWebSiteSchema } from "../utils/schema";
+
+// ดึงข้อมูลทั้งหมด
+const posts = await getPosts();
+const categories = await getCategories();
+const featuredPosts = await getFeaturedPosts(3);
+
+// สร้าง Schema Markup
+const organizationSchema = createOrganizationSchema();
+const websiteSchema = createWebSiteSchema();
+const schemas = [organizationSchema, websiteSchema];
+---
+
+<Layout 
+  title="Blog ไทย - แหล่งรวมบทความเทคโนโลยี การพัฒนาเว็บ และเทรนด์ดิจิทัล"
+  description="แหล่งรวมบทความเทคโนโลยี การพัฒนาเว็บ Astro Sanity JavaScript และเทรนด์ใหม่ๆ ในโลกดิจิทัล พร้อมคู่มือและตัวอย่างที่ใช้งานได้จริง"
+  schemaMarkup={schemas}
+>
+  <div class="max-w-7xl mx-auto">
+    <!-- ✅ Hero Section พร้อม Enhanced Gradient -->
+    <section class="text-center py-16 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-900 rounded-2xl mb-16 shadow-sm">
+      <div class="max-w-4xl mx-auto px-8">
+        <div class="inline-flex items-center bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/50 dark:to-purple-900/50 rounded-full px-4 py-2 mb-6">
+          <span class="text-sm font-medium text-blue-800 dark:text-blue-200">🚀 พร้อมด้วย Schema Markup และ SEO Optimization</span>
+        </div>
+        
+        <h1 class="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
+          ยินดีต้อนรับสู่ 
+          <span class="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+            Blog ไทย
+          </span>
+        </h1>
+        
+        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed max-w-3xl mx-auto">
+          แหล่งรวมบทความเทคโนโลยี การพัฒนาเว็บด้วย Astro + Sanity JavaScript ES6+ และเทรนด์ใหม่ๆ ในโลกดิจิทัล
+          พร้อมคู่มือละเอียดและตัวอย่างที่ใช้งานได้จริง
+        </p>
+        
+        <!-- Stats -->
+        <div class="flex justify-center items-center gap-8 mb-8 text-sm text-gray-500 dark:text-gray-400">
+          <div class="flex items-center gap-2">
+            <span>📝</span>
+            <span>{posts.length} บทความ</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span>📚</span>
+            <span>{categories.length} หมวดหมู่</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span>⭐</span>
+            <span>{featuredPosts.length} บทความเด่น</span>
+          </div>
+        </div>
+        
+        <!-- Search Component -->
+        <div class="max-w-2xl mx-auto">
+          <SearchComponent posts={posts} />
+        </div>
+      </div>
+    </section>
+
+    <!-- ✅ Featured Posts Section พร้อม Enhanced Layout -->
+    {featuredPosts.length > 0 && (
+      <section class="mb-20">
+        <div class="text-center mb-12">
+          <div class="inline-flex items-center bg-yellow-100 dark:bg-yellow-900/30 rounded-full px-4 py-2 mb-4">
+            <span class="text-sm font-medium text-yellow-800 dark:text-yellow-200">✨ คัดสรรเป็นพิเศษ</span>
+          </div>
+          <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            บทความเด่น
+          </h2>
+          <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            บทความที่ได้รับความนิยมสูงสุด มีเนื้อหาครบถ้วน และแนะนำให้อ่าน
+          </p>
+        </div>
+        
+        <!-- Grid พิเศษสำหรับ Featured Posts -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {featuredPosts.map((post, index) => (
+            <Card 
+              post={post} 
+            />
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- ✅ Categories Section พร้อม Enhanced Design -->
+    {categories.length > 0 && (
+      <section class="mb-20">
+        <div class="text-center mb-12">
+          <div class="inline-flex items-center bg-green-100 dark:bg-green-900/30 rounded-full px-4 py-2 mb-4">
+            <span class="text-sm font-medium text-green-800 dark:text-green-200">📚 เลือกตามความสนใจ</span>
+          </div>
+          <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            หมวดหมู่
+          </h2>
+          <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            เลือกหมวดหมู่ที่สนใจเพื่อค้นหาบทความที่ตรงกับความต้องการ
+          </p>
+        </div>
+        
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+          {categories.slice(0, 6).map((category) => (
+            <a 
+              href={`/category/${category.slug.current}`}
+              class="group bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6 text-center hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-500/10 dark:hover:shadow-blue-500/5 transition-all duration-300 hover:-translate-y-1"
+            >
+              <div class="text-3xl mb-3 group-hover:scale-110 transition-transform duration-300">
+                {category.icon || '📝'}
+              </div>
+              <h3 class="font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors text-sm">
+                {category.title}
+              </h3>
+              {category.description && (
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 line-clamp-2">
+                  {category.description}
+                </p>
+              )}
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- ✅ Recent Posts Section พร้อม Enhanced Grid -->
+    <section class="mb-20">
+      <div class="text-center mb-12">
+        <div class="inline-flex items-center bg-blue-100 dark:bg-blue-900/30 rounded-full px-4 py-2 mb-4">
+          <span class="text-sm font-medium text-blue-800 dark:text-blue-200">📰 อัปเดตใหม่ล่าสุด</span>
+        </div>
+        <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          บทความล่าสุด
+        </h2>
+        <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+          บทความใหม่ล่าสุด {posts.length} บทความ พร้อมเนื้อหาที่ทันสมัยและใช้งานได้จริง
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {posts.length ? (
+          posts.map((post) => (
+            <Card 
+              post={post}
+            />
+          ))
+        ) : (
+          <div class="col-span-full">
+            <Welcome />
+          </div>
+        )}
+      </div>
+      
+      <!-- Load More Button พร้อม Enhanced Design -->
+      {posts.length > 6 && (
+        <div class="text-center mt-16">
+          <div class="inline-flex flex-col items-center gap-4">
+            <button 
+              class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 text-gray-600 dark:text-gray-300 rounded-xl hover:from-gray-200 hover:to-gray-300 dark:hover:from-gray-700 dark:hover:to-gray-600 transition-all duration-300 cursor-not-allowed opacity-60 shadow-sm"
+              disabled
+            >
+              <span class="text-base font-medium">โหลดบทความเพิ่มเติม</span>
+              <span class="text-xs bg-gray-200 dark:bg-gray-600 px-2 py-1 rounded-full">กำลังพัฒนา</span>
+            </button>
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+              🚀 ฟีเจอร์ Pagination กำลังมาเร็วๆ นี้
+            </p>
+          </div>
+        </div>
+      )}
+    </section>
+
+    <!-- ✅ Newsletter Section (เพิ่มใหม่) -->
+    <section class="mb-16">
+      <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 md:p-12 text-center text-white shadow-lg">
+        <div class="max-w-2xl mx-auto">
+          <h3 class="text-2xl md:text-3xl font-bold mb-4">
+            🚀 อยู่ในขั้นตอนการพัฒนา
+          </h3>
+          <p class="text-blue-100 mb-6 text-lg">
+            เราจะเพิ่มฟีเจอร์ Newsletter, Comment System และ User Authentication ในอนาคตอันใกล้
+          </p>
+          <div class="flex justify-center items-center gap-4 text-sm text-blue-200">
+            <span>✅ Schema Markup</span>
+            <span>✅ SEO Optimized</span>
+            <span>✅ Responsive Design</span>
+            <span>✅ Dark Mode</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  /* Enhanced animations และ transitions */
+  section {
+    animation: fadeInUp 0.8s ease-out forwards;
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* เพิ่ม stagger effect สำหรับ grid items */
+  .grid > * {
+    animation-delay: calc(var(--index, 0) * 0.1s);
+  }
+  
+  /* Line clamp utility */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  /* Enhanced hover effects */
+  a:hover, button:hover {
+    transform: translateY(-2px);
+  }
+  
+  /* Accessibility improvements */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+  
+  /* Focus styles */
+  a:focus-visible,
+  button:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+  }
+</style>

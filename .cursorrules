@@ -1,0 +1,75 @@
+# Cursor Rule: Website Development for Google Bot & LLM Search Optimization
+
+This rule defines the core principles and practices for developing all content and code within this project to maximize visibility on Google Search and ensure optimal understanding by Large Language Models (LLMs) for generative AI search.
+
+---
+
+# MCP Server Configuration
+
+## Sanity MCP Server
+เราใช้ Sanity MCP Server สำหรับการจัดการ content ผ่าน AI:
+
+**Project Details:**
+- Project ID: yor24whn  
+- Dataset: blog (not "production")
+- Sanity Studio Host: https://blogthai.sanity.studio/
+- Languages: Thai (th) and English (en)
+- Schema Version: Enhanced with multimedia support
+
+**MCP Configuration สำหรับ Cursor:**
+```json
+{
+  "mcpServers": {
+    "sanity": {
+      "command": "npx",
+      "args": ["-y", "@sanity/mcp-server@latest"],
+      "env": {
+        "SANITY_PROJECT_ID": "yor24whn",
+        "SANITY_DATASET": "blog",
+        "SANITY_API_TOKEN": "YOUR_SANITY_API_TOKEN_HERE",
+        "MCP_USER_ROLE": "developer"
+      }
+    }
+  }
+}
+```
+
+**คำสั่งที่สามารถใช้ได้ผ่าน MCP:**
+- Query content ด้วยภาษาธรรมชาติแทน GROQ
+- สร้างและแก้ไข documents
+- จัดการ content releases
+- Semantic search ข้ามเนื้อหา
+- เข้าถึงข้อมูล schema
+
+## CRITICAL - Sanity Schema Rules
+
+### Code Block Schema (อัปเดต 2024)
+- **ใช้ `type: 'code'`** - เป็น object type ที่ถูกต้องตาม schema ปัจจุบัน ✅
+- **หลีกเลี่ยง `type: 'codeBlock'`** - เป็น legacy type แล้ว
+- **ไม่ใช้ built-in code type** - จะทำให้เกิด validation errors
+
+### Available Block Types
+1. **block** - Rich text content
+2. **code** - Code examples (primary)
+3. **codeBlock** - Legacy code blocks
+4. **imageBlock** - Images with alt text and captions
+5. **youtube** - YouTube video embeds
+6. **callToAction** - CTA buttons
+7. **table** - Data tables
+
+### MCP Instructions Template
+```text
+"ใช้ type: 'code' เป็น object ใน blockContent พร้อม fields: 
+- language: string (javascript, typescript, html, css, python, php, json, bash, sql, text)
+- code: string (โค้ดจริง)
+- filename: string (optional)
+- highlightedLines: string (optional, เช่น '1-3' หรือ '5,7,9')"
+```
+
+### Development Workflow
+1. **ตรวจสอบ Schema เสมอ:** ใช้ `mcp_sanity_get_schema` ก่อนสร้าง document
+2. **ระบุ Instructions ชัดเจน:** บอก AI ให้ใช้ field types ที่ถูกต้อง
+3. **Validate Referenced Types:** ตรวจสอบว่า types ที่อ้างอิงมีอยู่ใน schema
+4. **Test ใน Studio UI:** ทดสอบสร้าง document ใน Studio ก่อนเมื่อไม่แน่ใจ
+
+By strictly following these Cursor Rules, we will build a project that not only ranks effectively in traditional search results but also serves as a reliable, understandable, and valuable source of information for the next generation of AI-powered search experiences. 

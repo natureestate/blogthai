@@ -1,0 +1,288 @@
+import type { SanityDocument } from "@sanity/client";
+import { urlFor, hasValidImage, isExternalUrl, isUnsplashUrl, getImageProps } from "../utils/image";
+import type { ImageSource } from "../utils/image";
+import { Badge } from "./ui/badge";
+
+export interface Props {
+  post: SanityDocument;
+  featured?: boolean;
+  showExcerpt?: boolean;
+  showAuthor?: boolean;
+  showTags?: boolean;
+  imageOptions?: {
+    width?: number;
+    height?: number;
+    quality?: number;
+  };
+}
+
+const { 
+  post, 
+  featured = false, 
+  showExcerpt = true, 
+  showAuthor = true, 
+  showTags = true,
+  imageOptions = { width: 400, height: 250, quality: 85 }
+} = Astro.props;
+
+// ตรวจสอบและเตรียม image source
+const imageSource = post.mainImage || post.coverImage || null;
+const hasImage = hasValidImage(imageSource);
+
+// สร้าง image props พร้อม optimization
+let imageProps = null;
+if (hasImage) {
+  imageProps = getImageProps(imageSource, imageOptions);
+}
+
+// ฟอร์แมตวันที่
+let publishedDate = null;
+if (post.publishedAt) {
+  publishedDate = new Date(post.publishedAt).toLocaleDateString('th-TH', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+}
+
+// สร้าง reading time badge
+let readingTimeText = null;
+if (post.readingTime) {
+  readingTimeText = `${post.readingTime} นาที`;
+}
+
+// สร้าง URL สำหรับ post
+const postUrl = `/post/${post.slug?.current || post._id}`;
+
+// ตรวจสอบว่าเป็น external image หรือไม่
+const isExternal = isExternalUrl(imageSource);
+const isUnsplash = isExternal && imageSource && isUnsplashUrl(imageSource);
+
+// เตรียม CSS classes
+const articleClasses = ['group', 'cursor-pointer', 'transition-all', 'duration-300'];
+if (featured) {
+  articleClasses.push('col-span-2', 'lg:col-span-3');
+}
+
+const containerClasses = [
+  'bg-white', 'dark:bg-gray-900',
+  'border', 'border-gray-200', 'dark:border-gray-800',
+  'rounded-xl', 'overflow-hidden', 'shadow-sm',
+  'hover:shadow-lg', 'hover:shadow-gray-200/50', 'dark:hover:shadow-gray-800/50',
+  'transition-all', 'duration-300',
+  'group-hover:scale-[1.02]', 'group-hover:-translate-y-1',
+  'h-full', 'flex', 'flex-col'
+];
+if (featured) {
+  containerClasses.push('lg:flex-row');
+}
+
+const imageClasses = ['relative', 'overflow-hidden', 'bg-gray-100', 'dark:bg-gray-800'];
+if (featured) {
+  imageClasses.push('lg:w-1/2', 'h-64', 'lg:h-auto');
+} else {
+  imageClasses.push('w-full', 'h-48');
+}
+
+const contentClasses = ['p-6', 'flex', 'flex-col', 'flex-grow'];
+if (featured) {
+  contentClasses.push('lg:w-1/2');
+}
+
+const titleClasses = [
+  'font-bold', 'text-gray-900', 'dark:text-white',
+  'group-hover:text-blue-600', 'dark:group-hover:text-blue-400',
+  'transition-colors', 'duration-200', 'line-clamp-2', 'mb-3'
+];
+if (featured) {
+  titleClasses.push('text-2xl', 'lg:text-3xl');
+} else {
+  titleClasses.push('text-xl');
+}
+
+const excerptClasses = [
+  'text-gray-600', 'dark:text-gray-400',
+  'line-clamp-3', 'mb-4', 'flex-grow'
+];
+if (featured) {
+  excerptClasses.push('text-base');
+} else {
+  excerptClasses.push('text-sm');
+}
+
+<article class={articleClasses.join(' ')}>
+  <a href={postUrl} class="block h-full">
+    <div class={containerClasses.join(' ')}>
+      
+      <!-- รูปภาพ -->
+      {hasImage && imageProps && (
+        <div class={imageClasses.join(' ')}>
+          <!-- Main Image -->
+          <img
+            src={imageProps.src}
+            alt={imageProps.alt}
+            loading={imageProps.loading}
+            decoding={imageProps.decoding}
+            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            srcset={`
+              ${imageProps.sm} 640w,
+              ${imageProps.md} 768w,
+              ${imageProps.lg} 1024w,
+              ${imageProps.xl} 1280w
+            `}
+            sizes={featured ? "(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 640px" : "(max-width: 768px) 100vw, (max-width: 1024px) 33vw, 400px"}
+          />
+          
+          <!-- Image Source Badge -->
+          {isUnsplash && (
+            <div class="absolute top-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded-full">
+              📸 Unsplash
+            </div>
+          )}
+          
+          <!-- Featured Badge -->
+          {featured && (
+            <div class="absolute top-2 left-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-medium px-3 py-1 rounded-full">
+              ⭐ Featured
+            </div>
+          )}
+          
+          <!-- Reading Time Badge -->
+          {readingTimeText && (
+            <div class="absolute bottom-2 left-2 bg-white/90 dark:bg-gray-900/90 text-gray-900 dark:text-white text-xs px-2 py-1 rounded-full backdrop-blur-sm">
+              🕐 {readingTimeText}
+            </div>
+          )}
+        </div>
+      )}
+      
+      <!-- เนื้อหา -->
+      <div class={contentClasses.join(' ')}>
+        
+        <!-- Tags -->
+        {showTags && post.tags && post.tags.length > 0 && (
+          <div class="flex flex-wrap gap-2 mb-3">
+            {post.tags.slice(0, 3).map((tag) => (
+              <Badge variant="secondary" class="text-xs">
+                {tag}
+              </Badge>
+            ))}
+            {post.tags.length > 3 && (
+              <Badge variant="outline" class="text-xs">
+                +{post.tags.length - 3}
+              </Badge>
+            )}
+          </div>
+        )}
+        
+        <!-- Title -->
+        <h2 class={titleClasses.join(' ')}>
+          {post.title}
+        </h2>
+        
+        <!-- Excerpt -->
+        {showExcerpt && post.excerpt && (
+          <p class={excerptClasses.join(' ')}>
+            {post.excerpt}
+          </p>
+        )}
+        
+        <!-- Meta Information -->
+        <div class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 mt-auto">
+          
+          <!-- Author และวันที่ -->
+          <div class="flex items-center space-x-4">
+            {showAuthor && post.author && (
+              <div class="flex items-center space-x-2">
+                <div class="w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-xs font-semibold">
+                  {post.author.name && post.author.name.charAt(0).toUpperCase() || 'A'}
+                </div>
+                <span class="font-medium text-gray-700 dark:text-gray-300">
+                  {post.author.name || 'ไม่ระบุผู้เขียน'}
+                </span>
+              </div>
+            )}
+            
+            {publishedDate && (
+              <time class="text-gray-500 dark:text-gray-400">
+                {publishedDate}
+              </time>
+            )}
+          </div>
+          
+          <!-- Language Badge -->
+          {post.language && (
+            <Badge variant="outline" class="text-xs">
+              {post.language === 'th' && '🇹🇭 ไทย' || '🇺🇸 EN'}
+            </Badge>
+          )}
+        </div>
+        
+        <!-- SEO Indicators -->
+        {post.seo && (
+          <div class="flex items-center space-x-2 mt-2 text-xs text-gray-400">
+            {post.seo.title && (
+              <span class="flex items-center space-x-1">
+                <span>🔍</span>
+                <span>SEO Ready</span>
+              </span>
+            )}
+            {post.featured && (
+              <span class="flex items-center space-x-1">
+                <span>⭐</span>
+                <span>Featured</span>
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  </a>
+</article>
+
+<style>
+  /* Utility classes สำหรับ line clamping */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  /* Dark mode transitions */
+  article {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* Responsive image optimization */
+  img {
+    content-visibility: auto;
+    contain-intrinsic-size: 400px 250px;
+  }
+  
+  /* Enhanced hover effects */
+  article:hover img {
+    transform: scale(1.1);
+    filter: brightness(1.1);
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    article,
+    img {
+      transition: none;
+      transform: none;
+    }
+    
+    article:hover img {
+      transform: none;
+      filter: none;
+    }
+  }
+</style> 

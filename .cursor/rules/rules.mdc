@@ -143,4 +143,80 @@ Beyond traditional SEO, optimize content for how LLMs understand and synthesize 
 
 ---
 
+## 6. MCP Server Configuration & Sanity CMS Integration
+
+This project uses Sanity MCP Server for AI-powered content management.
+
+* **Rule 6.1: Project Configuration:**
+    * **Project ID:** yor24whn  
+    * **Dataset:** blog (not "production")
+    * **Studio Host:** https://blogthai.sanity.studio/
+    * **Languages:** Thai (th) and English (en)
+
+* **Rule 6.2: Sanity Schema Development:**
+    * Always use `defineType`, `defineField`, `defineArrayMember` helpers
+    * Use named exports only (avoid default exports)
+    * For code blocks: use `type: 'code'` as object (not built-in type)
+    * Check schema before creating documents with MCP
+
+* **Rule 6.3: Content Creation via AI:**
+    * Always verify schema structure before document creation
+    * Use explicit instructions for field types and structure
+    * For code examples, specify: "use type: 'code' as object with language, code, filename fields"
+    * Test document creation in Studio UI when uncertain
+
+* **Rule 6.4: Available Block Types:**
+    * **block** - Rich text content
+    * **code** - Code examples (primary)
+    * **codeBlock** - Legacy code blocks  
+    * **imageBlock** - Images with alt text
+    * **youtube** - Video embeds
+    * **callToAction** - CTA buttons
+    * **table** - Data tables
+
+---
+
+### Complete MCP Instructions Template
+```text
+"สร้าง post ใหม่ให้ครบถ้วนตาม schema และ validation rules ดังนี้:
+
+REQUIRED FIELDS พร้อม VALIDATION RULES:
+- title: หัวข้อบทความ (10-100 ตัวอักษร) ✅
+- slug: URL slug (auto-generate จาก title)
+- excerpt: สรุปย่อของบทความ (50-200 ตัวอักษร) สำหรับแสดงในหน้ารายการ ✅
+- body: เนื้อหาหลักพร้อม code examples ใช้ type: 'code' เป็น object
+- author: reference ไปยัง author document
+- categories: หมวดหมู่ของบทความ (ต้องมี 1-3 หมวด) ✅
+- language: 'th' หรือ 'en'
+
+SEO FIELDS พร้อม VALIDATION:
+- seo.metaTitle: หัวข้อสำหรับ Google (สูงสุด 60 ตัวอักษร) ✅
+- seo.metaDescription: คำอธิบายสำหรับ Google (สูงสุด 160 ตัวอักษร) ✅
+- seo.keywords: คำสำคัญสำหรับ SEO (สูงสุด 10 คำ) ✅
+
+OPTIONAL FIELDS พร้อม VALIDATION:
+- tags: แท็กของบทความ (สูงสุด 10 แท็ก) ✅
+- featured: true/false
+- publishedAt: วันที่เผยแพร่
+- readingTime: เวลาอ่าน (นาที) - auto-calculated
+- series: reference ถ้ามี
+- relatedPosts: บทความที่เกี่ยวข้อง (สูงสุด 5 บทความ)
+
+CODE BLOCKS:
+ใช้ type: 'code' เป็น object พร้อม fields:
+- language: 'javascript', 'typescript', 'html', 'css', 'python', 'php', 'json', 'bash', 'sql', 'text'
+- code: โค้ดจริง
+- filename: ชื่อไฟล์ (optional)
+- highlightedLines: บรรทัดที่เน้น (optional)
+
+VALIDATION REQUIREMENTS:
+✅ หัวข้อบทความ (10-100 ตัวอักษร)
+✅ สรุปย่อของบทความ (50-200 ตัวอักษร) สำหรับแสดงในหน้ารายการ
+✅ หมวดหมู่ของบทความ (1-3 หมวด)
+✅ แท็กของบทความ (สูงสุด 10 แท็ก)
+✅ คำสำคัญสำหรับ SEO (สูงสุด 10 คำ)
+✅ หัวข้อสำหรับ Google (สูงสุด 60 ตัวอักษร)
+✅ คำอธิบายสำหรับ Google (สูงสุด 160 ตัวอักษร)"
+```
+
 By strictly following these Cursor Rules, we will build a project that not only ranks effectively in traditional search results but also serves as a reliable, understandable, and valuable source of information for the next generation of AI-powered search experiences.

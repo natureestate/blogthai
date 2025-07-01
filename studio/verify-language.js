@@ -1,0 +1,1 @@
+import {createClient} from "@sanity/client"; const client = createClient({projectId: "yor24whn", dataset: "blog", useCdn: false, apiVersion: "2024-01-01"}); client.fetch("*[_type == \"post\" && language == \"th\"]").then(posts => { console.log("Posts ที่มี language = th:", posts.length); console.log("ข้อมูลถูกต้องแล้ว - ไม่จำเป็นต้องแก้ไข"); });

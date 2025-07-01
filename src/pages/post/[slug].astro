@@ -1,0 +1,685 @@
+---
+import type { InferGetStaticParamsType } from "astro";
+import { PortableText } from "astro-portabletext";
+import Layout from "../../layouts/Layout.astro";
+import TableOfContents from "../../components/TableOfContents.astro";
+import RelatedPosts from "../../components/RelatedPosts.astro";
+import ReadingTime from "../../components/ReadingTime.astro";
+import ScheduleStatus from "../../components/ScheduleStatus.astro";
+import VisualEditing from "../../components/VisualEditing.astro";
+import { formatDate } from "../../utils";
+import { urlFor } from "../../utils/image";
+import { getPost, getPosts } from "../../utils/sanity";
+import { isPreviewMode } from "../../utils/preview";
+import { 
+  createArticleSchema, 
+  createAuthorSchema, 
+  createBreadcrumbSchema 
+} from "../../utils/schema";
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({
+    params: { slug: post.slug.current },
+  }));
+}
+
+type Params = InferGetStaticParamsType<typeof getStaticPaths>;
+const { slug } = Astro.params as Params;
+
+// ดึงข้อมูลบทความและบทความทั้งหมด (สำหรับ related posts)
+const post = await getPost(slug);
+const allPosts = await getPosts();
+
+// ตรวจสอบ preview mode
+const isPreview = isPreviewMode(Astro.request);
+
+// SEO data
+const seoTitle = post.seo?.metaTitle || post.title;
+const seoDescription = post.seo?.metaDescription || post.excerpt;
+const ogImage = post.seo?.ogImage || post.mainImage;
+const fullUrl = Astro.url.toString();
+
+// สร้าง Schema markup
+const schemas = [];
+
+// Article Schema
+schemas.push(createArticleSchema(post, fullUrl));
+
+// Author Schema ถ้ามี
+if (post.author) {
+  schemas.push(createAuthorSchema(post.author));
+}
+
+// Breadcrumb Schema
+const breadcrumbs = [
+  { name: "หน้าแรก", url: "/" },
+  { name: "บทความ", url: "/posts" },
+  { name: post.title!, url: `/post/${post.slug.current}` }
+];
+schemas.push(createBreadcrumbSchema(breadcrumbs));
+---
+
+<Layout 
+  title={seoTitle!}
+  description={seoDescription!}
+  ogImage={ogImage ? urlFor(ogImage).width(1200).height(630).url() : undefined}
+  canonicalUrl={fullUrl}
+  schemaMarkup={schemas}
+>
+  <!-- ✅ Visual Editing (ถ้าอยู่ใน preview mode) -->
+  <VisualEditing enabled={isPreview} />
+  
+  <article class="post-article">
+    <!-- ✅ Post Header -->
+    <header class="post-header">
+      <!-- Cover Image -->
+      {post.mainImage ? (
+        <div class="post-cover" data-sanity={`post;${post._id};mainImage`}>
+          <img
+            src={urlFor(post.mainImage).width(1200).height(630).url()}
+            alt={post.mainImage.alt || post.title}
+            class="post-cover__image"
+          />
+          {post.mainImage.caption && (
+            <div class="post-cover__caption">
+              {post.mainImage.caption}
+            </div>
+          )}
+        </div>
+      ) : (
+        <div class="post-cover--none" />
+      )}
+      
+      <!-- Post Meta -->
+      <div class="post-meta">
+        <!-- Categories -->
+        {post.categories && post.categories.length > 0 && (
+          <div class="post-categories" data-sanity={`post;${post._id};categories`}>
+            {post.categories.map(category => (
+              <a 
+                href={`/category/${category.slug.current}`}
+                class={`post-category post-category--${category.color || 'blue'}`}
+              >
+                {category.icon && <span class="post-category__icon">{category.icon}</span>}
+                {category.title}
+              </a>
+            ))}
+          </div>
+        )}
+        
+        <!-- Title -->
+        <h1 class="post-title" data-sanity={`post;${post._id};title`}>{post.title}</h1>
+        
+        <!-- Excerpt -->
+        {post.excerpt && (
+          <p class="post-excerpt" data-sanity={`post;${post._id};excerpt`}>{post.excerpt}</p>
+        )}
+        
+        <!-- Author & Date Info -->
+        <div class="post-info">
+          <div class="post-info__main">
+            {post.author && (
+              <div class="post-author" data-sanity={`post;${post._id};author`}>
+                {post.author.avatar && (
+                  <img 
+                    src={urlFor(post.author.avatar).width(40).height(40).url()}
+                    alt={post.author.name}
+                    class="post-author__avatar"
+                  />
+                )}
+                <div class="post-author__info">
+                  <a 
+                    href={`/author/${post.author.slug.current}`}
+                    class="post-author__name"
+                  >
+                    {post.author.name}
+                  </a>
+                  {post.author.shortBio && (
+                    <p class="post-author__bio">{post.author.shortBio}</p>
+                  )}
+                </div>
+              </div>
+            )}
+            
+            <div class="post-date-info">
+              <div class="post-date" data-sanity={`post;${post._id};publishedAt`}>
+                <svg class="post-date__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z"/>
+                </svg>
+                {formatDate(post.publishedAt || post._createdAt)}
+              </div>
+              
+              {post.body && (
+                <ReadingTime content={post.body} showIcon={true} />
+              )}
+            </div>
+          </div>
+          
+          <!-- Schedule Status (ถ้าเป็น scheduled post) -->
+          {post.publishedAt && (
+            <ScheduleStatus 
+              publishedAt={post.publishedAt}
+              status={post.publishedAt && new Date(post.publishedAt) > new Date() ? 'scheduled' : 'published'}
+              compact={true}
+            />
+          )}
+        </div>
+        
+        <!-- Tags -->
+        {post.tags && post.tags.length > 0 && (
+          <div class="post-tags" data-sanity={`post;${post._id};tags`}>
+            {post.tags.map(tag => (
+              <a href={`/tag/${tag}`} class="post-tag">
+                #{tag}
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+    </header>
+    
+    <!-- ✅ Main Content Area -->
+    <div class="post-main">
+      <!-- Table of Contents Sidebar -->
+      {post.body && (
+        <aside class="post-sidebar">
+          <TableOfContents 
+            content={post.body} 
+            maxLevel={3}
+            showNumbers={true}
+            sticky={true}
+          />
+        </aside>
+      )}
+      
+      <!-- Post Content -->
+      <main class="post-content">
+        <div class="post-body" data-sanity={`post;${post._id};body`}>
+          <PortableText value={post.body} />
+        </div>
+        
+        <!-- Series Navigation (ถ้าเป็นส่วนหนึ่งของ series) -->
+        {post.series && (
+          <div class="post-series">
+            <div class="post-series__header">
+              <h3 class="post-series__title">
+                <span class="post-series__icon">📚</span>
+                ซีรี่ส์: {post.series.title}
+              </h3>
+              {(post.series as any).description && (
+                <p class="post-series__description">
+                  {(post.series as any).description}
+                </p>
+              )}
+            </div>
+            
+            <div class="post-series__navigation">
+              <a href={`/series/${post.series.slug.current}`} class="post-series__link">
+                ดูบทความทั้งหมดในซีรี่ส์
+                <svg class="post-series__arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        )}
+        
+        <!-- Social Share -->
+        <div class="post-share">
+          <h4 class="post-share__title">แชร์บทความ</h4>
+          <div class="post-share__buttons">
+            <a 
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title!)}&url=${encodeURIComponent(Astro.url.toString())}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="post-share__button post-share__button--twitter"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+              </svg>
+              Twitter
+            </a>
+            
+            <a 
+              href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(Astro.url.toString())}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="post-share__button post-share__button--facebook"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              </svg>
+              Facebook
+            </a>
+            
+            <a 
+              href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(Astro.url.toString())}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="post-share__button post-share__button--linkedin"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+              LinkedIn
+            </a>
+            
+            <button 
+              class="post-share__button post-share__button--copy"
+              onclick="navigator.clipboard.writeText(window.location.href); this.textContent = 'คัดลอกแล้ว!'; setTimeout(() => this.innerHTML = '<svg viewBox=&quot;0 0 24 24&quot; fill=&quot;currentColor&quot;><path d=&quot;M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z&quot;/></svg>คัดลอกลิงก์', 2000)"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+              </svg>
+              คัดลอกลิงก์
+            </button>
+          </div>
+        </div>
+      </main>
+    </div>
+    
+    <!-- ✅ Related Posts -->
+    <RelatedPosts 
+      currentPost={post}
+      allPosts={allPosts}
+      limit={3}
+      showReasons={true}
+    />
+  </article>
+</Layout>
+
+<style>
+  .post-article {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  /* ✅ Post Header */
+  .post-header {
+    margin-bottom: 3rem;
+  }
+
+  .post-cover {
+    position: relative;
+    margin-bottom: 2rem;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .post-cover__image {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+  }
+
+  .post-cover__caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+    color: white;
+    padding: 1rem;
+    font-size: 0.875rem;
+  }
+
+  .post-cover--none {
+    width: 100%;
+    height: 400px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .post-meta {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .post-categories {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .post-category {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 9999px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .post-category--blue { background: #dbeafe; color: #1e40af; }
+  .post-category--green { background: #dcfce7; color: #166534; }
+  .post-category--purple { background: #f3e8ff; color: #7c3aed; }
+  .post-category--red { background: #fee2e2; color: #dc2626; }
+  .post-category--yellow { background: #fef3c7; color: #d97706; }
+  .post-category--cyan { background: #cffafe; color: #0891b2; }
+
+  .post-category:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .post-category__icon {
+    font-size: 1rem;
+  }
+
+  .post-title {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #1a202c;
+    margin-bottom: 1rem;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+  }
+
+  .post-excerpt {
+    font-size: 1.25rem;
+    color: #4a5568;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  .post-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .post-info__main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .post-author {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .post-author__avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .post-author__name {
+    font-weight: 600;
+    color: #2d3748;
+    text-decoration: none;
+  }
+
+  .post-author__name:hover {
+    color: #3b82f6;
+  }
+
+  .post-author__bio {
+    font-size: 0.875rem;
+    color: #64748b;
+    margin: 0;
+  }
+
+  .post-date-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #64748b;
+    font-size: 0.875rem;
+  }
+
+  .post-date {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .post-date__icon {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .post-tags {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .post-tag {
+    padding: 0.25rem 0.5rem;
+    background: #f1f5f9;
+    color: #475569;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .post-tag:hover {
+    background: #e2e8f0;
+    color: #334155;
+  }
+
+  /* ✅ Main Content */
+  .post-main {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+  }
+
+  .post-sidebar {
+    position: sticky;
+    top: 2rem;
+    height: fit-content;
+  }
+
+  .post-content {
+    min-width: 0;
+  }
+
+  .post-body {
+    font-size: 1.125rem;
+    line-height: 1.7;
+    color: #374151;
+    margin-bottom: 3rem;
+  }
+
+  /* ✅ Series */
+  .post-series {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .post-series__header {
+    margin-bottom: 1rem;
+  }
+
+  .post-series__title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1a202c;
+    margin-bottom: 0.5rem;
+  }
+
+  .post-series__icon {
+    font-size: 1.25rem;
+  }
+
+  .post-series__description {
+    color: #64748b;
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .post-series__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .post-series__link:hover {
+    color: #2563eb;
+  }
+
+  .post-series__arrow {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  /* ✅ Social Share */
+  .post-share {
+    border-top: 1px solid #e2e8f0;
+    padding-top: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .post-share__title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1a202c;
+    margin-bottom: 1rem;
+  }
+
+  .post-share__buttons {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .post-share__button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    background: white;
+    color: #374151;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+
+  .post-share__button svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .post-share__button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .post-share__button--twitter:hover {
+    background: #1da1f2;
+    color: white;
+    border-color: #1da1f2;
+  }
+
+  .post-share__button--facebook:hover {
+    background: #1877f2;
+    color: white;
+    border-color: #1877f2;
+  }
+
+  .post-share__button--linkedin:hover {
+    background: #0a66c2;
+    color: white;
+    border-color: #0a66c2;
+  }
+
+  .post-share__button--copy:hover {
+    background: #10b981;
+    color: white;
+    border-color: #10b981;
+  }
+
+  /* ✅ Responsive */
+  @media (max-width: 768px) {
+    .post-main {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .post-sidebar {
+      position: static;
+      order: -1;
+    }
+
+    .post-title {
+      font-size: 2rem;
+    }
+
+    .post-excerpt {
+      font-size: 1.125rem;
+    }
+
+    .post-info__main {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .post-cover__image {
+      height: 250px;
+    }
+
+    .post-cover--none {
+      height: 250px;
+    }
+
+    .post-share__buttons {
+      justify-content: center;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .post-article {
+      padding: 0 0.5rem;
+    }
+
+    .post-title {
+      font-size: 1.75rem;
+    }
+
+    .post-categories {
+      justify-content: center;
+    }
+
+    .post-share__buttons {
+      flex-direction: column;
+    }
+
+    .post-share__button {
+      justify-content: center;
+    }
+  }
+</style>

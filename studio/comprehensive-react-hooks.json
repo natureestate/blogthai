@@ -1,0 +1,695 @@
+{
+  "_type": "post",
+  "_id": "comprehensive-react-hooks-guide",
+  "title": "React Hooks ครบครัน: เปลี่ยนการเขียน React ให้ทันสมัยและมีประสิทธิภาพ",
+  "slug": {
+    "_type": "slug",
+    "current": "comprehensive-react-hooks-guide"
+  },
+  "author": {
+    "_type": "reference",
+    "_ref": "a335dc2a-5b15-43ed-adee-eeb0392a1668"
+  },
+  "categories": [],
+  "publishedAt": "2024-06-23T10:30:00Z",
+  "featured": true,
+  "language": "th",
+  "excerpt": "เรียนรู้ React Hooks ทุกตัวที่สำคัญ ตั้งแต่พื้นฐานไปจนถึงขั้นสูง พร้อมตัวอย่างโค้ดจริงและเทคนิคการใช้งานที่มีประสิทธิภาพในโปรเจ็กต์จริง",
+  "body": [
+    {
+      "_type": "block",
+      "_key": "intro",
+      "style": "normal",
+      "children": [
+        {
+          "_type": "span",
+          "text": "React Hooks ได้เปลี่ยนแปลงการพัฒนา React applications อย่างสิ้นเชิง ตั้งแต่เปิดตัวใน React 16.8 นักพัฒนาหลายล้านคนทั่วโลกได้หันมาใช้ functional components แทน class components ด้วยความสะดวกและประสิทธิภาพที่เหนือกว่า ในบทความนี้เราจะสำรวจ React Hooks ทุกตัวที่สำคัญ พร้อมตัวอย่างการใช้งานจริงและเทคนิคขั้นสูงที่จะทำให้โค้ดของคุณสะอาดและมีประสิทธิภาพมากขึ้น",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "block",
+      "_key": "what-are-hooks",
+      "style": "h2",
+      "children": [
+        {
+          "_type": "span",
+          "text": "🎣 React Hooks คืออะไร และทำไมถึงสำคัญ?",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "block",
+      "_key": "hooks-definition",
+      "style": "normal",
+      "children": [
+        {
+          "_type": "span",
+          "text": "React Hooks เป็นฟังก์ชันพิเศษที่ช่วยให้เราสามารถ \"hook into\" React features ต่างๆ ใน functional components ได้ เช่น state management, lifecycle methods, context API และอื่นๆ อีกมากมาย โดยไม่ต้องเขียน class components ที่ซับซ้อน",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "block",
+      "_key": "hooks-advantages-heading",
+      "style": "h3",
+      "children": [
+        {
+          "_type": "span",
+          "text": "ข้อดีของ React Hooks",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "block",
+      "_key": "hooks-advantages",
+      "style": "normal",
+      "children": [
+        {
+          "_type": "span",
+          "text": "• ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "Code ที่สั้นและอ่านง่ายกว่า",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - ลด boilerplate code จากการเขียน class\n• ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "การแชร์ logic ระหว่าง components",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - ใช้ custom hooks ได้\n• ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "ประสิทธิภาพที่ดีกว่า",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - optimizations และ tree shaking ทำงานได้ดีกว่า\n• ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "TypeScript Integration",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - type inference และ type safety ที่ดีเยี่ยม\n• ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "Testing ที่ง่ายขึ้น",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - functions ทดสอบได้ง่ายกว่า classes",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "block",
+      "_key": "basic-hooks-heading",
+      "style": "h2",
+      "children": [
+        {
+          "_type": "span",
+          "text": "📚 Basic Hooks: รากฐานที่ต้องเข้าใจ",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "block",
+      "_key": "useState-heading",
+      "style": "h3",
+      "children": [
+        {
+          "_type": "span",
+          "text": "1. useState: จัดการ State ใน Functional Components",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "block",
+      "_key": "useState-description",
+      "style": "normal",
+      "children": [
+        {
+          "_type": "span",
+          "text": "useState เป็น Hook ที่พื้นฐานและสำคัญที่สุดสำหรับการจัดการ state ใน functional components ช่วยให้เราสามารถเก็บและอัปเดตข้อมูลที่เปลี่ยนแปลงได้",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "code",
+      "_key": "useState-example",
+      "language": "jsx",
+      "code": "import React, { useState } from 'react';\n\nfunction Counter() {\n  // ประกาศ state variable ชื่อ count และ setter function ชื่อ setCount\n  const [count, setCount] = useState(0);\n  const [name, setName] = useState('');\n  const [todos, setTodos] = useState([]);\n\n  // ฟังก์ชันสำหรับเพิ่มค่า count\n  const increment = () => {\n    setCount(count + 1);\n    // หรือใช้ functional update สำหรับ async safety\n    setCount(prevCount => prevCount + 1);\n  };\n\n  // ฟังก์ชันสำหรับเพิ่ม todo ใหม่\n  const addTodo = (text) => {\n    setTodos(prevTodos => [\n      ...prevTodos,\n      { id: Date.now(), text, completed: false }\n    ]);\n  };\n\n  return (\n    <div>\n      <h2>Count: {count}</h2>\n      <button onClick={increment}>เพิ่ม</button>\n      \n      <input \n        value={name}\n        onChange={(e) => setName(e.target.value)}\n        placeholder=\"ชื่อของคุณ\"\n      />\n      <p>สวัสดี {name}!</p>\n    </div>\n  );\n}"
+    },
+    {
+      "_type": "block",
+      "_key": "useEffect-heading",
+      "style": "h3",
+      "children": [
+        {
+          "_type": "span",
+          "text": "2. useEffect: Side Effects และ Lifecycle Management",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "block",
+      "_key": "useEffect-description",
+      "style": "normal",
+      "children": [
+        {
+          "_type": "span",
+          "text": "useEffect เป็น Hook ที่ใช้สำหรับการจัดการ side effects เช่น การ fetch data, การสมัครสมาชิก event listeners, การ cleanup resources และการทำงานต่างๆ ที่เกิดขึ้นหลังจาก component render",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "code",
+      "_key": "useEffect-example",
+      "language": "jsx",
+      "code": "import React, { useState, useEffect } from 'react';\n\nfunction UserProfile({ userId }) {\n  const [user, setUser] = useState(null);\n  const [loading, setLoading] = useState(true);\n  const [error, setError] = useState(null);\n\n  // useEffect สำหรับ data fetching\n  useEffect(() => {\n    const fetchUser = async () => {\n      try {\n        setLoading(true);\n        setError(null);\n        const response = await fetch(`/api/users/${userId}`);\n        const userData = await response.json();\n        setUser(userData);\n      } catch (err) {\n        setError('ไม่สามารถโหลดข้อมูลผู้ใช้ได้');\n      } finally {\n        setLoading(false);\n      }\n    };\n\n    if (userId) {\n      fetchUser();\n    }\n  }, [userId]); // dependency array - จะ run ใหม่เมื่อ userId เปลี่ยน\n\n  // useEffect สำหรับ cleanup\n  useEffect(() => {\n    const timer = setInterval(() => {\n      console.log('ตรวจสอบสถานะผู้ใช้...');\n    }, 5000);\n\n    // cleanup function - จะทำงานเมื่อ component unmount\n    return () => {\n      clearInterval(timer);\n    };\n  }, []);\n\n  if (loading) return <div>กำลังโหลด...</div>;\n  if (error) return <div>ข้อผิดพลาด: {error}</div>;\n  if (!user) return <div>ไม่พบข้อมูลผู้ใช้</div>;\n\n  return (\n    <div>\n      <h2>{user.name}</h2>\n      <p>อีเมล: {user.email}</p>\n    </div>\n  );\n}"
+    },
+    {
+      "_type": "block",
+      "_key": "useContext-heading",
+      "style": "h3",
+      "children": [
+        {
+          "_type": "span",
+          "text": "3. useContext: การแชร์ข้อมูลระหว่าง Components",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "code",
+      "_key": "useContext-example",
+      "language": "jsx",
+      "code": "import React, { createContext, useContext, useState } from 'react';\n\n// สร้าง Context\nconst ThemeContext = createContext();\nconst UserContext = createContext();\n\n// Provider Component\nfunction AppProvider({ children }) {\n  const [theme, setTheme] = useState('light');\n  const [user, setUser] = useState(null);\n\n  const toggleTheme = () => {\n    setTheme(prev => prev === 'light' ? 'dark' : 'light');\n  };\n\n  return (\n    <ThemeContext.Provider value={{ theme, toggleTheme }}>\n      <UserContext.Provider value={{ user, setUser }}>\n        {children}\n      </UserContext.Provider>\n    </ThemeContext.Provider>\n  );\n}\n\n// Custom Hooks สำหรับ Context\nfunction useTheme() {\n  const context = useContext(ThemeContext);\n  if (!context) {\n    throw new Error('useTheme ต้องใช้ภายใน ThemeProvider');\n  }\n  return context;\n}\n\nfunction useUser() {\n  const context = useContext(UserContext);\n  if (!context) {\n    throw new Error('useUser ต้องใช้ภายใน UserProvider');\n  }\n  return context;\n}\n\n// Component ที่ใช้ Context\nfunction Header() {\n  const { theme, toggleTheme } = useTheme();\n  const { user } = useUser();\n\n  return (\n    <header className={`header header--${theme}`}>\n      <h1>My App</h1>\n      {user && <span>สวัสดี {user.name}!</span>}\n      <button onClick={toggleTheme}>\n        เปลี่ยนเป็น {theme === 'light' ? 'Dark' : 'Light'} Mode\n      </button>\n    </header>\n  );\n}"
+    },
+    {
+      "_type": "block",
+      "_key": "advanced-hooks-heading",
+      "style": "h2",
+      "children": [
+        {
+          "_type": "span",
+          "text": "🚀 Advanced Hooks: เทคนิคขั้นสูงสำหรับ Performance",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "block",
+      "_key": "useMemo-heading",
+      "style": "h3",
+      "children": [
+        {
+          "_type": "span",
+          "text": "4. useMemo: การ Memoization สำหรับ Expensive Calculations",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "code",
+      "_key": "useMemo-example",
+      "language": "jsx",
+      "code": "import React, { useState, useMemo } from 'react';\n\nfunction ExpensiveComponent({ items, filter }) {\n  const [count, setCount] = useState(0);\n\n  // การคำนวณที่ใช้เวลานาน - ใช้ useMemo เพื่อ cache ผลลัพธ์\n  const filteredAndSortedItems = useMemo(() => {\n    console.log('กำลังคำนวณ filtered items...');\n    return items\n      .filter(item => item.name.toLowerCase().includes(filter.toLowerCase()))\n      .sort((a, b) => a.name.localeCompare(b.name))\n      .map(item => ({\n        ...item,\n        score: item.rating * item.reviews // การคำนวณ score\n      }));\n  }, [items, filter]); // จะคำนวณใหม่เมื่อ items หรือ filter เปลี่ยน\n\n  // การคำนวณ statistics\n  const stats = useMemo(() => {\n    const totalItems = filteredAndSortedItems.length;\n    const averageScore = totalItems > 0 \n      ? filteredAndSortedItems.reduce((sum, item) => sum + item.score, 0) / totalItems\n      : 0;\n    \n    return {\n      totalItems,\n      averageScore: averageScore.toFixed(2),\n      topItem: filteredAndSortedItems[0] || null\n    };\n  }, [filteredAndSortedItems]);\n\n  return (\n    <div>\n      <h2>สถิติ</h2>\n      <p>จำนวนรายการ: {stats.totalItems}</p>\n      <p>คะแนนเฉลี่ย: {stats.averageScore}</p>\n      \n      <button onClick={() => setCount(count + 1)}>\n        Count: {count} (ไม่ทำให้ useMemo คำนวณใหม่)\n      </button>\n      \n      <div>\n        {filteredAndSortedItems.map(item => (\n          <div key={item.id}>\n            {item.name} - Score: {item.score}\n          </div>\n        ))}\n      </div>\n    </div>\n  );\n}"
+    },
+    {
+      "_type": "block",
+      "_key": "useCallback-heading",
+      "style": "h3",
+      "children": [
+        {
+          "_type": "span",
+          "text": "5. useCallback: การ Memoize Functions เพื่อป้องกัน Re-renders",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "code",
+      "_key": "useCallback-example", 
+      "language": "jsx",
+      "code": "import React, { useState, useCallback, memo } from 'react';\n\n// Child component ที่ใช้ React.memo\nconst TodoItem = memo(({ todo, onToggle, onDelete }) => {\n  console.log(`Rendering TodoItem: ${todo.text}`);\n  \n  return (\n    <div className={`todo-item ${todo.completed ? 'completed' : ''}`}>\n      <input \n        type=\"checkbox\" \n        checked={todo.completed}\n        onChange={() => onToggle(todo.id)}\n      />\n      <span>{todo.text}</span>\n      <button onClick={() => onDelete(todo.id)}>ลบ</button>\n    </div>\n  );\n});\n\nfunction TodoApp() {\n  const [todos, setTodos] = useState([]);\n  const [newTodo, setNewTodo] = useState('');\n  const [filter, setFilter] = useState('all');\n\n  // ใช้ useCallback เพื่อป้องกันการ re-create function ทุกครั้งที่ render\n  const handleToggle = useCallback((id) => {\n    setTodos(prevTodos => \n      prevTodos.map(todo => \n        todo.id === id \n          ? { ...todo, completed: !todo.completed }\n          : todo\n      )\n    );\n  }, []); // ไม่มี dependencies เพราะใช้ functional update\n\n  const handleDelete = useCallback((id) => {\n    setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));\n  }, []);\n\n  const handleAdd = useCallback(() => {\n    if (newTodo.trim()) {\n      setTodos(prevTodos => [\n        ...prevTodos,\n        {\n          id: Date.now(),\n          text: newTodo.trim(),\n          completed: false\n        }\n      ]);\n      setNewTodo('');\n    }\n  }, [newTodo]); // dependency เพราะใช้ newTodo\n\n  // Filter function ที่ไม่ต้อง useCallback เพราะไม่ pass ลงไป child\n  const filteredTodos = todos.filter(todo => {\n    if (filter === 'completed') return todo.completed;\n    if (filter === 'pending') return !todo.completed;\n    return true;\n  });\n\n  return (\n    <div>\n      <h1>Todo App with useCallback</h1>\n      \n      <div>\n        <input \n          value={newTodo}\n          onChange={(e) => setNewTodo(e.target.value)}\n          onKeyPress={(e) => e.key === 'Enter' && handleAdd()}\n          placeholder=\"เพิ่ม todo ใหม่...\"\n        />\n        <button onClick={handleAdd}>เพิ่ม</button>\n      </div>\n      \n      <div>\n        <button onClick={() => setFilter('all')}>ทั้งหมด</button>\n        <button onClick={() => setFilter('pending')}>ยังไม่เสร็จ</button>\n        <button onClick={() => setFilter('completed')}>เสร็จแล้ว</button>\n      </div>\n      \n      <div>\n        {filteredTodos.map(todo => (\n          <TodoItem \
+            key={todo.id}\
+            todo={todo}\
+            onToggle={handleToggle}\
+            onDelete={handleDelete}\
+          />\
+        ))}\
+      </div>\
+    </div>\
+  );\
+}"
+    },
+    {
+      "_type": "block",
+      "_key": "custom-hooks-heading",
+      "style": "h2",
+      "children": [
+        {
+          "_type": "span",
+          "text": "🛠️ Custom Hooks: สร้าง Reusable Logic",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "block",
+      "_key": "custom-hooks-description",
+      "style": "normal",
+      "children": [
+        {
+          "_type": "span",
+          "text": "Custom Hooks คือการสร้างฟังก์ชันที่ใช้ React Hooks ภายในเพื่อแบ่งปัน stateful logic ระหว่าง components ต่างๆ ทำให้โค้ดสามารถนำกลับมาใช้ได้และจัดการได้ง่าย",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "code",
+      "_key": "custom-hooks-example",
+      "language": "jsx",
+      "code": "import { useState, useEffect, useCallback } from 'react';\n\n// Custom Hook สำหรับ data fetching\nfunction useApi(url) {\n  const [data, setData] = useState(null);\n  const [loading, setLoading] = useState(true);\n  const [error, setError] = useState(null);\n\n  const fetchData = useCallback(async () => {\n    try {\n      setLoading(true);\n      setError(null);\n      const response = await fetch(url);\n      if (!response.ok) {\n        throw new Error(`HTTP error! status: ${response.status}`);\n      }\n      const result = await response.json();\n      setData(result);\n    } catch (err) {\n      setError(err.message);\n    } finally {\n      setLoading(false);\n    }\n  }, [url]);\n\n  useEffect(() => {\n    fetchData();\n  }, [fetchData]);\n\n  return {\n    data,\
+    loading,\
+    error,\
+    refetch: fetchData\
+  };\
+}\n\n// Custom Hook สำหรับ localStorage\nfunction useLocalStorage(key, initialValue) {\n  const [storedValue, setStoredValue] = useState(() => {\n    try {\n      const item = window.localStorage.getItem(key);\n      return item ? JSON.parse(item) : initialValue;\n    } catch (error) {\n      console.error(`Error reading localStorage key \"${key}\":`, error);\n      return initialValue;\n    }\n  });\n\n  const setValue = useCallback((value) => {\n    try {\n      setStoredValue(value);\n      window.localStorage.setItem(key, JSON.stringify(value));\n    } catch (error) {\n      console.error(`Error setting localStorage key \"${key}\":`, error);\n    }\n  }, [key]);\n\n  return [storedValue, setValue];\n}\n\n// Custom Hook สำหรับ debounce\nfunction useDebounce(value, delay) {\n  const [debouncedValue, setDebouncedValue] = useState(value);\n\n  useEffect(() => {\n    const handler = setTimeout(() => {\n      setDebouncedValue(value);\n    }, delay);\n\n    return () => {\n      clearTimeout(handler);\n    };\n  }, [value, delay]);\n\n  return debouncedValue;\n}\n\n// การใช้งาน Custom Hooks\nfunction UserSearch() {\n  const [searchTerm, setSearchTerm] = useState('');\n  const debouncedSearchTerm = useDebounce(searchTerm, 300);\n  const [favorites, setFavorites] = useLocalStorage('user-favorites', []);\n  \n  const { data: users, loading, error, refetch } = useApi(\n    debouncedSearchTerm \n      ? `/api/users/search?q=${encodeURIComponent(debouncedSearchTerm)}`\n      : '/api/users'\n  );\n\n  const toggleFavorite = (userId) => {\n    setFavorites(prev => \n      prev.includes(userId)\n        ? prev.filter(id => id !== userId)\n        : [...prev, userId]\n    );\n  };\n\n  return (\n    <div>\n      <input \n        type=\"text\"\
+        value={searchTerm}\
+        onChange={(e) => setSearchTerm(e.target.value)}\
+        placeholder=\"ค้นหาผู้ใช้...\"\
+      />\
+      \n      {loading && <div>กำลังค้นหา...</div>}\
+      {error && <div>ข้อผิดพลาด: {error}</div>}\
+      \n      <div>\
+        {users?.map(user => (\n          <div key={user.id}>\n            <span>{user.name}</span>\n            <button onClick={() => toggleFavorite(user.id)}>\n              {favorites.includes(user.id) ? '💖' : '🤍'}\
+            </button>\
+          </div>\
+        ))}\
+      </div>\
+      \n      <button onClick={refetch}>รีเฟรช</button>\
+    </div>\
+  );\
+}"
+    },
+    {
+      "_type": "block",
+      "_key": "best-practices-heading",
+      "style": "h2",
+      "children": [
+        {
+          "_type": "span",
+          "text": "✨ Best Practices และเทคนิคขั้นสูง",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "block",
+      "_key": "rules-of-hooks",
+      "style": "h3",
+      "children": [
+        {
+          "_type": "span",
+          "text": "กฎของ React Hooks",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "block",
+      "_key": "hooks-rules",
+      "style": "normal",
+      "children": [
+        {
+          "_type": "span",
+          "text": "1. ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "เรียกใช้ Hooks ที่ top level เท่านั้น",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - ห้ามใช้ใน loops, conditions, หรือ nested functions\n2. ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "เรียกใช้ Hooks ใน React functions เท่านั้น",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - ใน functional components หรือ custom hooks\n3. ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "ใช้ ESLint plugin",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - eslint-plugin-react-hooks ช่วยตรวจสอบ\n4. ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "ตั้งชื่อ custom hooks ขึ้นต้นด้วย \"use\"",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - ตาม convention และเพื่อให้ linter ทำงาน",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "block",
+      "_key": "performance-tips",
+      "style": "h3",
+      "children": [
+        {
+          "_type": "span",
+          "text": "เทคนิคเพิ่มประสิทธิภาพ",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "block",
+      "_key": "performance-list",
+      "style": "normal",
+      "children": [
+        {
+          "_type": "span",
+          "text": "🎯 ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "ใช้ useCallback และ useMemo อย่างชาญฉลาด",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - เมื่อจำเป็นจริงๆ เท่านั้น\n🔄 ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "Optimize dependency arrays",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - ใส่เฉพาะ dependencies ที่จำเป็น\n📦 ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "แยก state ที่ไม่เกี่ยวข้องกัน",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - หลาย useState ดีกว่า object เดียว\n⚡ ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "ใช้ React.memo กับ components",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - ป้องกัน unnecessary re-renders\n🧮 ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "Lazy initialization",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - ใช้ function ใน useState สำหรับ expensive calculations",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "block",
+      "_key": "common-mistakes",
+      "style": "h3",
+      "children": [
+        {
+          "_type": "span",
+          "text": "ข้อผิดพลาดที่พบบ่อย",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "block",
+      "_key": "mistakes-list",
+      "style": "normal",
+      "children": [
+        {
+          "_type": "span",
+          "text": "❌ ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "ลืมใส่ dependencies ใน useEffect",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - ทำให้เกิด stale closures\n❌ ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "ใช้ useCallback/useMemo มากเกินไป",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - overhead มากกว่าประโยชน์\n❌ ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "Mutating state โดยตรง",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - ต้อง return new object/array เสมอ\n❌ ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "ไม่ cleanup ใน useEffect",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - ทำให้เกิด memory leaks\n❌ ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "ใช้ object/array เป็น dependencies",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - โดยไม่ memoize ก่อน",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "block",
+      "_key": "conclusion-heading",
+      "style": "h2",
+      "children": [
+        {
+          "_type": "span",
+          "text": "🎯 สรุป: ทำไมต้อง Master React Hooks",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "block",
+      "_key": "conclusion-content",
+      "style": "normal",
+      "children": [
+        {
+          "_type": "span",
+          "text": "React Hooks ได้เปลี่ยนแปลงการพัฒนา React applications อย่างสิ้นเชิง ทำให้การเขียนโค้ดเป็นเรื่องที่สนุกและมีประสิทธิภาพมากขึ้น การเข้าใจและใช้งาน Hooks อย่างถูกต้องจะช่วยให้คุณ:",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "block",
+      "_key": "final-benefits",
+      "style": "normal",
+      "children": [
+        {
+          "_type": "span",
+          "text": "🚀 ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "เขียนโค้ดที่สะอาดและอ่านง่าย",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - ลด complexity และ boilerplate code\n🔄 ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "แชร์ logic ระหว่าง components",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - ผ่าน custom hooks ที่ reusable\n⚡ ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "เพิ่มประสิทธิภาพของแอปพลิเคชัน",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - ด้วย memoization และ optimization\n🧪 ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "ทดสอบได้ง่ายขึ้น",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - functional programming paradigm\n📈 ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "เป็น Future-proof",
+          "marks": ["strong"]
+        },
+        {
+          "_type": "span",
+          "text": " - React team focus ที่ Hooks เป็นหลัก",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "block",
+      "_key": "call-to-action",
+      "style": "normal",
+      "children": [
+        {
+          "_type": "span",
+          "text": "หากคุณยังใช้ class components อยู่ ",
+          "marks": []
+        },
+        {
+          "_type": "span",
+          "text": "ถึงเวลาแล้วที่จะเปลี่ยนมาใช้ React Hooks!",
+          "marks": ["strong", "em"]
+        },
+        {
+          "_type": "span",
+          "text": " เริ่มต้นจากการแปลง components เล็กๆ แล้วค่อยๆ ขยายไปยัง project ทั้งหมด คุณจะประหลาดใจกับความสะดวกและประสิทธิภาพที่เพิ่มขึ้น",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    }
+  ],
+  "seo": {
+    "title": "React Hooks ครบครัน 2024: useState, useEffect, useContext และ Custom Hooks สำหรับนักพัฒนา",
+    "description": "เรียนรู้ React Hooks ทุกตัวที่สำคัญ ตั้งแต่พื้นฐานไปจนถึงขั้นสูง พร้อมตัวอย่างโค้ดจริง เทคนิคการใช้งานที่มีประสิทธิภาพ Best Practices และ Custom Hooks ที่ใช้ในโปรเจ็กต์จริง",
+    "keywords": ["React Hooks", "useState", "useEffect", "useContext", "useMemo", "useCallback", "Custom Hooks", "React", "JavaScript", "Frontend", "Web Development", "Performance", "Best Practices"]
+  },
+  "readingTime": 15,
+  "tags": ["React", "Hooks", "JavaScript", "Frontend", "Web Development", "Performance", "Best Practices", "useState", "useEffect", "useContext", "Tutorial", "2024"]
+} 

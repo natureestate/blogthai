@@ -1,0 +1,884 @@
+{
+  "_createdAt": "2025-06-22T14:56:10Z",
+  "_id": "complete-guide-astro-sanity-cms",
+  "_rev": "mSkCbxUwGcv6uYz7geq2VO",
+  "_type": "post",
+  "_updatedAt": "2025-06-22T15:05:48Z",
+  "author": {
+    "_ref": "drafts.a335dc2a-5b15-43ed-adee-eeb0392a1668",
+    "_type": "reference"
+  },
+  "body": [
+    {
+      "_key": "intro",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "การพัฒนาเว็บไซต์ในยุคปัจจุบันต้องการเครื่องมือที่ทันสมัย รวดเร็ว และยืดหยุ่น Astro และ Sanity CMS เป็นคู่หูที่สมบูรณ์แบบสำหรับการสร้างเว็บไซต์ที่มีประสิทธิภาพสูงและง่ายต่อการจัดการเนื้อหา ในบทความนี้เราจะมาเรียนรู้ทุกขั้นตอนตั้งแต่การติดตั้งจนถึงการ deploy ขึ้น production"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "what-is-astro",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "🚀 Astro คืออะไร และทำไมถึงควรใช้?"
+        }
+      ],
+      "markDefs": [],
+      "style": "h2"
+    },
+    {
+      "_key": "astro-definition",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "Astro เป็น "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Static Site Generator"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " รุ่นใหม่ที่ออกแบบมาเพื่อความเร็วและประสิทธิภาพสูงสุด โดยมีปรัชญาหลักคือ \"เอา JavaScript ออกจากผลลัพธ์สุดท้ายให้มากที่สุด\" ซึ่งส่งผลให้เว็บไซต์มีขนาดเล็กและโหลดเร็วขึ้นอย่างมาก"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "astro-benefits-intro",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "จุดเด่นหลักของ Astro"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "astro-benefits-list",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "• "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Zero JavaScript by Default"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - ส่งเฉพาะ HTML และ CSS ไปยัง browser ทำให้โหลดเร็วมาก\n• "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Island Architecture"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - โหลด JavaScript เฉพาะส่วนที่จำเป็นจริงๆ เมื่อผู้ใช้ต้องการ\n• "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Framework Agnostic"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - ใช้ได้กับ React, Vue, Svelte, Preact และ framework อื่นๆ ในโปรเจ็กต์เดียว\n• "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Built-in Performance"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - Core Web Vitals และ Lighthouse scores ที่ดีเยี่ยมตั้งแต่ต้น\n• "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Developer Experience"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - Hot Module Reloading, TypeScript support, และ Vite integration"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "sanity-heading",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "🎨 Sanity CMS: Headless CMS ที่ยืดหยุ่นที่สุด"
+        }
+      ],
+      "markDefs": [],
+      "style": "h2"
+    },
+    {
+      "_key": "sanity-description",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "Sanity เป็น "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Headless CMS"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " ที่ให้อิสระในการออกแบบ content model และ user interface อย่างเต็มที่ โดยมีการแยกส่วนระหว่าง content management และ presentation layer อย่างสมบูรณ์ ทำให้สามารถใช้เนื้อหาเดียวกันกับหลายแพลตฟอร์มได้"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "sanity-features-heading",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "คุณสมบัติเด่นของ Sanity"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "sanity-features",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "• "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Real-time Collaboration"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - ทำงานร่วมกันหลายคนแบบ real-time เหมือน Google Docs\n• "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Flexible Schema"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - ปรับแต่ง content structure ได้อย่างอิสระด้วย JavaScript\n• "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "GROQ Query Language"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - ภาษา query ที่ทรงพลังและยืดหยุ่นกว่า GraphQL\n• "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Studio Customization"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - ปรับแต่ง editing interface ให้เหมาะกับ workflow\n• "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "API-first Approach"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - เข้าถึงข้อมูลผ่าน REST และ GraphQL APIs"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "setup-heading",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "⚙️ การติดตั้งและตั้งค่าโปรเจ็กต์"
+        }
+      ],
+      "markDefs": [],
+      "style": "h2"
+    },
+    {
+      "_key": "setup-intro",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "มาเริ่มต้นสร้างโปรเจ็กต์ Astro + Sanity จากศูนย์กันครับ ในส่วนนี้เราจะทำการติดตั้งทีละขั้นตอนแบบละเอียด"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "astro-setup",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "1. ติดตั้ง Astro Project"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "code-astro-create",
+      "_type": "code",
+      "code": "# สร้างโปรเจ็กต์ Astro ใหม่\nnpm create astro@latest my-astro-sanity-site\ncd my-astro-sanity-site\n\n# ติดตั้ง dependencies\nnpm install\n\n# เพิ่ม integrations ที่จำเป็น\nnpx astro add tailwind\nnpx astro add react  # ถ้าต้องการใช้ React components",
+      "language": "bash"
+    },
+    {
+      "_key": "sanity-setup",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "2. ติดตั้งและตั้งค่า Sanity Studio"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "code-sanity-install",
+      "_type": "code",
+      "code": "# ติดตั้ง Sanity CLI globally\nnpm install -g @sanity/cli\n\n# สร้าง Sanity project ใหม่\nsanity init\n\n# หรือ ติดตั้งใน workspace เดียวกัน\nmkdir studio\ncd studio\nnpm init -y\nnpm install sanity @sanity/vision\n\n# เริ่ม development server\nnpm run dev",
+      "language": "bash"
+    },
+    {
+      "_key": "connection-setup",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "3. เชื่อมต่อ Astro กับ Sanity"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "code-astro-sanity",
+      "_type": "code",
+      "code": "# ติดตั้ง Sanity client ใน Astro project\nnpm install @sanity/client @sanity/image-url @astrojs/sanity\n\n# สร้างไฟล์ config\ntouch src/utils/sanity.ts",
+      "language": "bash"
+    },
+    {
+      "_key": "config-example",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "ตัวอย่างการตั้งค่า Sanity Client"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "code-sanity-config",
+      "_type": "code",
+      "code": "// src/utils/sanity.ts\nimport { createClient } from '@sanity/client'\nimport imageUrlBuilder from '@sanity/image-url'\n\n// ตั้งค่า Sanity client\nexport const client = createClient({\n  projectId: 'your-project-id',\n  dataset: 'production',\n  useCdn: true,\n  apiVersion: '2024-06-22'\n})\n\n// สร้าง URL builder สำหรับรูปภาพ\nconst builder = imageUrlBuilder(client)\nexport const urlFor = (source: any) => builder.image(source)\n\n// GROQ queries สำหรับดึงข้อมูล\nexport const postsQuery = `\n  *[_type == \"post\" && defined(slug.current)] | order(publishedAt desc) {\n    _id,\n    title,\n    slug,\n    publishedAt,\n    excerpt,\n    mainImage,\n    author->{\n      name,\n      slug\n    }\n  }\n`",
+      "language": "typescript"
+    },
+    {
+      "_key": "best-practices-heading",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "🛠️ Best Practices สำหรับการพัฒนา"
+        }
+      ],
+      "markDefs": [],
+      "style": "h2"
+    },
+    {
+      "_key": "seo-optimization",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "📈 การเพิ่มประสิทธิภาพ SEO"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "seo-tips",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "สำหรับการทำ SEO ที่ดีและให้ Google Bot เข้าใจเนื้อหาได้ดี ควรใส่ใจในประเด็นสำคัญต่อไปนี้:"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "seo-checklist",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "✅ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Meta Tags ครบถ้วน"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - title, description, og:image, twitter:card\n✅ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Schema Markup"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - JSON-LD สำหรับ structured data\n✅ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Sitemap XML"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " และ robots.txt ที่เหมาะสม\n✅ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Internal Linking Strategy"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - เชื่อมโยงเนื้อหาที่เกี่ยวข้อง\n✅ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Mobile-First Design"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - responsive ทุกขนาดหน้าจอ\n✅ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Core Web Vitals"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - LCP, FID, CLS ที่ดีเยี่ยม"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "performance-heading",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "⚡ การเพิ่มประสิทธิภาพ Performance"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "performance-tips",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "เทคนิคสำคัญในการทำให้เว็บไซต์เร็วขึ้นและให้ผู้ใช้ได้รับประสบการณ์ที่ดี:"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "performance-list",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "🖼️ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Image Optimization"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - ใช้ modern formats (WebP, AVIF) และ lazy loading\n📦 "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Code Splitting"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - แยก JavaScript bundles ตามการใช้งาน\n🌐 "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "CDN และ Caching"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - ใช้ service เช่น Cloudflare หรือ Vercel\n📱 "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Minimize Bundle Size"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - tree shaking และเลือก libraries ที่เล็ก\n🚀 "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Preload Critical Resources"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - fonts, CSS, และ JavaScript สำคัญ"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "deployment-heading",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "🚀 การ Deploy ขึ้น Production"
+        }
+      ],
+      "markDefs": [],
+      "style": "h2"
+    },
+    {
+      "_key": "deploy-commands",
+      "_type": "code",
+      "code": "# Deploy Astro site ไปยัง Vercel\nnpm install -g vercel\nvercel\n\n# หรือ deploy ไปยัง Netlify\nnpm run build\n# แล้วอัปโหลด dist/ folder ไปยัง Netlify\n\n# Deploy Sanity Studio\ncd studio\nnpx sanity deploy",
+      "language": "bash"
+    },
+    {
+      "_key": "faq-heading",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "❓ คำถามที่พบบ่อย (FAQ)"
+        }
+      ],
+      "markDefs": [],
+      "style": "h2"
+    },
+    {
+      "_key": "faq-1-q",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "Q: Astro เร็วกว่า Next.js หรือ Gatsby จริงหรือ?"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "faq-1-a",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "A: ใช่ครับ เพราะ Astro ส่ง JavaScript น้อยกว่ามาก ทำให้ initial page load เร็วกว่า แต่สำหรับ interactive features อาจต้องใช้เวลาในการ hydrate เพิ่ม"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "faq-2-q",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "Q: ใช้ Sanity ฟรีได้แค่ไหน?"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "faq-2-a",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "A: Sanity มี free tier ที่ให้ใช้ได้ 3 users, 2 datasets, และ 10GB bandwidth ต่อเดือน ซึ่งเพียงพอสำหรับโปรเจ็กต์เล็กๆ"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "faq-3-q",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "Q: สามารถใช้ CMS อื่นแทน Sanity ได้ไหม?"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "faq-3-a",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "A: ได้ครับ Astro รองรับ CMS หลายตัว เช่น Contentful, Strapi, WordPress, Markdown files หรือแม้กระทั่ง Notion"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "conclusion-heading",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "🎯 สรุป: ทำไมต้อง Astro + Sanity"
+        }
+      ],
+      "markDefs": [],
+      "style": "h2"
+    },
+    {
+      "_key": "conclusion-content",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "การผสานระหว่าง Astro และ Sanity CMS ให้ประโยชน์ที่สมบูรณ์แบบสำหรับการพัฒนาเว็บไซต์สมัยใหม่:"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "final-benefits",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "🚀 "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "ประสิทธิภาพสูงสุด"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - เว็บไซต์เร็ว SEO-friendly และ Core Web Vitals ดีเยี่ยม\n🔧 "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "ความยืดหยุ่นสูง"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - ปรับแต่งได้ทุกส่วนตามต้องการ ไม่ติดกรอบ\n👨‍💻 "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Developer Experience ยอดเยี่ยม"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - เครื่องมือครบครัน hot reload รวดเร็ว\n📈 "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Scalability ระดับ Enterprise"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - รองรับการเติบโตจากเว็บไซต์เล็กไปจนถึงระดับองค์กร\n💰 "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "ต้นทุนประหยัด"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " - hosting ราคาถูก เพราะเป็น static files"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "call-to-action",
+      "_type": "block",
+      "children": [
+        {
+          "_type": "span",
+          "marks": [],
+          "text": "หากคุณกำลังมองหาโซลูชันสำหรับสร้างเว็บไซต์ที่ทันสมัย รวดเร็ว และง่ายต่อการจัดการ "
+        },
+        {
+          "_type": "span",
+          "marks": [
+            "strong",
+            "em"
+          ],
+          "text": "Astro + Sanity คือคำตอบที่สมบูรณ์แบบ!"
+        },
+        {
+          "_type": "span",
+          "marks": [],
+          "text": " ลองเริ่มต้นสร้างโปรเจ็กต์แรกได้เลยวันนี้ และสัมผัสประสบการณ์การพัฒนาเว็บไซต์รูปแบบใหม่"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    }
+  ],
+  "categories": [],
+  "excerpt": "เรียนรู้การสร้างเว็บไซต์สมัยใหม่ด้วย Astro Static Site Generator และ Sanity Headless CMS พร้อมเทคนิคการเพิ่มประสิทธิภาพ SEO และ Performance สำหรับนักพัฒนาทุกระดับ",
+  "featured": true,
+  "language": "th",
+  "publishedAt": "2024-06-22T14:30:00Z",
+  "readingTime": 12,
+  "seo": {
+    "description": "เรียนรู้การสร้างเว็บไซต์สมัยใหม่ด้วย Astro Static Site Generator และ Sanity Headless CMS พร้อมเทคนิคการเพิ่มประสิทธิภาพ SEO และ Performance สำหรับนักพัฒนาทุกระดับ รวมทั้ง FAQ และ Best Practices",
+    "keywords": [
+      "Astro",
+      "Sanity CMS",
+      "Static Site Generator",
+      "Headless CMS",
+      "Web Development",
+      "SEO",
+      "Performance",
+      "JavaScript",
+      "นักพัฒนา",
+      "เว็บไซต์",
+      "Tutorial",
+      "Guide"
+    ],
+    "title": "คู่มือสมบูรณ์ Astro + Sanity CMS 2024: สร้างเว็บไซต์ที่รวดเร็วและทันสมัย"
+  },
+  "slug": {
+    "_type": "slug",
+    "current": "complete-guide-astro-sanity-cms"
+  },
+  "tags": [
+    "Astro",
+    "Sanity",
+    "CMS",
+    "Static Site",
+    "Web Development",
+    "Performance",
+    "SEO",
+    "Tutorial",
+    "Guide",
+    "2024"
+  ],
+  "title": "คู่มือสมบูรณ์: การพัฒนาเว็บไซต์ด้วย Astro และ Sanity CMS สำหรับนักพัฒนา",
+  "mainImage": {
+    "_type": "image",
+    "asset": {
+      "_type": "reference",
+      "_ref": "image-placeholder-computer-setup"
+    },
+    "alt": "Modern computer setup with multiple screens showing code for web development",
+    "caption": "เครื่องมือสำหรับการพัฒนาเว็บไซต์สมัยใหม่"
+  }
+}

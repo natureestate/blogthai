@@ -1,0 +1,1 @@
+import {createClient} from "@sanity/client"; const client = createClient({projectId: "yor24whn", dataset: "blog", useCdn: false, apiVersion: "2024-01-01", token: process.env.SANITY_API_TOKEN || ""}); client.patch("a335dc2a-5b15-43ed-adee-eeb0392a1668").set({name: "Sinanan R"}).commit().then(result => console.log("Updated:", result)).catch(err => console.error("Error:", err));

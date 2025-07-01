@@ -1,0 +1,184 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Cursor Rules: Sanity Schema Development for Blog Thai Project
+
+## Core Rules for Sanity Schema Development
+
+### CRITICAL - Complete Post Creation Rules
+**เมื่อสร้าง post ใหม่ ต้องมี fields ครบถ้วนดังนี้:**
+
+#### **Required Fields (ต้องมี):**
+- **title** (string) - หัวเรื่องที่ชัดเจน
+- **slug** (slug) - URL-friendly slug
+- **excerpt** (text) - สรุปสั้นๆ 2-3 ประโยค
+- **body** (blockContent) - เนื้อหาหลักพร้อม code examples
+- **author** (reference) - อ้างอิงถึง author document
+- **categories** (array of references) - หมวดหมู่ที่เกี่ยวข้อง
+- **language** (string) - "th" หรือ "en"
+
+#### **SEO Fields (สำคัญสำหรับ SEO):**
+- **seo.title** (string) - SEO title (50-60 ตัวอักษร)
+- **seo.description** (text) - Meta description (150-160 ตัวอักษร)
+- **seo.keywords** (array of strings) - Keywords สำคัญ 5-10 คำ
+
+#### **Optional but Recommended Fields:**
+- **featured** (boolean) - true สำหรับบทความเด่น
+- **publishedAt** (datetime) - วันที่เผยแพร่
+- **readingTime** (number) - เวลาอ่าน (นาที)
+- **tags** (array of strings) - Tags สำหรับ filtering
+- **series** (reference) - หากเป็นส่วนหนึ่งของ series
+
+### CRITICAL - Code Block Schema Rule (อัปเดต 2024)
+- **ใช้ `type: 'code'`** - เป็น object type ที่ถูกต้องตาม schema ปัจจุบัน ✅
+- **หลีกเลี่ยง `type: 'codeBlock'`** - เป็น legacy type แล้ว
+- **ไม่ใช้ built-in code type** - จะทำให้เกิด validation errors
+
+### Complete MCP Instructions Template
+```text
+"สร้าง post ใหม่ให้ครบถ้วนตาม schema ดังนี้:
+
+REQUIRED FIELDS:
+- title: หัวเรื่องที่น่าสนใจและ SEO-friendly
+- slug: URL slug (auto-generate จาก title)
+- excerpt: สรุปบทความ 2-3 ประโยค
+- body: เนื้อหาหลักพร้อม code examples ใช้ type: 'code' เป็น object
+- author: reference ไปยัง author document
+- categories: array ของ category references
+- language: 'th' หรือ 'en'
+
+SEO FIELDS:
+- seo.title: SEO title 50-60 ตัวอักษร
+- seo.description: Meta description 150-160 ตัวอักษร  
+- seo.keywords: array ของ keywords 5-10 คำ
+
+OPTIONAL FIELDS:
+- featured: true/false
+- publishedAt: วันที่เผยแพร่
+- readingTime: เวลาอ่าน (นาที)
+- tags: array ของ tags
+- series: reference ถ้ามี
+
+CODE BLOCKS:
+ใช้ type: 'code' เป็น object พร้อม fields:
+- language: 'javascript', 'typescript', 'html', 'css', 'python', 'php', 'json', 'bash', 'sql', 'text'
+- code: โค้ดจริง
+- filename: ชื่อไฟล์ (optional)
+- highlightedLines: บรรทัดที่เน้น (optional)"
+```
+
+### Current Schema Structure (2024)
+```typescript
+// ✅ CORRECT - ใช้ object type 'code'
+{
+  "_type": "code",
+  "language": "javascript",
+  "code": "console.log('Hello World');",
+  "filename": "example.js",
+  "highlightedLines": "1-3"
+}
+
+// ⚠️ LEGACY - type: 'codeBlock' ยังใช้ได้แต่เป็น legacy
+{
+  "_type": "codeBlock", 
+  // ... same structure
+}
+```
+
+### TypeScript Schema Development
+- Always use `defineType`, `defineField`, `defineArrayMember` helpers
+- Use named exports only (avoid default exports)
+- Import from 'sanity' package for type safety
+
+### Schema Organization Rules
+- Documents go in `studio/src/schemaTypes/documents/`
+- Objects go in `studio/src/schemaTypes/objects/`
+- Complex components with inputs go in `studio/src/schemaTypes/[typeName]/`
+
+### Field Type Best Practices
+- Avoid boolean fields - use string literals with options instead
+- Prefer array references over single references (use validation for max count)
+- Always add validation rules for required fields
+- Include icons and preview properties for better UX
+
+### Validation Rules
+- Use validation for data quality: `validation: (rule) => rule.required().min(10).max(100)`
+- Add custom validation for complex business logic
+- Include helpful error messages for editors
+
+### Block Content Schema (อัปเดต 2024)
+```typescript
+// Current blockContent structure
+export const blockContent = defineType({
+  name: 'blockContent',
+  type: 'array',
+  of: [
+    defineArrayMember({ type: 'block' }),
+    defineArrayMember({ type: 'code' }),        // ✅ Primary type
+    defineArrayMember({ type: 'codeBlock' }),   // ⚠️ Legacy support
+    defineArrayMember({ type: 'image' }),
+    defineArrayMember({ type: 'youtube' }),
+    defineArrayMember({ type: 'callToAction' }),
+    defineArrayMember({ type: 'table' })
+  ]
+})
+```
+
+### Available Languages for Code Blocks
+```javascript
+const supportedLanguages = [
+  'javascript', 'typescript', 'html', 'css', 'jsx', 'vue',
+  'python', 'php', 'json', 'bash', 'sql', 'text'
+]
+```
+
+### MCP Document Creation Rules
+- Always check schema types before creating documents with AI
+- Use instructions that specify exact field names and types
+- Validate that all referenced types exist in the schema
+- For code examples, explicitly mention "use type: 'code' as object"
+- **ต้องสร้าง post ให้ครบทุก required fields ตาม checklist**
+
+### Project-Specific Context (อัปเดต 2024)
+- Dataset: "blog" (not "production")
+- Project ID: "yor24whn"
+- Studio Host: https://blogthai.sanity.studio/
+- Main types: post, author, category, series
+- Languages: Thai (th) and English (en)
+- Schema Version: Enhanced with multimedia support
+
+### Available Block Types
+1. **block** - Rich text content
+2. **code** - Code examples (primary)
+3. **codeBlock** - Legacy code blocks
+4. **imageBlock** - Images with alt text and captions
+5. **youtube** - YouTube video embeds
+6. **callToAction** - CTA buttons
+7. **table** - Data tables
+
+### Pre-Creation Checklist
+**ก่อนสร้าง post ใหม่ ต้องทำ:**
+1. ✅ ตรวจสอบ schema ด้วย `mcp_sanity_get_schema`
+2. ✅ เตรียม instructions ที่ครบถ้วนตาม template
+3. ✅ ระบุ fields ทั้ง required และ optional ที่ต้องการ
+4. ✅ ตรวจสอบว่า referenced documents (author, categories) มีอยู่
+5. ✅ ใช้ type: 'code' สำหรับ code examples
+6. ✅ ระบุ language, SEO fields, และ metadata ครบถ้วน
+
+### Development Workflow
+1. Check existing schema with `mcp_sanity_get_schema`
+2. Create/update schema files in studio/src/schemaTypes/
+3. Test in local Studio before deploying
+4. Deploy with `sanity deploy` command
+
+### Error Prevention
+- Before creating any document with MCP, verify field types in schema
+- Use explicit type checking for blockContent elements
+- Validate that referenced document types exist
+- Test document creation in Studio UI first when uncertain
+- Always use object format for code blocks, not built-in types
+- **ตรวจสอบว่าทุก required fields ถูกระบุ**
+
+These rules prevent validation errors and ensure consistent, maintainable Sanity schemas with complete post data based on our current 2024 schema structure. 

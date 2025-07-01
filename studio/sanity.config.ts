@@ -1,6 +1,7 @@
 import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
+import {presentationTool} from 'sanity/presentation'
 import {
   dashboardTool,
   sanityTutorialsWidget,
@@ -10,12 +11,15 @@ import {
 import {schemaTypes} from './src/schemaTypes'
 
 // Environment variables สำหรับการตั้งค่าโปรเจ็กต์
-const projectId = process.env.SANITY_STUDIO_PROJECT_ID || 'yor24whn'
-const dataset = process.env.SANITY_STUDIO_DATASET || 'blog'
+const projectId = 'yor24whn'
+const dataset = 'blog'
+
+// URL สำหรับ Preview และ Visual Editing - ปรับตาม port ที่ Astro ใช้
+const previewUrl = 'http://localhost:4323'
 
 export default defineConfig({
   name: 'sanity-template-astro-clean',
-  title: 'Sanity Astro Starter',
+  title: 'Blog Thai Studio',
   projectId,
   dataset,
   plugins: [
@@ -30,10 +34,24 @@ export default defineConfig({
         projectUsersWidget(),
       ]
     }),
-    structureTool(), 
+    structureTool(),
+    // ✅ เพิ่ม Presentation Tool สำหรับ Visual Editing
+    presentationTool({
+      title: 'Visual Editor',
+      previewUrl: previewUrl,
+    }),
     visionTool()
   ],
   schema: {
     types: schemaTypes,
+  },
+  // ✅ เพิ่ม Form components สำหรับ Visual Editing
+  form: {
+    // เพิ่ม live preview ใน form
+    image: {
+      assetSources: (previousAssetSources) => {
+        return previousAssetSources.filter((assetSource) => assetSource.name !== 'unsplash')
+      },
+    },
   },
 })

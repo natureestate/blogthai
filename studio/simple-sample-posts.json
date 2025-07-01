@@ -1,0 +1,188 @@
+[
+  {
+    "_type": "post",
+    "_id": "sample-astro-guide-2024",
+    "title": "คู่มือการเริ่มต้น Astro: Static Site Generator ที่ทรงพลัง",
+    "slug": {
+      "_type": "slug", 
+      "current": "astro-beginner-guide"
+    },
+    "excerpt": "เรียนรู้วิธีการสร้างเว็บไซต์ที่รวดเร็วและทันสมัยด้วย Astro โดยเริ่มตั้งแต่พื้นฐานไปจนถึงเทคนิคขั้นสูง",
+    "categories": [],
+    "tags": ["Astro", "Web Development", "Static Site", "JavaScript", "Tutorial"],
+    "publishedAt": "2024-06-20T10:00:00Z",
+    "featured": true,
+    "language": "th",
+    "readingTime": 8,
+    "body": [
+      {
+        "_type": "block",
+        "_key": "intro",
+        "style": "normal",
+        "children": [
+          {
+            "_type": "span",
+            "text": "Astro เป็น Static Site Generator ที่ได้รับความนิยมอย่างมากในปัจจุบัน ด้วยความสามารถในการสร้างเว็บไซต์ที่มีประสิทธิภาพสูงและโหลดเร็ว ในบทความนี้เราจะมาเรียนรู้การใช้งาน Astro ตั้งแต่เริ่มต้นไปจนถึงเทคนิคขั้นสูง",
+            "marks": []
+          }
+        ],
+        "markDefs": []
+      },
+      {
+        "_type": "block",
+        "_key": "features",
+        "style": "h2",
+        "children": [
+          {
+            "_type": "span",
+            "text": "จุดเด่นของ Astro",
+            "marks": []
+          }
+        ],
+        "markDefs": []
+      },
+      {
+        "_type": "block",
+        "_key": "features-list",
+        "style": "normal",
+        "children": [
+          {
+            "_type": "span",
+            "text": "Astro มีจุดเด่นหลายประการที่ทำให้เป็นที่นิยม เช่น การสร้าง static site ที่รวดเร็ว, การรองรับ framework หลายตัว, และการมี built-in optimization ที่ดีเยี่ยม",
+            "marks": []
+          }
+        ],
+        "markDefs": []
+      }
+    ],
+    "seo": {
+      "metaTitle": "คู่มือ Astro สำหรับมือใหม่ 2024",
+      "metaDescription": "เรียนรู้ Astro Static Site Generator ตั้งแต่เริ่มต้นพร้อมตัวอย่างจริง",
+      "keywords": ["Astro", "Static Site Generator", "Web Development", "JavaScript"]
+    }
+  },
+  {
+    "_type": "post", 
+    "_id": "sample-react-hooks-2024",
+    "title": "React Hooks ที่ทุกคนควรรู้: จาก useState ถึง useContext",
+    "slug": {
+      "_type": "slug",
+      "current": "essential-react-hooks-guide"
+    },
+    "excerpt": "ทำความเข้าใจ React Hooks พื้นฐานและขั้นสูง พร้อมตัวอย่างการใช้งานจริงที่นำไปประยุกต์ได้ทันที",
+    "categories": [],
+    "tags": ["React", "JavaScript", "Hooks", "Frontend", "Programming"],
+    "publishedAt": "2024-06-21T14:30:00Z",
+    "featured": false,
+    "language": "th", 
+    "readingTime": 12,
+    "body": [
+      {
+        "_type": "block",
+        "_key": "intro",
+        "style": "normal",
+        "children": [
+          {
+            "_type": "span",
+            "text": "React Hooks เปลี่ยนวิธีการเขียน React components อย่างสิ้นเชิง ทำให้เราสามารถใช้ state และ lifecycle methods ใน functional components ได้ ในบทความนี้เราจะมาเรียนรู้ Hooks ที่สำคัญและวิธีการใช้งาน",
+            "marks": []
+          }
+        ],
+        "markDefs": []
+      },
+      {
+        "_type": "block",
+        "_key": "useState-section",
+        "style": "h2",
+        "children": [
+          {
+            "_type": "span",
+            "text": "useState Hook",
+            "marks": []
+          }
+        ],
+        "markDefs": []
+      },
+      {
+        "_type": "block",
+        "_key": "useState-description",
+        "style": "normal",
+        "children": [
+          {
+            "_type": "span",
+            "text": "useState เป็น Hook ที่พื้นฐานที่สุดสำหรับการจัดการ state ใน functional components ช่วยให้เราสามารถเก็บและอัปเดต state ได้อย่างง่ายดาย",
+            "marks": []
+          }
+        ],
+        "markDefs": []
+      }
+    ],
+    "seo": {
+      "metaTitle": "React Hooks ครบครัน: useState, useEffect, useContext",
+      "metaDescription": "เรียนรู้ React Hooks ที่สำคัญพร้อมตัวอย่างโค้ดและเทคนิคการใช้งาน",
+      "keywords": ["React", "Hooks", "useState", "useEffect", "JavaScript", "Frontend"]
+    }
+  },
+  {
+    "_type": "post",
+    "_id": "sample-tailwind-tips-2024",
+    "title": "Tailwind CSS Tips & Tricks: เทคนิคที่จะเปลี่ยนการเขียน CSS ของคุณ",
+    "slug": {
+      "_type": "slug",
+      "current": "tailwind-css-advanced-tips"
+    },
+    "excerpt": "ค้นพบเทคนิคขั้นสูงของ Tailwind CSS ที่จะช่วยให้คุณเขียน CSS ได้เร็วขึ้นและมีประสิทธิภาพมากขึ้น",
+    "categories": [],
+    "tags": ["Tailwind", "CSS", "Web Design", "Frontend", "Responsive"],
+    "publishedAt": "2024-06-22T09:15:00Z", 
+    "featured": true,
+    "language": "th",
+    "readingTime": 6,
+    "body": [
+      {
+        "_type": "block",
+        "_key": "intro",
+        "style": "normal",
+        "children": [
+          {
+            "_type": "span",
+            "text": "Tailwind CSS ได้เปลี่ยนแปลงวิธีการเขียน CSS อย่างรวดเร็ว ด้วย utility-first approach ที่ช่วยให้เราสร้าง UI ได้อย่างมีประสิทธิภาพ ในบทความนี้เราจะมาดูเทคนิคขั้นสูงที่จะช่วยเพิ่มประสิทธิภาพการทำงาน",
+            "marks": []
+          }
+        ],
+        "markDefs": []
+      },
+      {
+        "_type": "block",
+        "_key": "responsive-design",
+        "style": "h2",
+        "children": [
+          {
+            "_type": "span",
+            "text": "Responsive Design with Tailwind",
+            "marks": []
+          }
+        ],
+        "markDefs": []
+      },
+      {
+        "_type": "block",
+        "_key": "responsive-description",
+        "style": "normal",
+        "children": [
+          {
+            "_type": "span",
+            "text": "Tailwind CSS ทำให้การสร้าง responsive design เป็นเรื่องง่าย ด้วย breakpoint prefixes ที่ใช้งานได้อย่างสะดวก เช่น sm:, md:, lg:, xl: และ 2xl:",
+            "marks": []
+          }
+        ],
+        "markDefs": []
+      }
+    ],
+    "seo": {
+      "metaTitle": "Tailwind CSS เทคนิคขั้นสูง 2024",
+      "metaDescription": "เรียนรู้เทคนิค Tailwind CSS ที่จะเปลี่ยนการเขียน CSS ของคุณให้เร็วและมีประสิทธิภาพ",
+      "keywords": ["Tailwind CSS", "CSS", "Web Design", "Utility-first", "Responsive Design"]
+    }
+  }
+] 

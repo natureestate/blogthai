@@ -1,0 +1,218 @@
+{
+  "_type": "post",
+  "_id": "modern-javascript-es6-complete-guide",
+  "title": "Modern JavaScript ES6+ ฉบับสมบูรณ์: Features ใหม่ที่นักพัฒนาต้องรู้ในปี 2024",
+  "slug": {
+    "_type": "slug",
+    "current": "modern-javascript-es6-complete-guide"
+  },
+  "author": {
+    "_type": "reference",
+    "_ref": "a335dc2a-5b15-43ed-adee-eeb0392a1668"
+  },
+  "categories": [],
+  "publishedAt": "2024-06-25T11:00:00Z",
+  "featured": true,
+  "language": "th",
+  "excerpt": "เจาะลึกทุก features ของ Modern JavaScript ตั้งแต่ ES6 ไปจนถึง ES2024 พร้อมตัวอย่างการใช้งานจริง async/await, destructuring, modules และเทคนิคขั้นสูงสำหรับนักพัฒนาไทย",
+  "body": [
+    {
+      "_type": "block",
+      "_key": "intro",
+      "style": "normal",
+      "children": [
+        {
+          "_type": "span",
+          "text": "JavaScript ได้พัฒนาไปอย่างรวดเร็วในช่วงหลายปีที่ผ่านมา ตั้งแต่ ES6 (ECMAScript 2015) เป็นต้นมา เรามี features ใหม่ๆ ที่ทำให้การเขียน JavaScript เป็นเรื่องที่สนุกและมีประสิทธิภาพมากขึ้น ในบทความนี้เราจะมาสำรวจ Modern JavaScript features ทั้งหมดที่นักพัฒนาควรรู้ พร้อมตัวอย่างการใช้งานจริงที่สามารถนำไปประยุกต์ในโปรเจ็กต์ได้ทันที",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "block",
+      "_key": "arrow-functions",
+      "style": "h2",
+      "children": [
+        {
+          "_type": "span",
+          "text": "🎯 Arrow Functions: การเขียนฟังก์ชันที่ทันสมัย",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "code",
+      "_key": "arrow-functions-examples",
+      "language": "javascript",
+      "code": "// Traditional function\nfunction add(a, b) {\n  return a + b;\n}\n\n// Arrow function\nconst add = (a, b) => a + b;\n\n// Arrow function with single parameter\nconst square = x => x * x;\n\n// Arrow function with no parameters\nconst getCurrentTime = () => new Date();\n\n// Arrow function with block body\nconst processUser = (user) => {\n  console.log(`Processing user: ${user.name}`);\n  return {\n    ...user,\n    processed: true,\n    timestamp: new Date()\n  };\n};\n\n// Arrow functions ใน array methods\nconst numbers = [1, 2, 3, 4, 5];\nconst doubled = numbers.map(n => n * 2);\nconst evens = numbers.filter(n => n % 2 === 0);\nconst sum = numbers.reduce((acc, n) => acc + n, 0);\n\n// ข้อควรระวัง: this binding\nclass Timer {\n  constructor() {\n    this.seconds = 0;\n    \n    // Arrow function preserves 'this'\n    setInterval(() => {\n      this.seconds++;\n      console.log(`Timer: ${this.seconds}s`);\n    }, 1000);\n    \n    // Regular function would lose 'this'\n    // setInterval(function() {\n    //   this.seconds++; // Error: this is undefined\n    // }, 1000);\n  }\n}"
+    },
+    {
+      "_type": "block",
+      "_key": "destructuring",
+      "style": "h2",
+      "children": [
+        {
+          "_type": "span",
+          "text": "📦 Destructuring: การแยกข้อมูลอย่างสะดวก",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "code",
+      "_key": "destructuring-examples",
+      "language": "javascript",
+      "code": "// Array destructuring\nconst [first, second, ...rest] = [1, 2, 3, 4, 5];\nconsole.log(first); // 1\nconsole.log(second); // 2\nconsole.log(rest); // [3, 4, 5]\n\n// Object destructuring\nconst user = {\n  name: 'สมชาย',\n  age: 30,\n  address: {\n    city: 'กรุงเทพฯ',\n    country: 'ไทย'\n  }\n};\n\nconst { name, age, address: { city } } = user;\nconsole.log(name); // สมชาย\nconsole.log(city); // กรุงเทพฯ\n\n// Default values\nconst { name: userName = 'Anonymous', email = 'no-email' } = user;\n\n// Function parameter destructuring\nfunction processOrder({ id, items, customer: { name, email } }) {\n  console.log(`Order ${id} for ${name} (${email})`);\n  return items.map(item => ({ ...item, orderId: id }));\n}\n\n// Array destructuring ใน loops\nconst users = [\n  ['Alice', 25],\n  ['Bob', 30],\n  ['Charlie', 35]\n];\n\nfor (const [name, age] of users) {\n  console.log(`${name} is ${age} years old`);\n}\n\n// Swapping variables\nlet a = 1, b = 2;\n[a, b] = [b, a]; // a = 2, b = 1\n\n// Destructuring ใน React (ตัวอย่าง)\nfunction UserCard({ user: { name, avatar, email }, onEdit }) {\n  return (\n    <div>\n      <img src={avatar} alt={name} />\n      <h3>{name}</h3>\n      <p>{email}</p>\n      <button onClick={() => onEdit(user)}>แก้ไข</button>\n    </div>\n  );\n}"
+    },
+    {
+      "_type": "block",
+      "_key": "template-literals",
+      "style": "h2",
+      "children": [
+        {
+          "_type": "span",
+          "text": "📝 Template Literals: การจัดการ String แบบทันสมัย",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "code",
+      "_key": "template-literals-examples",
+      "language": "javascript",
+      "code": "const name = 'สมหญิง';\nconst age = 25;\nconst city = 'เชียงใหม่';\n\n// Basic template literal\nconst greeting = `สวัสดีครับ ${name}!`;\n\n// Multi-line strings\nconst message = `\n  ขณะนี้คุณ ${name} อายุ ${age} ปี\n  อาศัยอยู่ที่ ${city}\n  ยินดีต้อนรับสู่เว็บไซต์ของเรา!\n`;\n\n// Expressions in template literals\nconst mathResult = `2 + 3 = ${2 + 3}`;\nconst conditional = `สถานะ: ${age >= 18 ? 'ผู้ใหญ่' : 'เด็ก'}`;\n\n// Function calls\nfunction formatCurrency(amount) {\n  return new Intl.NumberFormat('th-TH', {\n    style: 'currency',\n    currency: 'THB'\n  }).format(amount);\n}\n\nconst price = 1500;\nconst receipt = `ราคาสินค้า: ${formatCurrency(price)}`;\n\n// Tagged template literals\nfunction highlight(strings, ...values) {\n  return strings.reduce((result, string, i) => {\n    const value = values[i] ? `<mark>${values[i]}</mark>` : '';\n    return result + string + value;\n  }, '');\n}\n\nconst searchTerm = 'JavaScript';\nconst description = highlight`เรียนรู้ ${searchTerm} แบบครบครัน`;\n// Result: \"เรียนรู้ <mark>JavaScript</mark> แบบครบครัน\"\n\n// HTML templating\nfunction createUserCard(user) {\n  return `\n    <div class=\"user-card\">\n      <img src=\"${user.avatar}\" alt=\"${user.name}\" />\n      <h3>${user.name}</h3>\n      <p>อายุ: ${user.age} ปี</p>\n      <p>อีเมล: ${user.email}</p>\n      ${user.isOnline ? '<span class=\"online\">🟢 ออนไลน์</span>' : '<span class=\"offline\">🔴 ออฟไลน์</span>'}\n    </div>\n  `;\n}"
+    },
+    {
+      "_type": "block",
+      "_key": "async-await",
+      "style": "h2",
+      "children": [
+        {
+          "_type": "span",
+          "text": "⚡ Async/Await: การจัดการ Asynchronous Code",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "code",
+      "_key": "async-await-examples",
+      "language": "javascript",
+      "code": "// Traditional Promise approach\nfunction fetchUserOld(id) {\n  return fetch(`/api/users/${id}`)\n    .then(response => response.json())\n    .then(user => {\n      console.log('User loaded:', user);\n      return user;\n    })\n    .catch(error => {\n      console.error('Error:', error);\n      throw error;\n    });\n}\n\n// Modern async/await approach\nasync function fetchUser(id) {\n  try {\n    const response = await fetch(`/api/users/${id}`);\n    const user = await response.json();\n    console.log('User loaded:', user);\n    return user;\n  } catch (error) {\n    console.error('Error:', error);\n    throw error;\n  }\n}\n\n// Parallel async operations\nasync function loadUserDashboard(userId) {\n  try {\n    // เรียกหลาย API พร้อมกัน\n    const [user, posts, notifications] = await Promise.all([\n      fetch(`/api/users/${userId}`).then(r => r.json()),\n      fetch(`/api/users/${userId}/posts`).then(r => r.json()),\n      fetch(`/api/users/${userId}/notifications`).then(r => r.json())\n    ]);\n    \n    return {\n      user,\n      posts,\n      notifications\n    };\n  } catch (error) {\n    console.error('Failed to load dashboard:', error);\n    throw error;\n  }\n}\n\n// Sequential async operations\nasync function processUserData(userData) {\n  try {\n    // ทำทีละขั้นตอน\n    const savedUser = await saveUser(userData);\n    const emailSent = await sendWelcomeEmail(savedUser.email);\n    const logEntry = await logUserRegistration(savedUser.id);\n    \n    return {\n      success: true,\n      user: savedUser,\n      emailSent,\n      logged: logEntry\n    };\n  } catch (error) {\n    console.error('User processing failed:', error);\n    return { success: false, error: error.message };\n  }\n}\n\n// Async iteration\nasync function processUsers(userIds) {\n  const results = [];\n  \n  for (const id of userIds) {\n    try {\n      const user = await fetchUser(id);\n      const processed = await processUser(user);\n      results.push(processed);\n    } catch (error) {\n      console.error(`Failed to process user ${id}:`, error);\n      results.push({ id, error: error.message });\n    }\n  }\n  \n  return results;\n}\n\n// Timeout utility\nfunction timeout(ms) {\n  return new Promise(resolve => setTimeout(resolve, ms));\n}\n\nasync function fetchWithTimeout(url, timeoutMs = 5000) {\n  const controller = new AbortController();\n  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);\n  \n  try {\n    const response = await fetch(url, {\n      signal: controller.signal\n    });\n    clearTimeout(timeoutId);\n    return await response.json();\n  } catch (error) {\n    if (error.name === 'AbortError') {\n      throw new Error(`Request timeout after ${timeoutMs}ms`);\n    }\n    throw error;\n  }\n}"
+    },
+    {
+      "_type": "block",
+      "_key": "modules",
+      "style": "h2",
+      "children": [
+        {
+          "_type": "span",
+          "text": "📁 ES Modules: การจัดการโค้ดแบบโมดูล",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "code",
+      "_key": "modules-examples",
+      "language": "javascript",
+      "code": "// utils.js - Named exports\nexport const PI = 3.14159;\n\nexport function calculateArea(radius) {\n  return PI * radius * radius;\n}\n\nexport function formatCurrency(amount, currency = 'THB') {\n  return new Intl.NumberFormat('th-TH', {\n    style: 'currency',\n    currency\n  }).format(amount);\n}\n\nexport class MathUtils {\n  static add(a, b) {\n    return a + b;\n  }\n  \n  static multiply(a, b) {\n    return a * b;\n  }\n}\n\n// Default export\nexport default function greet(name) {\n  return `สวัสดี ${name}!`;\n}\n\n// user.js - Using imports\nimport greet, { PI, calculateArea, formatCurrency, MathUtils } from './utils.js';\n\n// การใช้งาน\nconsole.log(greet('สมชาย')); // สวัสดี สมชาย!\nconsole.log(calculateArea(5)); // 78.53975\nconsole.log(formatCurrency(1500)); // ฿1,500.00\nconsole.log(MathUtils.add(10, 20)); // 30\n\n// Re-exports\nexport { calculateArea, formatCurrency } from './utils.js';\nexport { default as greetUser } from './utils.js';\n\n// Dynamic imports\nasync function loadMathModule() {\n  try {\n    const { MathUtils } = await import('./utils.js');\n    return MathUtils;\n  } catch (error) {\n    console.error('Failed to load math module:', error);\n  }\n}\n\n// Conditional imports\nif (process.env.NODE_ENV === 'development') {\n  const { enableDevTools } = await import('./dev-tools.js');\n  enableDevTools();\n}\n\n// Import maps (ใน HTML)\n// <script type=\"importmap\">\n// {\n//   \"imports\": {\n//     \"lodash\": \"https://cdn.skypack.dev/lodash\",\n//     \"react\": \"https://cdn.skypack.dev/react\"\n//   }\n// }\n// </script>"
+    },
+    {
+      "_type": "block",
+      "_key": "spread-rest",
+      "style": "h2",
+      "children": [
+        {
+          "_type": "span",
+          "text": "🔄 Spread และ Rest Operators",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "code",
+      "_key": "spread-rest-examples",
+      "language": "javascript",
+      "code": "// Spread operator (...) กับ arrays\nconst fruits = ['apple', 'banana'];\nconst vegetables = ['carrot', 'broccoli'];\nconst food = [...fruits, ...vegetables]; // ['apple', 'banana', 'carrot', 'broccoli']\n\n// Array cloning\nconst originalArray = [1, 2, 3];\nconst clonedArray = [...originalArray]; // [1, 2, 3]\n\n// Spread operator กับ objects\nconst user = {\n  name: 'John',\n  age: 30\n};\n\nconst updatedUser = {\n  ...user,\n  age: 31,\n  city: 'Bangkok'\n}; // { name: 'John', age: 31, city: 'Bangkok' }\n\n// Object merging\nconst defaultSettings = {\n  theme: 'light',\n  language: 'th',\n  notifications: true\n};\n\nconst userSettings = {\n  theme: 'dark',\n  fontSize: 16\n};\n\nconst finalSettings = {\n  ...defaultSettings,\n  ...userSettings\n}; // { theme: 'dark', language: 'th', notifications: true, fontSize: 16 }\n\n// Rest operator (...) ในฟังก์ชัน\nfunction sum(...numbers) {\n  return numbers.reduce((total, num) => total + num, 0);\n}\n\nconsole.log(sum(1, 2, 3, 4, 5)); // 15\n\n// Rest ใน destructuring\nconst [first, second, ...remaining] = [1, 2, 3, 4, 5];\nconsole.log(remaining); // [3, 4, 5]\n\nconst { name, age, ...otherInfo } = {\n  name: 'Alice',\n  age: 25,\n  city: 'Bangkok',\n  country: 'Thailand',\n  job: 'Developer'\n};\nconsole.log(otherInfo); // { city: 'Bangkok', country: 'Thailand', job: 'Developer' }\n\n// Practical examples\nfunction createApiRequest(baseConfig, ...overrides) {\n  return overrides.reduce((config, override) => ({\n    ...config,\n    ...override\n  }), baseConfig);\n}\n\nconst baseConfig = {\n  method: 'GET',\n  headers: { 'Content-Type': 'application/json' }\n};\n\nconst postRequest = createApiRequest(\n  baseConfig,\n  { method: 'POST' },\n  { body: JSON.stringify({ name: 'Test' }) }\n);\n\n// Spread ใน function calls\nconst numbers = [1, 5, 3, 9, 2];\nconsole.log(Math.max(...numbers)); // 9\nconsole.log(Math.min(...numbers)); // 1"
+    },
+    {
+      "_type": "block",
+      "_key": "modern-features",
+      "style": "h2",
+      "children": [
+        {
+          "_type": "span",
+          "text": "🆕 Modern Features (ES2020+)",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "code",
+      "_key": "modern-features-examples",
+      "language": "javascript",
+      "code": "// Optional Chaining (?.) - ES2020\nconst user = {\n  name: 'John',\n  address: {\n    street: '123 Main St'\n    // city is missing\n  }\n};\n\n// แทนที่จะเขียน\n// const city = user && user.address && user.address.city;\n\n// ใช้ optional chaining\nconst city = user?.address?.city; // undefined (ไม่ error)\nconst phoneNumber = user?.contact?.phone; // undefined\n\n// กับ arrays\nconst users = [\n  { name: 'Alice', posts: [1, 2, 3] },\n  { name: 'Bob' } // ไม่มี posts\n];\n\nconst firstUserFirstPost = users?.[0]?.posts?.[0]; // 1\nconst secondUserFirstPost = users?.[1]?.posts?.[0]; // undefined\n\n// กับ function calls\nconst api = {\n  users: {\n    getAll: () => fetch('/api/users')\n  }\n};\n\nconst result = await api?.users?.getAll?.(); // เรียกได้ถ้ามี\nconst missingResult = await api?.posts?.getAll?.(); // undefined\n\n// Nullish Coalescing (??) - ES2020\nconst username = user.name ?? 'Guest'; // ใช้ค่า default ถ้า null หรือ undefined\nconst port = process.env.PORT ?? 3000;\nconst isEnabled = user.settings?.notifications ?? true;\n\n// ความแตกต่างจาก ||\nconst value1 = '' || 'default'; // 'default' ('' เป็น falsy)\nconst value2 = '' ?? 'default'; // '' ('' ไม่ใช่ null/undefined)\n\nconst number1 = 0 || 100; // 100\nconst number2 = 0 ?? 100; // 0\n\n// Logical Assignment Operators - ES2021\nlet config = { theme: 'light' };\n\n// Nullish assignment (??=)\nconfig.language ??= 'th'; // ตั้งค่าถ้ายังไม่มี\nconfig.theme ??= 'dark'; // ไม่เปลี่ยน เพราะมีแล้ว\n\n// OR assignment (||=)\nlet cache = {};\ncache.users ||= []; // สร้าง array ถ้ายังไม่มี\n\n// AND assignment (&&=)\nlet settings = { debug: true, verbose: false };\nsettings.debug &&= console.log; // ตั้งค่าถ้า debug เป็น truthy\n\n// Private Fields - ES2022\nclass BankAccount {\n  #balance = 0; // private field\n  #accountNumber; // private field\n  \n  constructor(initialBalance, accountNumber) {\n    this.#balance = initialBalance;\n    this.#accountNumber = accountNumber;\n  }\n  \n  deposit(amount) {\n    if (amount > 0) {\n      this.#balance += amount;\n      return true;\n    }\n    return false;\n  }\n  \n  getBalance() {\n    return this.#balance; // เข้าถึง private field ได้ภายใน class\n  }\n  \n  #validateTransaction(amount) { // private method\n    return amount > 0 && amount <= this.#balance;\n  }\n  \n  withdraw(amount) {\n    if (this.#validateTransaction(amount)) {\n      this.#balance -= amount;\n      return true;\n    }\n    return false;\n  }\n}\n\nconst account = new BankAccount(1000, '123-456-789');\nconsole.log(account.getBalance()); // 1000\n// console.log(account.#balance); // SyntaxError: Private field '#balance' must be declared in an enclosing class\n\n// Top-level await - ES2022\n// ใน module สามารถใช้ await ที่ top level ได้\nconst userData = await fetch('/api/user').then(r => r.json());\nconst config = await import('./config.js');\n\nconsole.log('App initialized with user:', userData.name);\n\n// Array.at() - ES2022\nconst arr = [1, 2, 3, 4, 5];\nconsole.log(arr.at(-1)); // 5 (last element)\nconsole.log(arr.at(-2)); // 4 (second last)\nconsole.log(arr.at(0));  // 1 (first element)\n\n// Object.hasOwn() - ES2022\nconst obj = { name: 'John' };\nconsole.log(Object.hasOwn(obj, 'name')); // true\nconsole.log(Object.hasOwn(obj, 'toString')); // false (inherited)"
+    },
+    {
+      "_type": "block",
+      "_key": "practical-examples",
+      "style": "h2",
+      "children": [
+        {
+          "_type": "span",
+          "text": "💼 ตัวอย่างการใช้งานจริง",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "code",
+      "_key": "practical-examples-code",
+      "language": "javascript",
+      "code": "// API Client with modern JavaScript\nclass ApiClient {\n  #baseURL;\n  #defaultHeaders;\n  \n  constructor(baseURL, defaultHeaders = {}) {\n    this.#baseURL = baseURL;\n    this.#defaultHeaders = {\n      'Content-Type': 'application/json',\n      ...defaultHeaders\n    };\n  }\n  \n  async #request(endpoint, options = {}) {\n    const url = `${this.#baseURL}${endpoint}`;\n    const config = {\n      headers: {\n        ...this.#defaultHeaders,\n        ...options.headers\n      },\n      ...options\n    };\n    \n    try {\n      const response = await fetch(url, config);\n      \n      if (!response.ok) {\n        throw new Error(`HTTP ${response.status}: ${response.statusText}`);\n      }\n      \n      const contentType = response.headers.get('content-type');\n      if (contentType?.includes('application/json')) {\n        return await response.json();\n      }\n      \n      return await response.text();\n    } catch (error) {\n      console.error(`API request failed: ${url}`, error);\n      throw error;\n    }\n  }\n  \n  async get(endpoint, params = {}) {\n    const queryString = new URLSearchParams(params).toString();\n    const url = queryString ? `${endpoint}?${queryString}` : endpoint;\n    return this.#request(url);\n  }\n  \n  async post(endpoint, data) {\n    return this.#request(endpoint, {\n      method: 'POST',\n      body: JSON.stringify(data)\n    });\n  }\n  \n  async put(endpoint, data) {\n    return this.#request(endpoint, {\n      method: 'PUT',\n      body: JSON.stringify(data)\n    });\n  }\n  \n  async delete(endpoint) {\n    return this.#request(endpoint, { method: 'DELETE' });\n  }\n}\n\n// การใช้งาน API Client\nconst api = new ApiClient('https://api.example.com', {\n  'Authorization': 'Bearer token123'\n});\n\n// User management functions\nasync function createUser(userData) {\n  try {\n    const newUser = await api.post('/users', userData);\n    console.log('User created:', newUser);\n    return newUser;\n  } catch (error) {\n    console.error('Failed to create user:', error);\n    throw error;\n  }\n}\n\nasync function getUsers(filters = {}) {\n  try {\n    const users = await api.get('/users', filters);\n    return users;\n  } catch (error) {\n    console.error('Failed to fetch users:', error);\n    return [];\n  }\n}\n\n// Advanced data processing\nclass DataProcessor {\n  static async processUsers(users) {\n    const results = await Promise.allSettled(\n      users.map(async (user) => {\n        const [profile, posts, stats] = await Promise.all([\n          api.get(`/users/${user.id}/profile`),\n          api.get(`/users/${user.id}/posts`),\n          api.get(`/users/${user.id}/stats`)\n        ]);\n        \n        return {\n          ...user,\n          profile,\n          postsCount: posts?.length ?? 0,\n          stats: {\n            views: stats?.views ?? 0,\n            likes: stats?.likes ?? 0,\n            ...stats\n          }\n        };\n      })\n    );\n    \n    return results\n      .filter(result => result.status === 'fulfilled')\n      .map(result => result.value);\n  }\n  \n  static groupBy(array, keyFn) {\n    return array.reduce((groups, item) => {\n      const key = keyFn(item);\n      groups[key] ??= [];\n      groups[key].push(item);\n      return groups;\n    }, {});\n  }\n  \n  static sortBy(array, keyFn, direction = 'asc') {\n    return [...array].sort((a, b) => {\n      const aVal = keyFn(a);\n      const bVal = keyFn(b);\n      \n      if (aVal < bVal) return direction === 'asc' ? -1 : 1;\n      if (aVal > bVal) return direction === 'asc' ? 1 : -1;\n      return 0;\n    });\n  }\n}\n\n// การใช้งานจริง\nasync function initializeDashboard() {\n  try {\n    const users = await getUsers({ active: true, limit: 100 });\n    const processedUsers = await DataProcessor.processUsers(users);\n    \n    // Group users by city\n    const usersByCity = DataProcessor.groupBy(\n      processedUsers, \n      user => user.profile?.city ?? 'Unknown'\n    );\n    \n    // Sort by total views\n    const topUsers = DataProcessor.sortBy(\n      processedUsers,\n      user => user.stats.views,\n      'desc'\n    ).slice(0, 10);\n    \n    console.log('Dashboard data ready:', {\n      totalUsers: processedUsers.length,\n      usersByCity,\n      topUsers\n    });\n    \n    return { processedUsers, usersByCity, topUsers };\n  } catch (error) {\n    console.error('Dashboard initialization failed:', error);\n    throw error;\n  }\n}\n\n// Utility functions\nconst utils = {\n  debounce: (fn, delay) => {\n    let timeoutId;\n    return (...args) => {\n      clearTimeout(timeoutId);\n      timeoutId = setTimeout(() => fn.apply(null, args), delay);\n    };\n  },\n  \n  throttle: (fn, limit) => {\n    let inThrottle;\n    return (...args) => {\n      if (!inThrottle) {\n        fn.apply(null, args);\n        inThrottle = true;\n        setTimeout(() => inThrottle = false, limit);\n      }\n    };\n  },\n  \n  formatDate: (date, locale = 'th-TH') => {\n    return new Intl.DateTimeFormat(locale, {\n      year: 'numeric',\n      month: 'long',\n      day: 'numeric'\n    }).format(new Date(date));\n  },\n  \n  formatNumber: (number, locale = 'th-TH') => {\n    return new Intl.NumberFormat(locale).format(number);\n  }\n};\n\n// Export สำหรับใช้ใน modules อื่น\nexport {\n  ApiClient,\n  DataProcessor,\n  createUser,\n  getUsers,\n  initializeDashboard,\n  utils\n};"
+    },
+    {
+      "_type": "block",
+      "_key": "conclusion",
+      "style": "h2",
+      "children": [
+        {
+          "_type": "span",
+          "text": "🎯 สรุป: อนาคตของ JavaScript",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    },
+    {
+      "_type": "block",
+      "_key": "conclusion-content",
+      "style": "normal",
+      "children": [
+        {
+          "_type": "span",
+          "text": "Modern JavaScript ES6+ ได้เปลี่ยนแปลงวิธีการเขียนโค้ดให้ดีขึ้นอย่างมาก ทำให้เราสามารถเขียนโค้ดที่สั้น อ่านง่าย และมีประสิทธิภาพสูงขึ้น การเรียนรู้และใช้งาน features เหล่านี้จะช่วยให้คุณเป็นนักพัฒนา JavaScript ที่ดีขึ้น และพร้อมสำหรับอนาคตของการพัฒนาเว็บไซต์",
+          "marks": []
+        }
+      ],
+      "markDefs": []
+    }
+  ],
+  "seo": {
+    "title": "Modern JavaScript ES6+ ฉบับสมบูรณ์ 2024: Arrow Functions, Async/Await, Modules และ Features ใหม่",
+    "description": "เจาะลึกทุก features ของ Modern JavaScript ตั้งแต่ ES6 ไปจนถึง ES2024 พร้อมตัวอย่างการใช้งานจริง async/await, destructuring, modules และเทคนิคขั้นสูงสำหรับนักพัฒนาไทย",
+    "keywords": ["Modern JavaScript", "ES6", "ES2023", "Async Await", "Arrow Functions", "Destructuring", "Template Literals", "Modules", "JavaScript", "Web Development", "Programming"]
+  },
+  "readingTime": 18,
+  "tags": ["JavaScript", "ES6", "Modern JavaScript", "Async/Await", "Modules", "Web Development", "Programming", "Frontend", "Tutorial", "2024"]
+} 

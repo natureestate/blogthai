@@ -1,0 +1,11 @@
+{
+  "_type": "author",
+  "_id": "a335dc2a-5b15-43ed-adee-eeb0392a1668",
+  "name": "Blog ไทย",
+  "slug": {
+    "_type": "slug",
+    "current": "blog-thai"
+  },
+  "bio": "ทีมนักเขียนและนักพัฒนาเว็บไซต์ที่มีประสบการณ์ในการสร้างเนื้อหาคุณภาพสำหรับนักพัฒนาไทย",
+  "email": "contact@blogthai.com"
+} 
